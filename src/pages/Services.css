@@ -1,0 +1,199 @@
+.services-page {
+  padding-bottom: var(--space-16);
+}
+
+.services-page__hero {
+  padding-block: var(--space-12) var(--space-8);
+}
+
+.services-page__hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: end;
+}
+
+.services-page__title {
+  font-size: clamp(var(--text-5xl), 9vw, var(--text-7xl));
+  color: var(--color-orange);
+}
+
+.services-page__intro {
+  font-size: var(--text-base);
+  color: var(--color-orange);
+  max-width: 42ch;
+  justify-self: end;
+}
+
+.services-page__hero-image {
+  margin-bottom: var(--space-12);
+}
+
+.services-page__image-placeholder {
+  aspect-ratio: 16 / 6;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--color-cream-soft),
+      var(--color-cream-soft) 10px,
+      rgba(229, 75, 42, 0.05) 10px,
+      rgba(229, 75, 42, 0.05) 20px
+    );
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+/* ---------- Service cards ---------- */
+.services-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.service-card {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-12);
+  padding: var(--space-12);
+  border-radius: var(--radius-2xl);
+  align-items: start;
+}
+
+.service-card--blue {
+  background-color: var(--color-blue);
+  color: var(--color-cream);
+}
+
+.service-card--dark {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.service-card--yellow {
+  background-color: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+.service-card__title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.service-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.service-card__description {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+
+.service-card__cta {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+}
+
+.service-card__inquire {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.service-card__list {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-8);
+}
+
+.service-card__item {
+  border-top: 1px solid currentColor;
+}
+
+.service-card__item:last-child {
+  border-bottom: 1px solid currentColor;
+}
+
+.service-card__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) 0;
+  background: transparent;
+  font-size: var(--text-base);
+  color: inherit;
+  text-align: left;
+}
+
+.service-card__row:hover {
+  opacity: 0.85;
+}
+
+.service-card__detail {
+  padding-bottom: var(--space-4);
+  font-size: var(--text-sm);
+  opacity: 0.85;
+}
+
+.service-card__price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.service-card__price {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  background-color: var(--color-cream);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+}
+
+.service-card--yellow .btn--outline {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.service-card--yellow .btn--outline:hover {
+  background-color: var(--color-ink);
+  color: var(--color-yellow);
+}
+
+.service-card--blue .btn--outline,
+.service-card--dark .btn--outline {
+  border-color: var(--color-cream);
+  color: var(--color-cream);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .services-page__hero-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .services-page__intro {
+    justify-self: start;
+  }
+
+  .service-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: var(--space-8);
+  }
+
+  .service-card__price-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

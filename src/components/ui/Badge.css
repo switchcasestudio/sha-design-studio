@@ -1,0 +1,100 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  line-height: 1;
+  text-align: center;
+  min-width: 90px;
+  min-height: 90px;
+  position: relative;
+  user-select: none;
+}
+
+/* ----- Flower shape (8-petal blob) ----- */
+.badge--flower {
+  /* CSS mask-like effect using a flower-shaped mask via SVG background.
+     The shape is approximated with border-radius percentages for rounded petals. */
+  border-radius: 42% 58% 42% 58% / 50% 50% 50% 50%;
+  animation: badge-wobble 8s ease-in-out infinite;
+}
+
+.badge--flower::before,
+.badge--flower::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+}
+
+.badge--flower::before {
+  transform: rotate(45deg);
+}
+
+.badge--flower::after {
+  transform: rotate(-45deg);
+}
+
+/* ----- Cloud shape (rounded blob) ----- */
+.badge--cloud {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  padding: var(--space-5) var(--space-6);
+}
+
+.badge--cloud::before,
+.badge--cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.badge--cloud::before {
+  width: 60%;
+  height: 60%;
+  top: -20%;
+  left: 20%;
+}
+
+.badge--cloud::after {
+  width: 50%;
+  height: 50%;
+  top: -10%;
+  right: -10%;
+}
+
+/* ----- Text on top ----- */
+.badge__text {
+  position: relative;
+  z-index: 1;
+}
+
+/* ----- Colors ----- */
+.badge--orange {
+  background-color: var(--color-orange);
+  color: var(--color-cream);
+}
+
+.badge--yellow {
+  background-color: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+.badge--blue {
+  background-color: var(--color-blue-soft);
+  color: var(--color-cream);
+}
+
+/* ----- Wobble animation ----- */
+@keyframes badge-wobble {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}

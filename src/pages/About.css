@@ -1,0 +1,215 @@
+.about-page {
+  background-color: var(--color-blue);
+  color: var(--color-cream);
+  padding-bottom: var(--space-16);
+}
+
+/* ---------- Bio ---------- */
+.about-bio {
+  padding-block: var(--space-12);
+}
+
+.about-bio__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+
+.about-bio__title {
+  font-size: clamp(var(--text-5xl), 7vw, var(--text-7xl));
+  margin-bottom: var(--space-8);
+}
+
+.about-bio__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-size: var(--text-base);
+  max-width: 50ch;
+}
+
+.about-bio__signoff {
+  font-weight: var(--weight-semibold);
+  margin-top: var(--space-2);
+}
+
+.about-bio__cta {
+  margin-top: var(--space-8);
+}
+
+.about-bio__photo {
+  position: sticky;
+  top: var(--space-24);
+}
+
+.about-bio__photo-frame {
+  position: relative;
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+.about-bio__photo-placeholder {
+  aspect-ratio: 4 / 5;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--color-cream),
+      var(--color-cream) 10px,
+      rgba(74, 127, 191, 0.1) 10px,
+      rgba(74, 127, 191, 0.1) 20px
+    );
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-blue);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+.about-bio__hello {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  z-index: 2;
+}
+
+/* ---------- Gallery ---------- */
+.about-gallery {
+  padding-block: var(--space-12);
+}
+
+.about-gallery__grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: auto auto;
+  gap: var(--space-6);
+}
+
+.about-gallery__item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.about-gallery__item--small {
+  aspect-ratio: 4 / 5;
+}
+
+.about-gallery__item--large {
+  aspect-ratio: 16 / 10;
+}
+
+.about-gallery__item--medium {
+  aspect-ratio: 16 / 9;
+  grid-column: 1 / 2;
+}
+
+.about-gallery__placeholder {
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1) 10px,
+      rgba(255, 255, 255, 0.04) 10px,
+      rgba(255, 255, 255, 0.04) 20px
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+/* ---------- What I Offer ---------- */
+.about-offer {
+  padding-block: var(--space-12);
+}
+
+.about-offer__panel {
+  background-color: var(--color-yellow);
+  color: var(--color-ink);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-12);
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+
+.about-offer__title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: clamp(var(--text-4xl), 5vw, var(--text-5xl));
+  margin-bottom: var(--space-6);
+  letter-spacing: var(--tracking-tight);
+}
+
+.about-offer__text {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-8);
+  max-width: 38ch;
+}
+
+.about-offer__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-offer__item {
+  border-top: 1px solid var(--color-ink);
+}
+
+.about-offer__item:last-child {
+  border-bottom: 1px solid var(--color-ink);
+}
+
+.about-offer__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) 0;
+  background: transparent;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: inherit;
+  text-align: left;
+}
+
+.about-offer__row:hover {
+  opacity: 0.75;
+}
+
+.about-offer__detail {
+  padding: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+  opacity: 0.85;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .about-bio__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .about-bio__photo {
+    position: static;
+  }
+
+  .about-gallery__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-gallery__item--medium {
+    grid-column: auto;
+  }
+
+  .about-offer__panel {
+    grid-template-columns: 1fr;
+    padding: var(--space-8);
+  }
+}

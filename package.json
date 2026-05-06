@@ -1,0 +1,32 @@
+{
+  "name": "sha-design-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Portfolio site for Sha Design Studio — Shiran Bar, industrial designer specializing in toys and baby products.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.2",
+    "motion": "^11.11.0",
+    "lucide-react": "^0.445.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "vite": "^5.4.6"
+  }
+}

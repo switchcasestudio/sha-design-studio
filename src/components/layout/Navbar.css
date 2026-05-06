@@ -1,0 +1,130 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background-color: var(--bg-page);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-4);
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar__nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.navbar__link {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--text-primary);
+  padding: var(--space-2) 0;
+  position: relative;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-orange);
+  transition: width var(--duration-base) var(--ease-out),
+              left var(--duration-base) var(--ease-out);
+}
+
+.navbar__link:hover {
+  color: var(--color-orange);
+}
+
+.navbar__link--active {
+  color: var(--color-orange);
+}
+
+.navbar__link--active::after {
+  width: 100%;
+  left: 0;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Mobile toggle — hidden on desktop */
+.navbar__toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-orange);
+  border-radius: var(--radius-pill);
+}
+
+.navbar__mobile {
+  display: none;
+}
+
+/* ---------- Mobile breakpoint ---------- */
+@media (max-width: 768px) {
+  .navbar__nav,
+  .navbar__actions {
+    display: none;
+  }
+
+  .navbar__toggle {
+    display: inline-flex;
+  }
+
+  .navbar__mobile {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--duration-slow) var(--ease-out);
+    background-color: var(--bg-page);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .navbar__mobile--open {
+    max-height: 400px;
+  }
+
+  .navbar__mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6) var(--gutter);
+  }
+
+  .navbar__mobile-link {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--color-orange);
+    padding: var(--space-3) 0;
+  }
+}

@@ -1,0 +1,19 @@
+/* ==========================================================================
+   Font faces
+   Climate Crisis is a variable display font — drop the .ttf file into
+   src/assets/fonts/ and Vite will resolve the URL.
+   Falls back gracefully to Impact / Arial Black if not loaded.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Climate Crisis';
+  src: url('../assets/fonts/ClimateCrisis-Regular.ttf') format('truetype-variations'),
+       url('../assets/fonts/ClimateCrisis-Regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Body font — use Inter via Google Fonts CDN as a sensible default.
+   Swap to a local file if you'd rather self-host. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
