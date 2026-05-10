@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { navigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
 import './Navbar.css';
@@ -27,7 +28,13 @@ function Navbar() {
           onClick={closeMobile}
           aria-label="Sha Design Studio — Home"
         >
-          <Logo size={48} variant={theme.logo} />
+          <motion.div
+            whileHover={{ scale: 1.08, rotate: -3 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+          >
+            <Logo size={48} variant={theme.logo} />
+          </motion.div>
         </Link>
 
         <nav className="navbar__nav" aria-label="Primary">
@@ -48,51 +55,97 @@ function Navbar() {
         </nav>
 
         <div className="navbar__actions">
-          <Link to="/contact" className="navbar__cta">
-            Inquire Now
-          </Link>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
+            <Link to="/contact" className="navbar__cta">
+              Inquire Now
+            </Link>
+          </motion.div>
         </div>
 
-        <button
+        <motion.button
           type="button"
           className="navbar__toggle"
           onClick={() => setMobileOpen((v) => !v)}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          whileTap={{ scale: 0.9, rotate: 90 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 15 }}
         >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <AnimatePresence mode="wait">
+            {mobileOpen ? (
+              <motion.span
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <X size={24} />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="menu"
+                initial={{ rotate: 90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: -90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <Menu size={24} />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
 
-      <div
-        id="mobile-menu"
-        className={`navbar__mobile${mobileOpen ? ' navbar__mobile--open' : ''}`}
-        aria-hidden={!mobileOpen}
-      >
-        <ul className="navbar__mobile-list">
-          {navigation.map((item) => (
-            <li key={item.href}>
-              <NavLink
-                to={item.href}
-                className="navbar__mobile-link"
-                onClick={closeMobile}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            id="mobile-menu"
+            className="navbar__mobile navbar__mobile--open"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+          >
+            <ul className="navbar__mobile-list">
+              {navigation.map((item, i) => (
+                <motion.li
+                  key={item.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <NavLink
+                    to={item.href}
+                    className="navbar__mobile-link"
+                    onClick={closeMobile}
+                  >
+                    {item.label}
+                  </NavLink>
+                </motion.li>
+              ))}
+              <motion.li
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navigation.length * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
               >
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-          <li>
-            <Link
-              to="/contact"
-              className="navbar__mobile-link"
-              onClick={closeMobile}
-            >
-              Inquire Now
-            </Link>
-          </li>
-        </ul>
-      </div>
+                <Link
+                  to="/contact"
+                  className="navbar__mobile-link"
+                  onClick={closeMobile}
+                >
+                  Inquire Now
+                </Link>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

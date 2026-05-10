@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import Badge from '@/components/ui/Badge';
 import './Projects.css';
 
@@ -29,50 +30,90 @@ const projects = [
   },
 ];
 
+const spring = { type: 'spring', stiffness: 200, damping: 22 };
+
 function Projects() {
   return (
     <div className="projects-page">
       <section className="projects-page__hero">
         <div className="container projects-page__hero-inner">
-          <h1 className="projects-page__title">Portfolio</h1>
-          <p className="projects-page__intro">
+          <motion.h1
+            className="projects-page__title"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...spring, delay: 0.1 }}
+          >
+            Portfolio
+          </motion.h1>
+          <motion.p
+            className="projects-page__intro"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...spring, delay: 0.25 }}
+          >
             The following are just a few examples of my creative vision and
             craftsmanship, where every space tells a unique story through design.
-          </p>
+          </motion.p>
         </div>
       </section>
 
       <div className="container projects-page__list">
         {projects.map((project, idx) => (
-          <article key={idx} className="project-entry">
-            <div
+          <motion.article
+            key={idx}
+            className="project-entry"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ ...spring, delay: 0.1 }}
+          >
+            <motion.div
               className={`project-entry__media project-entry__media--${
                 project.background || 'orange'
               }`}
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <div className="project-entry__images">
                 {Array.from({ length: project.images }).map((_, i) => (
-                  <div key={i} className="project-entry__image-placeholder">
+                  <motion.div
+                    key={i}
+                    className="project-entry__image-placeholder"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ ...spring, delay: 0.2 + i * 0.1 }}
+                  >
                     <span>Image placeholder</span>
-                  </div>
+                  </motion.div>
                 ))}
                 {project.badge && (
-                  <div
+                  <motion.div
                     className={`project-entry__badge project-entry__badge--${
                       project.images > 1 ? 'right' : 'left'
                     }`}
+                    initial={{ scale: 0, rotate: -20 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.4 }}
                   >
                     <Badge {...project.badge}>{project.badge.label}</Badge>
-                  </div>
+                  </motion.div>
                 )}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="project-entry__caption">
+            <motion.div
+              className="project-entry__caption"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.3 }}
+            >
               <span className="project-entry__year">{project.year}</span>
               <p className="project-entry__description">{project.description}</p>
-            </div>
-          </article>
+            </motion.div>
+          </motion.article>
         ))}
       </div>
     </div>

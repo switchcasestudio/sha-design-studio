@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import './About.css';
@@ -22,6 +23,8 @@ const offers = [
   },
 ];
 
+const spring = { type: 'spring', stiffness: 200, damping: 22 };
+
 function About() {
   const [openIdx, setOpenIdx] = useState(null);
 
@@ -30,7 +33,12 @@ function About() {
       {/* ---------- Bio section ---------- */}
       <section className="about-bio">
         <div className="container about-bio__inner">
-          <div className="about-bio__copy">
+          <motion.div
+            className="about-bio__copy"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ...spring, delay: 0.15 }}
+          >
             <h1 className="about-bio__title">About Me</h1>
             <div className="about-bio__text">
               <p>
@@ -67,18 +75,28 @@ function About() {
             <Button variant="yellow" size="md" className="about-bio__cta">
               Let's Chat
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="about-bio__photo">
+          <motion.div
+            className="about-bio__photo"
+            initial={{ opacity: 0, x: 40, rotate: 3 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            transition={{ ...spring, delay: 0.3 }}
+          >
             <div className="about-bio__photo-frame">
               <div className="about-bio__photo-placeholder">
                 <span>Designer portrait placeholder</span>
               </div>
-              <div className="about-bio__hello">
+              <motion.div
+                className="about-bio__hello"
+                initial={{ scale: 0, rotate: -30 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.6 }}
+              >
                 <Badge shape="flower" color="yellow">Hello!</Badge>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -86,30 +104,42 @@ function About() {
       <section className="about-gallery">
         <div className="container">
           <div className="about-gallery__grid">
-            <div className="about-gallery__item about-gallery__item--small">
-              <div className="about-gallery__placeholder">
-                <span>Image 1</span>
-              </div>
-            </div>
-            <div className="about-gallery__item about-gallery__item--large">
-              <div className="about-gallery__placeholder">
-                <span>Image 2</span>
-              </div>
-            </div>
-            <div className="about-gallery__item about-gallery__item--medium">
-              <div className="about-gallery__placeholder">
-                <span>Image 3</span>
-              </div>
-            </div>
+            {['small', 'large', 'medium'].map((size, i) => (
+              <motion.div
+                key={size}
+                className={`about-gallery__item about-gallery__item--${size}`}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ ...spring, delay: i * 0.1 }}
+                whileHover={{ y: -4, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+              >
+                <div className="about-gallery__placeholder">
+                  <span>Image {i + 1}</span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ---------- What I Offer ---------- */}
-      <section className="about-offer">
+      <motion.section
+        className="about-offer"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ ...spring }}
+      >
         <div className="container">
           <div className="about-offer__panel">
-            <div className="about-offer__intro">
+            <motion.div
+              className="about-offer__intro"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.15 }}
+            >
               <h2 className="about-offer__title">What I Offer</h2>
               <p className="about-offer__text">
                 Whether a single room or a full home makeover, I can offer
@@ -117,28 +147,51 @@ function About() {
                 of elegance and comfort. Here are some of the services I offer:
               </p>
               <Button variant="primary" size="md">Explore My Services</Button>
-            </div>
+            </motion.div>
 
             <ul className="about-offer__list">
               {offers.map((offer, idx) => (
-                <li key={idx} className="about-offer__item">
-                  <button
+                <motion.li
+                  key={idx}
+                  className="about-offer__item"
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ ...spring, delay: 0.1 + idx * 0.08 }}
+                >
+                  <motion.button
                     className="about-offer__row"
                     onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
                     aria-expanded={openIdx === idx}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <span>{offer.title}</span>
-                    {openIdx === idx ? <Minus size={20} /> : <Plus size={20} />}
-                  </button>
-                  {openIdx === idx && (
-                    <p className="about-offer__detail">{offer.description}</p>
-                  )}
-                </li>
+                    <motion.span
+                      animate={{ rotate: openIdx === idx ? 180 : 0 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    >
+                      {openIdx === idx ? <Minus size={20} /> : <Plus size={20} />}
+                    </motion.span>
+                  </motion.button>
+                  <AnimatePresence>
+                    {openIdx === idx && (
+                      <motion.p
+                        className="about-offer__detail"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                      >
+                        {offer.description}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </motion.li>
               ))}
             </ul>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

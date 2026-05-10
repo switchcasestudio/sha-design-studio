@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
 import './ContactForm.css';
 
@@ -8,7 +9,7 @@ function ContactForm() {
     message: '',
     newsletter: false,
   });
-  const [status, setStatus] = useState('idle'); // idle | submitting | success | error
+  const [status, setStatus] = useState('idle');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,8 +23,6 @@ function ContactForm() {
     e.preventDefault();
     setStatus('submitting');
 
-    // TODO: wire up to a real backend (Formspree, Netlify Forms, custom API, etc.)
-    // For now, simulate a success after a short delay.
     try {
       await new Promise((resolve) => setTimeout(resolve, 600));
       setStatus('success');
@@ -85,16 +84,34 @@ function ContactForm() {
         {status === 'submitting' ? 'Sending…' : 'Send Away'}
       </Button>
 
-      {status === 'success' && (
-        <p className="contact-form__msg contact-form__msg--success" role="status">
-          Thanks — Shiran will be in touch soon!
-        </p>
-      )}
-      {status === 'error' && (
-        <p className="contact-form__msg contact-form__msg--error" role="alert">
-          Something went wrong. Please try again or email directly.
-        </p>
-      )}
+      <AnimatePresence mode="wait">
+        {status === 'success' && (
+          <motion.p
+            key="success"
+            className="contact-form__msg contact-form__msg--success"
+            role="status"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            Thanks — Shiran will be in touch soon!
+          </motion.p>
+        )}
+        {status === 'error' && (
+          <motion.p
+            key="error"
+            className="contact-form__msg contact-form__msg--error"
+            role="alert"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            Something went wrong. Please try again or email directly.
+          </motion.p>
+        )}
+      </AnimatePresence>
     </form>
   );
 }
