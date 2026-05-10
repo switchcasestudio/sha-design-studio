@@ -1,13 +1,7 @@
+import { motion } from 'motion/react';
 import { cn } from '@/utils/cn';
 import './Badge.css';
 
-/**
- * Decorative badge — the flower or cloud-shaped labels seen on portfolio
- * thumbnails ("Way cool!", "Sorter", "Activity center", "Hello!", "Gymini").
- *
- * shape: flower | cloud
- * color: orange | yellow | blue
- */
 function Badge({
   shape = 'flower',
   color = 'orange',
@@ -16,12 +10,14 @@ function Badge({
   ...props
 }) {
   return (
-    <span
+    <motion.span
       className={cn('badge', `badge--${shape}`, `badge--${color}`, className)}
+      whileHover={{ scale: 1.1, rotate: 8 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 12 }}
       {...props}
     >
       <span className="badge__text">{children}</span>
-    </span>
+    </motion.span>
   );
 }
 

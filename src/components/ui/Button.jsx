@@ -1,13 +1,7 @@
+import { motion } from 'motion/react';
 import { cn } from '@/utils/cn';
 import './Button.css';
 
-/**
- * Polymorphic button — renders as <button>, <a>, or any other component
- * via the `as` prop.
- *
- * Variants: primary | outline | ghost | dark
- * Sizes:    sm | md | lg
- */
 function Button({
   as: Component = 'button',
   variant = 'primary',
@@ -16,18 +10,23 @@ function Button({
   children,
   ...props
 }) {
+  const MotionComponent = motion.create(Component);
+
   return (
-    <Component
+    <MotionComponent
       className={cn(
         'btn',
         `btn--${variant}`,
         `btn--${size}`,
         className
       )}
+      whileHover={{ scale: 1.04, y: -1 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
     >
       {children}
-    </Component>
+    </MotionComponent>
   );
 }
 

@@ -1,18 +1,18 @@
 import { Link } from 'react-router-dom';
+import { motion, useInView } from 'motion/react';
+import { useRef } from 'react';
 import Logo from '@/components/ui/Logo';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { siteConfig } from '@/utils/siteConfig';
 import './Home.css';
 
-
-// Placeholder project data — swap image paths once assets are added
 const featuredProjects = [
   {
     id: 'shape-sorter',
     title: 'Shape Sorter — Tiny Rocker collection',
     badge: { label: 'Sorter', shape: 'cloud', color: 'blue' },
-    image: null, // TODO: '/src/assets/images/projects/shape-sorter.jpg'
+    image: null,
     studio: 'Tiny Love',
     size: 'large',
   },
@@ -50,23 +50,63 @@ const featuredProjects = [
   },
 ];
 
+const spring = { type: 'spring', stiffness: 200, damping: 20 };
+const springBouncy = { type: 'spring', stiffness: 300, damping: 15 };
+
+function Section({ children, className }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+
+  return (
+    <motion.section
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ ...spring, duration: 0.6 }}
+    >
+      {children}
+    </motion.section>
+  );
+}
+
 function Home() {
   return (
     <>
       {/* ---------- Hero ---------- */}
       <section className="home-hero">
         <div className="container home-hero__inner">
-          <Logo size={180} />
-          <h1 className="home-hero__title">{siteConfig.tagline}</h1>
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ ...springBouncy, delay: 0.1 }}
+          >
+            <Logo size={180} />
+          </motion.div>
+          <motion.h1
+            className="home-hero__title"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...spring, delay: 0.3 }}
+          >
+            {siteConfig.tagline}
+          </motion.h1>
         </div>
       </section>
 
       {/* ---------- Featured projects grid ---------- */}
-      <section className="home-projects">
+      <Section className="home-projects">
         <div className="container">
           <div className="home-projects__grid">
             {/* Featured / large project */}
-            <article className="project-card project-card--feature">
+            <motion.article
+              className="project-card project-card--feature"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ ...spring, delay: 0.1 }}
+              whileHover={{ y: -6 }}
+            >
               <div className="project-card__media project-card__media--placeholder">
                 <span className="project-card__placeholder">
                   Project image placeholder
@@ -83,11 +123,19 @@ function Home() {
                 <span className="project-card__studio">{featuredProjects[0].studio}</span>
                 <h3 className="project-card__title">{featuredProjects[0].title}</h3>
               </div>
-            </article>
+            </motion.article>
 
             {/* Secondary projects */}
-            {featuredProjects.slice(1).map((project) => (
-              <article key={project.id} className="project-card">
+            {featuredProjects.slice(1).map((project, i) => (
+              <motion.article
+                key={project.id}
+                className="project-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ ...spring, delay: 0.1 + i * 0.08 }}
+                whileHover={{ y: -6, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+              >
                 <div className="project-card__media project-card__media--placeholder">
                   <span className="project-card__placeholder">Image placeholder</span>
                   {project.badge && (
@@ -100,17 +148,23 @@ function Home() {
                   <span className="project-card__studio">{project.studio}</span>
                   <h3 className="project-card__title">{project.title}</h3>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ---------- "What I Do" CTA ---------- */}
-      <section className="home-what">
+      <Section className="home-what">
         <div className="container">
           <div className="home-what__panel">
-            <div className="home-what__copy">
+            <motion.div
+              className="home-what__copy"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.15 }}
+            >
               <h2 className="home-what__title">What I Do</h2>
               <p className="home-what__text">
                 I create simple, smart, and playful designs that spark curiosity,
@@ -119,18 +173,30 @@ function Home() {
               <Button as={Link} to="/services" variant="outline" size="md">
                 Explore My Services
               </Button>
-            </div>
-            <div className="home-what__media home-what__media--placeholder">
+            </motion.div>
+            <motion.div
+              className="home-what__media home-what__media--placeholder"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.25 }}
+            >
               <span>Designer at work — image placeholder</span>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ---------- Kind Words / Testimonials ---------- */}
-      <section className="home-words">
+      <Section className="home-words">
         <div className="container">
-          <div className="home-words__panel">
+          <motion.div
+            className="home-words__panel"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ ...spring, delay: 0.1 }}
+          >
             <h2 className="home-words__title">Kind Words</h2>
             <blockquote className="home-words__quote">
               <p>
@@ -140,9 +206,9 @@ function Home() {
               </p>
               <cite className="home-words__cite">— Jaya Dixon</cite>
             </blockquote>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </Section>
     </>
   );
 }

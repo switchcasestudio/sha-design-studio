@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Twitter } from 'lucide-react';
+import { motion } from 'motion/react';
 import { siteConfig, footerNavigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
 import ContactForm from '@/components/sections/ContactForm';
 import './Footer.css';
+
+const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
 function Footer() {
   return (
@@ -11,13 +14,25 @@ function Footer() {
       {/* Orange contact panel */}
       <div className="footer__panel">
         <div className="container">
-          <div className="footer__brand">
+          <motion.div
+            className="footer__brand"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ ...spring }}
+          >
             <Logo size={120} variant="cream" />
             <p className="footer__tagline">{siteConfig.tagline}</p>
-          </div>
+          </motion.div>
 
           <div className="footer__grid">
-            <div className="footer__col">
+            <motion.div
+              className="footer__col"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.1 }}
+            >
               <h4 className="footer__heading">Menu</h4>
               <ul className="footer__list">
                 {footerNavigation.menu.map((item) => (
@@ -28,9 +43,15 @@ function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="footer__col">
+            <motion.div
+              className="footer__col"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.2 }}
+            >
               <h4 className="footer__heading">Social</h4>
               <ul className="footer__list">
                 {footerNavigation.social.map((item) => (
@@ -46,15 +67,21 @@ function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="footer__col footer__col--form">
+            <motion.div
+              className="footer__col footer__col--form"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: 0.3 }}
+            >
               <h4 className="footer__heading">Let's stay connected</h4>
               <p className="footer__sub">
                 Reach out about a project, collaboration or just to say hello!
               </p>
               <ContactForm />
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -64,30 +91,24 @@ function Footer() {
         <div className="container footer__bar-inner">
           <span className="footer__site">{siteConfig.name}</span>
           <div className="footer__icons">
-            <a
-              href={siteConfig.social.instagram}
-              aria-label="Instagram"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Instagram size={20} />
-            </a>
-            <a
-              href={siteConfig.social.facebook}
-              aria-label="Facebook"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Facebook size={20} />
-            </a>
-            <a
-              href={siteConfig.social.twitter}
-              aria-label="Twitter"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Twitter size={20} />
-            </a>
+            {[
+              { href: siteConfig.social.instagram, label: 'Instagram', Icon: Instagram },
+              { href: siteConfig.social.facebook, label: 'Facebook', Icon: Facebook },
+              { href: siteConfig.social.twitter, label: 'Twitter', Icon: Twitter },
+            ].map(({ href, label, Icon }) => (
+              <motion.a
+                key={label}
+                href={href}
+                aria-label={label}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.2, y: -2 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+              >
+                <Icon size={20} />
+              </motion.a>
+            ))}
           </div>
           <a href={`mailto:${siteConfig.email}`} className="footer__email">
             {siteConfig.email}
