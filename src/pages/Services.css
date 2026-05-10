@@ -1,7 +1,14 @@
+/* ==========================================================================
+   Services Page — single yellow theme
+   ========================================================================== */
+
 .services-page {
+  background-color: var(--color-yellow);
+  color: var(--color-ink);
   padding-bottom: var(--space-16);
 }
 
+/* ── Hero ── */
 .services-page__hero {
   padding-block: var(--space-12) var(--space-8);
 }
@@ -15,18 +22,19 @@
 
 .services-page__title {
   font-size: clamp(var(--text-5xl), 9vw, var(--text-7xl));
-  color: var(--color-orange);
+  color: var(--color-ink);
 }
 
 .services-page__intro {
   font-size: var(--text-base);
-  color: var(--color-orange);
+  color: var(--color-ink);
   max-width: 42ch;
   justify-self: end;
 }
 
+/* ── Hero image ── */
 .services-page__hero-image {
-  margin-bottom: var(--space-12);
+  padding-bottom: var(--space-16);
 }
 
 .services-page__image-placeholder {
@@ -34,11 +42,12 @@
   background:
     repeating-linear-gradient(
       45deg,
-      var(--color-cream-soft),
-      var(--color-cream-soft) 10px,
-      rgba(229, 75, 42, 0.05) 10px,
-      rgba(229, 75, 42, 0.05) 20px
+      rgba(26, 26, 26, 0.08),
+      rgba(26, 26, 26, 0.08) 10px,
+      rgba(26, 26, 26, 0.03) 10px,
+      rgba(26, 26, 26, 0.03) 20px
     );
+  border: 1px solid var(--color-ink);
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
@@ -47,135 +56,182 @@
   font-style: italic;
 }
 
-/* ---------- Service cards ---------- */
+/* ==========================================================================
+   Service blocks — stacked on yellow with ink dividers
+   ========================================================================== */
+
 .services-page__list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
 }
 
-.service-card {
+.service-block {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: var(--space-12);
-  padding: var(--space-12);
-  border-radius: var(--radius-2xl);
+  padding-block: var(--space-16);
+  border-top: 2px solid var(--color-ink);
   align-items: start;
 }
 
-.service-card--blue {
-  background-color: var(--color-blue);
-  color: var(--color-cream);
+.service-block:last-child {
+  border-bottom: 2px solid var(--color-ink);
 }
 
-.service-card--dark {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
+/* ── Left column — title + price ── */
+.service-block__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.service-card--yellow {
-  background-color: var(--color-yellow);
+.service-block__title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  white-space: pre-line;
   color: var(--color-ink);
 }
 
-.service-card__title {
+.service-block__price {
   font-family: var(--font-body);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
+  color: var(--color-ink);
 }
 
-.service-card__content {
+/* ── Right column — content ── */
+.service-block__right {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-.service-card__description {
+.service-block__description {
   font-size: var(--text-xl);
   font-weight: var(--weight-semibold);
   line-height: var(--leading-snug);
+  color: var(--color-ink);
 }
 
-.service-card__cta {
+.service-block__cta {
   font-size: var(--text-xl);
   font-weight: var(--weight-semibold);
+  color: var(--color-ink);
 }
 
-.service-card__inquire {
+.service-block__inquire {
   text-decoration: underline;
   text-underline-offset: 4px;
+  color: var(--color-ink);
 }
 
-.service-card__list {
+.service-block__inquire:hover {
+  color: var(--color-orange);
+}
+
+/* ── Accordion list ── */
+.service-block__list {
   display: flex;
   flex-direction: column;
-  margin-top: var(--space-8);
+  margin-top: var(--space-4);
 }
 
-.service-card__item {
-  border-top: 1px solid currentColor;
+.service-block__item {
+  border-top: 1px solid var(--color-ink);
 }
 
-.service-card__item:last-child {
-  border-bottom: 1px solid currentColor;
+.service-block__item:last-child {
+  border-bottom: 1px solid var(--color-ink);
 }
 
-.service-card__row {
+.service-block__row {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4) 0;
+  padding: var(--space-5) 0;
   background: transparent;
-  font-size: var(--text-base);
-  color: inherit;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ink);
   text-align: left;
 }
 
-.service-card__row:hover {
-  opacity: 0.85;
+.service-block__row:hover {
+  color: var(--color-orange);
 }
 
-.service-card__detail {
+.service-block__detail {
   padding-bottom: var(--space-4);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
+  color: var(--color-ink);
   opacity: 0.85;
 }
 
-.service-card__price-row {
+/* ── Purchase row (Design Session) ── */
+.service-block__purchase {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
-  margin-top: var(--space-6);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
-.service-card__price {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
+/* Quantity stepper */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
   background-color: var(--color-cream);
-  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
+  overflow: hidden;
 }
 
-.service-card--yellow .btn--outline {
-  border-color: var(--color-ink);
+.qty-stepper__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-ink);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.qty-stepper__btn:hover {
+  background-color: rgba(26, 26, 26, 0.08);
+}
+
+.qty-stepper__value {
+  min-width: 32px;
+  text-align: center;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
   color: var(--color-ink);
 }
 
-.service-card--yellow .btn--outline:hover {
+/* Purchase button */
+.service-block__buy-btn {
+  flex: 1;
+  padding: var(--space-3) var(--space-8);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--color-ink);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.service-block__buy-btn:hover {
   background-color: var(--color-ink);
   color: var(--color-yellow);
 }
 
-.service-card--blue .btn--outline,
-.service-card--dark .btn--outline {
-  border-color: var(--color-cream);
-  color: var(--color-cream);
-}
-
-/* ---------- Responsive ---------- */
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .services-page__hero-inner {
     grid-template-columns: 1fr;
@@ -186,14 +242,18 @@
     justify-self: start;
   }
 
-  .service-card {
+  .service-block {
     grid-template-columns: 1fr;
     gap: var(--space-6);
-    padding: var(--space-8);
+    padding-block: var(--space-12);
   }
 
-  .service-card__price-row {
+  .service-block__purchase {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .service-block__buy-btn {
+    flex: unset;
   }
 }

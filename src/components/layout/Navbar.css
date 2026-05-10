@@ -1,12 +1,42 @@
+/* ==========================================================================
+   Navbar — per-page color theme
+   Each route sets three custom properties: --nav-bg, --nav-fg, --nav-accent.
+   Everything inside the navbar reads from these variables.
+   ========================================================================== */
+
 .navbar {
+  /* Defaults (Home) */
+  --nav-bg: var(--color-cream);
+  --nav-fg: var(--color-ink);
+  --nav-accent: var(--color-orange);
+
   position: sticky;
   top: 0;
   z-index: var(--z-nav);
-  background-color: var(--bg-page);
-  border-bottom: 1px solid transparent;
-  transition: border-color var(--duration-base) var(--ease-out);
+  background-color: var(--nav-bg);
+  color: var(--nav-fg);
+  transition: background-color var(--duration-base) var(--ease-out);
 }
 
+.navbar--projects {
+  --nav-bg: var(--color-orange);
+  --nav-fg: var(--color-cream);
+  --nav-accent: var(--color-white);
+}
+
+.navbar--services {
+  --nav-bg: var(--color-yellow);
+  --nav-fg: var(--color-ink);
+  --nav-accent: var(--color-orange);
+}
+
+.navbar--about {
+  --nav-bg: var(--color-blue);
+  --nav-fg: var(--color-cream);
+  --nav-accent: var(--color-yellow);
+}
+
+/* ── Layout ── */
 .navbar__inner {
   display: flex;
   align-items: center;
@@ -21,6 +51,12 @@
   flex-shrink: 0;
 }
 
+.navbar__logo img {
+  display: block;
+  width: auto;
+  max-height: 48px;
+}
+
 .navbar__nav {
   flex: 1;
   display: flex;
@@ -33,11 +69,12 @@
   gap: var(--space-8);
 }
 
+/* ── Links ── */
 .navbar__link {
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
-  color: var(--text-primary);
+  color: var(--nav-fg);
   padding: var(--space-2) 0;
   position: relative;
   transition: color var(--duration-fast) var(--ease-out);
@@ -50,17 +87,15 @@
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: var(--color-orange);
-  transition: width var(--duration-base) var(--ease-out),
-              left var(--duration-base) var(--ease-out);
+  background-color: var(--nav-accent);
+  transition:
+    width var(--duration-base) var(--ease-out),
+    left var(--duration-base) var(--ease-out);
 }
 
-.navbar__link:hover {
-  color: var(--color-orange);
-}
-
+.navbar__link:hover,
 .navbar__link--active {
-  color: var(--color-orange);
+  color: var(--nav-accent);
 }
 
 .navbar__link--active::after {
@@ -68,20 +103,55 @@
   left: 0;
 }
 
+/* ── CTA button ── */
 .navbar__actions {
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
-/* Mobile toggle — hidden on desktop */
+.navbar__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  border: 2px solid var(--nav-accent);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: var(--nav-accent);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.navbar__cta:hover {
+  background-color: var(--nav-accent);
+  color: var(--nav-bg);
+}
+
+/* Home gets a filled ink CTA — explicit override of the outline default */
+.navbar--home .navbar__cta {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.navbar--home .navbar__cta:hover {
+  background-color: var(--color-orange);
+  border-color: var(--color-orange);
+  color: var(--color-cream);
+}
+
+/* ── Mobile toggle ── */
 .navbar__toggle {
   display: none;
   width: 44px;
   height: 44px;
   align-items: center;
   justify-content: center;
-  color: var(--color-orange);
+  color: var(--nav-accent);
   border-radius: var(--radius-pill);
 }
 
@@ -89,7 +159,7 @@
   display: none;
 }
 
-/* ---------- Mobile breakpoint ---------- */
+/* ── Mobile menu ── */
 @media (max-width: 768px) {
   .navbar__nav,
   .navbar__actions {
@@ -104,9 +174,9 @@
     display: block;
     max-height: 0;
     overflow: hidden;
+    background-color: var(--nav-bg);
+    border-top: 1px solid color-mix(in srgb, var(--nav-fg) 25%, transparent);
     transition: max-height var(--duration-slow) var(--ease-out);
-    background-color: var(--bg-page);
-    border-top: 1px solid var(--color-border);
   }
 
   .navbar__mobile--open {
@@ -124,7 +194,7 @@
     display: block;
     font-family: var(--font-display);
     font-size: var(--text-2xl);
-    color: var(--color-orange);
+    color: var(--nav-accent);
     padding: var(--space-3) 0;
   }
 }

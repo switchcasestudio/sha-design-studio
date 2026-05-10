@@ -1,21 +1,33 @@
 import { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { navigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
-import Button from '@/components/ui/Button';
 import './Navbar.css';
+
+const THEMES = {
+  '/projects': { route: 'navbar--projects', logo: 'white' },
+  '/services': { route: 'navbar--services', logo: 'orange' },
+  '/about':    { route: 'navbar--about',    logo: 'yellow' },
+};
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { pathname } = useLocation();
 
+  const theme = THEMES[pathname] || { route: 'navbar--home', logo: 'colorful' };
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="navbar">
+    <header className={`navbar ${theme.route}`}>
       <div className="navbar__inner container">
-        <Link to="/" className="navbar__logo" onClick={closeMobile} aria-label="Sha Design Studio — Home">
-          <Logo size={48} />
+        <Link
+          to="/"
+          className="navbar__logo"
+          onClick={closeMobile}
+          aria-label="Sha Design Studio — Home"
+        >
+          <Logo size={48} variant={theme.logo} />
         </Link>
 
         <nav className="navbar__nav" aria-label="Primary">
@@ -36,9 +48,9 @@ function Navbar() {
         </nav>
 
         <div className="navbar__actions">
-          <Button as={Link} to="/contact" variant="outline" size="sm">
+          <Link to="/contact" className="navbar__cta">
             Inquire Now
-          </Button>
+          </Link>
         </div>
 
         <button
@@ -53,7 +65,6 @@ function Navbar() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
       <div
         id="mobile-menu"
         className={`navbar__mobile${mobileOpen ? ' navbar__mobile--open' : ''}`}
@@ -72,7 +83,11 @@ function Navbar() {
             </li>
           ))}
           <li>
-            <Link to="/contact" className="navbar__mobile-link" onClick={closeMobile}>
+            <Link
+              to="/contact"
+              className="navbar__mobile-link"
+              onClick={closeMobile}
+            >
               Inquire Now
             </Link>
           </li>

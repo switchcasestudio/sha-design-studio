@@ -1,12 +1,9 @@
-.footer {
-  margin-top: var(--space-16);
-}
+
 
 .footer__panel {
   background-color: var(--color-orange);
   color: var(--text-on-orange);
   padding-block: var(--space-20);
-  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .footer__brand {
