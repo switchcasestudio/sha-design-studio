@@ -1,12 +1,17 @@
 import { motion } from 'motion/react';
-import Badge from '@/components/ui/Badge';
+import blueShape from '@/assets/svg/blue-1.svg';
+import yellowShape from '@/assets/svg/yellow-1.svg';
 import './Projects.css';
 
 const projects = [
   {
     year: '2023',
     title: 'Activity center',
-    badge: { label: 'Activity center', shape: 'cloud', color: 'blue' },
+    badge: {
+      label: 'Activity center',
+      src: blueShape,
+      variant: 'blue',
+    },
     description:
       'It all begins with an idea. Maybe you want to launch a business. Maybe you want to turn a hobby into something more. Whatever it is, the way you tell your story online can make all the difference.',
     images: 2,
@@ -14,7 +19,11 @@ const projects = [
   {
     year: '2022',
     title: 'Gymini',
-    badge: { label: 'Gymini', shape: 'flower', color: 'yellow' },
+    badge: {
+      label: 'Gymini',
+      src: yellowShape,
+      variant: 'yellow',
+    },
     description:
       'It all begins with an idea. Maybe you want to launch a business. Maybe you want to turn a hobby into something more. Whatever it is, the way you tell your story online can make all the difference.',
     images: 2,
@@ -45,6 +54,7 @@ function Projects() {
           >
             Portfolio
           </motion.h1>
+
           <motion.p
             className="projects-page__intro"
             initial={{ opacity: 0, y: 20 }}
@@ -52,7 +62,8 @@ function Projects() {
             transition={{ ...spring, delay: 0.25 }}
           >
             The following are just a few examples of my creative vision and
-            craftsmanship, where every space tells a unique story through design.
+            craftsmanship, where every space tells a unique story through
+            design.
           </motion.p>
         </div>
       </section>
@@ -60,7 +71,7 @@ function Projects() {
       <div className="container projects-page__list">
         {projects.map((project, idx) => (
           <motion.article
-            key={idx}
+            key={project.title}
             className="project-entry"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -87,17 +98,31 @@ function Projects() {
                     <span>Image placeholder</span>
                   </motion.div>
                 ))}
+
                 {project.badge && (
                   <motion.div
                     className={`project-entry__badge project-entry__badge--${
                       project.images > 1 ? 'right' : 'left'
-                    }`}
+                    } project-entry__badge--${project.badge.variant}`}
                     initial={{ scale: 0, rotate: -20 }}
                     whileInView={{ scale: 1, rotate: 0 }}
                     viewport={{ once: true }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.4 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 12,
+                      delay: 0.4,
+                    }}
                   >
-                    <Badge {...project.badge}>{project.badge.label}</Badge>
+                    <img
+                      src={project.badge.src}
+                      alt=""
+                      className="project-entry__badge-shape"
+                      aria-hidden="true"
+                    />
+                    <span className="project-entry__badge-text">
+                      {project.badge.label}
+                    </span>
                   </motion.div>
                 )}
               </div>
@@ -111,7 +136,9 @@ function Projects() {
               transition={{ ...spring, delay: 0.3 }}
             >
               <span className="project-entry__year">{project.year}</span>
-              <p className="project-entry__description">{project.description}</p>
+              <p className="project-entry__description">
+                {project.description}
+              </p>
             </motion.div>
           </motion.article>
         ))}

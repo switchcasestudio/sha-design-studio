@@ -13,12 +13,12 @@ const logoMap = {
 };
 
 function Logo({
-  variant = 'orange',
+  variant = 'white',
   size = 56,
   title = 'Sha Design Studio',
   className = '',
 }) {
-  const logoSrc = logoMap[variant] || logoMap.orange;
+  const logoSrc = logoMap[variant] || logoMap.white;
 
   return (
     <img

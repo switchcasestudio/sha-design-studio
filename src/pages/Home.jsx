@@ -81,7 +81,7 @@ function Home() {
             animate={{ scale: 1, rotate: 0 }}
             transition={{ ...springBouncy, delay: 0.1 }}
           >
-            <Logo size={180} />
+            <Logo size={180} variant="colorful" />
           </motion.div>
           <motion.h1
             className="home-hero__title"
@@ -120,8 +120,12 @@ function Home() {
                 )}
               </div>
               <div className="project-card__caption">
-                <span className="project-card__studio">{featuredProjects[0].studio}</span>
-                <h3 className="project-card__title">{featuredProjects[0].title}</h3>
+                <span className="project-card__studio">
+                  {featuredProjects[0].studio}
+                </span>
+                <h3 className="project-card__title">
+                  {featuredProjects[0].title}
+                </h3>
               </div>
             </motion.article>
 
@@ -134,10 +138,15 @@ function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ ...spring, delay: 0.1 + i * 0.08 }}
-                whileHover={{ y: -6, transition: { type: 'spring', stiffness: 400, damping: 20 } }}
+                whileHover={{
+                  y: -6,
+                  transition: { type: 'spring', stiffness: 400, damping: 20 },
+                }}
               >
                 <div className="project-card__media project-card__media--placeholder">
-                  <span className="project-card__placeholder">Image placeholder</span>
+                  <span className="project-card__placeholder">
+                    Image placeholder
+                  </span>
                   {project.badge && (
                     <div className="project-card__badge project-card__badge--top-left">
                       <Badge {...project.badge}>{project.badge.label}</Badge>
@@ -167,8 +176,9 @@ function Home() {
             >
               <h2 className="home-what__title">What I Do</h2>
               <p className="home-what__text">
-                I create simple, smart, and playful designs that spark curiosity,
-                support early development, and bring joy to little ones.
+                I create simple, smart, and playful designs that spark
+                curiosity, support early development, and bring joy to little
+                ones.
               </p>
               <Button as={Link} to="/services" variant="outline" size="md">
                 Explore My Services
