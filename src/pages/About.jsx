@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
+import yellowFlower from '@/assets/svg/yellow-1.svg';
+import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 
 const offers = [
   {
     title: 'Virtual Design Guidance Sessions',
     description:
-      'One-on-one sessions to talk through your project, get feedback on concepts, and plan next steps — all from anywhere in the world.',
+      'One-on-one sessions to talk through your project, get feedback on concepts, and plan next steps, all from anywhere in the world.',
   },
   {
     title: 'Room Revival and Refinement',
     description:
-      'A targeted refresh for a single room — color, layout, and key product recommendations to bring the space to life.',
+      'A targeted refresh for a single room, color, layout, and key product recommendations to bring the space to life.',
   },
   {
     title: 'Complete Home Transformation',
@@ -40,33 +41,39 @@ function About() {
             transition={{ ...spring, delay: 0.15 }}
           >
             <h1 className="about-bio__title">About Me</h1>
+
             <div className="about-bio__text">
               <p>
-                Hi there — I'm Shiran Bar, an industrial designer specializing
-                in toys and baby products.
+                Hi there, I'm Shiran Bar, an industrial designer specializing in
+                toys and baby products.
               </p>
+
               <p>
                 I graduated from Shenkar College of Design, interned at HAPE in
                 China, and worked at Tiny Love designing a wide range of baby
-                products — from soft toys to electronic developmental items.
+                products, from soft toys to electronic developmental items.
               </p>
+
               <p>
                 I'm inspired by the beautiful simplicity of babies: their
                 curiosity, instinct to play, and unfiltered reactions. This
                 drives me to create designs that are both intuitive and
                 emotionally engaging.
               </p>
+
               <p>
                 My process is guided by sensitivity, precision, and a love for
-                surprising details — the small things that turn a good product
+                surprising details, the small things that turn a good product
                 into an exceptional one.
               </p>
+
               <p>
                 I create toys that inspire, empower, and spark joy. Skilled in
                 concept development and hands-on product design, I'm open to
                 freelance projects, creative collaborations, and contracting
                 opportunities.
               </p>
+
               <p className="about-bio__signoff">
                 Simple, smart, and full of wonder.
               </p>
@@ -85,15 +92,27 @@ function About() {
           >
             <div className="about-bio__photo-frame">
               <div className="about-bio__photo-placeholder">
-                <span>Designer portrait placeholder</span>
+                <img src={shiranBar} alt="Shiran Bar" />
               </div>
+
               <motion.div
                 className="about-bio__hello"
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.6 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 12,
+                  delay: 0.6,
+                }}
               >
-                <Badge shape="flower" color="yellow">Hello!</Badge>
+                <img
+                  src={yellowFlower}
+                  alt=""
+                  className="about-bio__hello-shape"
+                  aria-hidden="true"
+                />
+                <span className="about-bio__hello-text">Hello!</span>
               </motion.div>
             </div>
           </motion.div>
@@ -112,7 +131,10 @@ function About() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ ...spring, delay: i * 0.1 }}
-                whileHover={{ y: -4, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+                whileHover={{
+                  y: -4,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 },
+                }}
               >
                 <div className="about-gallery__placeholder">
                   <span>Image {i + 1}</span>
@@ -141,12 +163,16 @@ function About() {
               transition={{ ...spring, delay: 0.15 }}
             >
               <h2 className="about-offer__title">What I Offer</h2>
+
               <p className="about-offer__text">
                 Whether a single room or a full home makeover, I can offer
                 tailored solutions to elevate your living spaces to new levels
                 of elegance and comfort. Here are some of the services I offer:
               </p>
-              <Button variant="primary" size="md">Explore My Services</Button>
+
+              <Button variant="primary" size="md">
+                Explore My Services
+              </Button>
             </motion.div>
 
             <ul className="about-offer__list">
@@ -166,13 +192,23 @@ function About() {
                     whileTap={{ scale: 0.98 }}
                   >
                     <span>{offer.title}</span>
+
                     <motion.span
                       animate={{ rotate: openIdx === idx ? 180 : 0 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 20,
+                      }}
                     >
-                      {openIdx === idx ? <Minus size={20} /> : <Plus size={20} />}
+                      {openIdx === idx ? (
+                        <Minus size={20} />
+                      ) : (
+                        <Plus size={20} />
+                      )}
                     </motion.span>
                   </motion.button>
+
                   <AnimatePresence>
                     {openIdx === idx && (
                       <motion.p
@@ -180,7 +216,11 @@ function About() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 300,
+                          damping: 28,
+                        }}
                       >
                         {offer.description}
                       </motion.p>
