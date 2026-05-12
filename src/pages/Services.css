@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Services Page — single yellow theme
+   Services Page
    ========================================================================== */
 
 .services-page {
@@ -8,7 +8,7 @@
   padding-bottom: var(--space-16);
 }
 
-/* ── Hero ── */
+/* Hero */
 .services-page__hero {
   padding-block: var(--space-12) var(--space-8);
 }
@@ -32,7 +32,7 @@
   justify-self: end;
 }
 
-/* ── Hero image ── */
+/* Hero image */
 .services-page__hero-image {
   padding-bottom: var(--space-16);
 }
@@ -55,13 +55,11 @@
   font-style: italic;
 }
 
-/* ==========================================================================
-   Service blocks — stacked on yellow with ink dividers
-   ========================================================================== */
-
+/* Service blocks */
 .services-page__list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-8);
 }
 
 .service-block {
@@ -77,7 +75,7 @@
   border-bottom: 2px solid var(--color-ink);
 }
 
-/* ── Left column — title + price ── */
+/* Left column */
 .service-block__left {
   display: flex;
   flex-direction: column;
@@ -91,38 +89,6 @@
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   white-space: pre-line;
-  /* color: var(--color-ink); */
-}
-
-.service-block:first-child {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-8), 5vw, var(--space-16));
-  margin-bottom: var(--space-8);
-  min-height: 460px;
-}
-
-.service-block:first-child,
-.service-block:first-child .service-block__right,
-.service-block:first-child .service-block__description,
-.service-block:first-child .service-block__cta,
-.service-block:first-child .service-block__list,
-.service-block:first-child .service-block__item,
-.service-block:first-child .service-block__row,
-.service-block:first-child .service-block__detail,
-.service-block:first-child .service-block__inquire,
-.service-block:first-child .service-block__price,
-.service-block:first-child .service-block__title {
-  background-color: var(--color-orange);
-  color: var(--color-cream) !important;
-  border-color: var(--color-cream);
-}
-
-.service-block:first-child .service-block__row:hover,
-.service-block:first-child .service-block__inquire:hover {
-  color: var(--color-ink) !important;
 }
 
 .service-block__price {
@@ -132,7 +98,7 @@
   color: var(--color-ink);
 }
 
-/* ── Right column — content ── */
+/* Right column */
 .service-block__right {
   display: flex;
   flex-direction: column;
@@ -159,10 +125,10 @@
 }
 
 .service-block__inquire:hover {
-  color: var(--color-ink);
+  color: var(--color-orange);
 }
 
-/* ── Accordion list ── */
+/* Accordion list */
 .service-block__list {
   display: flex;
   flex-direction: column;
@@ -201,7 +167,89 @@
   opacity: 0.85;
 }
 
-/* ── Purchase row (Design Session) ── */
+/* First card: Full-service */
+.service-block:first-child {
+  background-color: var(--color-orange);
+  color: var(--color-cream);
+  border: none;
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-8), 5vw, var(--space-16));
+  min-height: 460px;
+}
+
+.service-block:first-child,
+.service-block:first-child .service-block__right,
+.service-block:first-child .service-block__description,
+.service-block:first-child .service-block__cta,
+.service-block:first-child .service-block__list,
+.service-block:first-child .service-block__item,
+.service-block:first-child .service-block__row,
+.service-block:first-child .service-block__detail,
+.service-block:first-child .service-block__inquire,
+.service-block:first-child .service-block__price,
+.service-block:first-child .service-block__title {
+  background-color: var(--color-orange);
+  color: var(--color-cream) !important;
+  border-color: var(--color-cream);
+}
+
+.service-block:first-child .service-block__row:hover,
+.service-block:first-child .service-block__inquire:hover {
+  color: var(--color-ink) !important;
+}
+
+/* Second card: Room Redesign */
+.service-block:nth-child(2) {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  border: none;
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-8), 5vw, var(--space-16));
+  min-height: 520px;
+}
+
+.service-block:nth-child(2),
+.service-block:nth-child(2) .service-block__right,
+.service-block:nth-child(2) .service-block__description,
+.service-block:nth-child(2) .service-block__cta,
+.service-block:nth-child(2) .service-block__list,
+.service-block:nth-child(2) .service-block__item,
+.service-block:nth-child(2) .service-block__row,
+.service-block:nth-child(2) .service-block__detail,
+.service-block:nth-child(2) .service-block__inquire,
+.service-block:nth-child(2) .service-block__price,
+.service-block:nth-child(2) .service-block__title {
+  background-color: var(--color-ink);
+  color: var(--color-cream) !important;
+  border-color: var(--color-cream);
+}
+
+.service-block:nth-child(2) .service-block__inquire {
+  text-decoration-thickness: 2px;
+}
+
+.service-block:nth-child(2) .service-block__list {
+  margin-top: var(--space-6);
+}
+
+.service-block:nth-child(2) .service-block__item {
+  border-top: 1px solid var(--color-cream);
+}
+
+.service-block:nth-child(2) .service-block__item:last-child {
+  border-bottom: 1px solid var(--color-cream);
+}
+
+.service-block:nth-child(2) .service-block__detail {
+  opacity: 0.85;
+}
+
+.service-block:nth-child(2) .service-block__row:hover,
+.service-block:nth-child(2) .service-block__inquire:hover {
+  color: var(--color-yellow) !important;
+}
+
+/* Purchase row */
 .service-block__purchase {
   display: flex;
   align-items: center;
@@ -261,7 +309,7 @@
   color: var(--color-yellow);
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 768px) {
   .services-page__hero-inner {
     grid-template-columns: 1fr;
@@ -272,10 +320,31 @@
     justify-self: start;
   }
 
-  .service-block {
+  .service-block,
+  .service-block:first-child,
+  .service-block:nth-child(2) {
     grid-template-columns: 1fr;
     gap: var(--space-6);
-    padding-block: var(--space-12);
+    padding: var(--space-8);
+    min-height: unset;
+  }
+
+  .service-block:nth-child(2) .service-block__title {
+    font-size: clamp(4rem, 18vw, 6rem);
+  }
+
+  .service-block:first-child .service-block__title,
+  .service-block:nth-child(2) .service-block__title {
+    font-size: clamp(2rem, 13vw, 2rem);
+    line-height: 0.95;
+  }
+
+  .service-block:nth-child(2) .service-block__description {
+    font-size: var(--text-2xl);
+  }
+
+  .service-block:nth-child(2) .service-block__cta {
+    font-size: var(--text-xl);
   }
 
   .service-block__purchase {

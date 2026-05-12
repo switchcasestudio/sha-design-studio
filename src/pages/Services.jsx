@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import redShape from '@/assets/svg/red-2.svg';
 import './Services.css';
 
 const services = [
@@ -25,7 +24,7 @@ const services = [
     id: 'design-session',
     title: 'Design\nSession',
     description:
-      'One-hour sessions tailored to your needs — perfect for quick design advice, a second opinion, or help with specific design decisions. Available virtually or in person.',
+      'One-hour sessions tailored to your needs, perfect for quick design advice, a second opinion, or help with specific design decisions. Available virtually or in person.',
     price: '₪200.00',
     purchase: true,
   },
@@ -47,6 +46,7 @@ function QuantityStepper() {
       >
         <Minus size={18} />
       </motion.button>
+
       <motion.span
         className="qty-stepper__value"
         key={qty}
@@ -56,6 +56,7 @@ function QuantityStepper() {
       >
         {qty}
       </motion.span>
+
       <motion.button
         className="qty-stepper__btn"
         onClick={() => setQty((q) => q + 1)}
@@ -90,6 +91,7 @@ function ServiceBlock({ service, index }) {
         >
           {service.title}
         </motion.h2>
+
         {service.price && (
           <motion.span
             className="service-block__price"
@@ -126,6 +128,7 @@ function ServiceBlock({ service, index }) {
                   whileTap={{ scale: 0.98 }}
                 >
                   <span>{item}</span>
+
                   <motion.span
                     animate={{ rotate: openItem === idx ? 180 : 0 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -137,6 +140,7 @@ function ServiceBlock({ service, index }) {
                     )}
                   </motion.span>
                 </motion.button>
+
                 <AnimatePresence>
                   {openItem === idx && (
                     <motion.p
@@ -163,6 +167,7 @@ function ServiceBlock({ service, index }) {
         {service.purchase && (
           <div className="service-block__purchase">
             <QuantityStepper />
+
             <motion.button
               className="service-block__buy-btn"
               whileHover={{ scale: 1.03 }}
@@ -191,6 +196,7 @@ function Services() {
           >
             Services
           </motion.h1>
+
           <motion.p
             className="services-page__intro"
             initial={{ opacity: 0, y: 20 }}
