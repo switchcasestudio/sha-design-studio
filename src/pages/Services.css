@@ -39,14 +39,13 @@
 
 .services-page__image-placeholder {
   aspect-ratio: 16 / 6;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(26, 26, 26, 0.08),
-      rgba(26, 26, 26, 0.08) 10px,
-      rgba(26, 26, 26, 0.03) 10px,
-      rgba(26, 26, 26, 0.03) 20px
-    );
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(26, 26, 26, 0.08),
+    rgba(26, 26, 26, 0.08) 10px,
+    rgba(26, 26, 26, 0.03) 10px,
+    rgba(26, 26, 26, 0.03) 20px
+  );
   border: 1px solid var(--color-ink);
   border-radius: var(--radius-lg);
   display: flex;
@@ -92,7 +91,38 @@
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   white-space: pre-line;
-  color: var(--color-ink);
+  /* color: var(--color-ink); */
+}
+
+.service-block:first-child {
+  background-color: var(--color-orange);
+  color: var(--color-cream);
+  border: none;
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-8), 5vw, var(--space-16));
+  margin-bottom: var(--space-8);
+  min-height: 460px;
+}
+
+.service-block:first-child,
+.service-block:first-child .service-block__right,
+.service-block:first-child .service-block__description,
+.service-block:first-child .service-block__cta,
+.service-block:first-child .service-block__list,
+.service-block:first-child .service-block__item,
+.service-block:first-child .service-block__row,
+.service-block:first-child .service-block__detail,
+.service-block:first-child .service-block__inquire,
+.service-block:first-child .service-block__price,
+.service-block:first-child .service-block__title {
+  background-color: var(--color-orange);
+  color: var(--color-cream) !important;
+  border-color: var(--color-cream);
+}
+
+.service-block:first-child .service-block__row:hover,
+.service-block:first-child .service-block__inquire:hover {
+  color: var(--color-ink) !important;
 }
 
 .service-block__price {
@@ -129,7 +159,7 @@
 }
 
 .service-block__inquire:hover {
-  color: var(--color-orange);
+  color: var(--color-ink);
 }
 
 /* ── Accordion list ── */

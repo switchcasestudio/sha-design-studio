@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import redShape from '@/assets/svg/red-2.svg';
 import './Services.css';
 
 const services = [
@@ -107,7 +108,9 @@ function ServiceBlock({ service, index }) {
 
         {service.cta && (
           <p className="service-block__cta">
-            <a href="/contact" className="service-block__inquire">Inquire</a>{' '}
+            <a href="/contact" className="service-block__inquire">
+              Inquire
+            </a>{' '}
             for a custom quote.
           </p>
         )}
@@ -127,7 +130,11 @@ function ServiceBlock({ service, index }) {
                     animate={{ rotate: openItem === idx ? 180 : 0 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
-                    {openItem === idx ? <Minus size={20} /> : <Plus size={20} />}
+                    {openItem === idx ? (
+                      <Minus size={20} />
+                    ) : (
+                      <Plus size={20} />
+                    )}
                   </motion.span>
                 </motion.button>
                 <AnimatePresence>
@@ -137,7 +144,11 @@ function ServiceBlock({ service, index }) {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 28,
+                      }}
                     >
                       Details about {item.toLowerCase()} go here. Replace with
                       real copy describing what's included.
