@@ -2,16 +2,17 @@ import { Link } from 'react-router-dom';
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import Logo from '@/components/ui/Logo';
-import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { siteConfig } from '@/utils/siteConfig';
+import redShape from '@/assets/svg/red-2.svg';
+import blueShape from '@/assets/svg/blue-2.svg';
 import './Home.css';
 
 const featuredProjects = [
   {
     id: 'shape-sorter',
     title: 'Shape Sorter — Tiny Rocker collection',
-    badge: { label: 'Sorter', shape: 'cloud', color: 'blue' },
+    badge: { label: 'Sorter', src: blueShape },
     image: null,
     studio: 'Tiny Love',
     size: 'large',
@@ -19,7 +20,7 @@ const featuredProjects = [
   {
     id: 'rattle-toy',
     title: 'Take Along Rattle Toy — Garden Of Adventure',
-    badge: { label: 'Way cool!', shape: 'flower', color: 'orange' },
+    badge: { label: 'Way cool!', src: redShape },
     image: null,
     studio: 'Tiny Love',
     size: 'medium',
@@ -53,6 +54,20 @@ const featuredProjects = [
 const spring = { type: 'spring', stiffness: 200, damping: 20 };
 const springBouncy = { type: 'spring', stiffness: 300, damping: 15 };
 
+function ProjectBadge({ badge }) {
+  return (
+    <>
+      <img
+        src={badge.src}
+        alt=""
+        className="project-card__badge-shape"
+        aria-hidden="true"
+      />
+      <span className="project-card__badge-text">{badge.label}</span>
+    </>
+  );
+}
+
 function Section({ children, className }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
@@ -83,6 +98,7 @@ function Home() {
           >
             <Logo size={180} variant="colorful" />
           </motion.div>
+
           <motion.h1
             className="home-hero__title"
             initial={{ opacity: 0, y: 30 }}
@@ -111,18 +127,19 @@ function Home() {
                 <span className="project-card__placeholder">
                   Project image placeholder
                 </span>
+
                 {featuredProjects[0].badge && (
                   <div className="project-card__badge project-card__badge--top-right">
-                    <Badge {...featuredProjects[0].badge}>
-                      {featuredProjects[0].badge.label}
-                    </Badge>
+                    <ProjectBadge badge={featuredProjects[0].badge} />
                   </div>
                 )}
               </div>
+
               <div className="project-card__caption">
                 <span className="project-card__studio">
                   {featuredProjects[0].studio}
                 </span>
+
                 <h3 className="project-card__title">
                   {featuredProjects[0].title}
                 </h3>
@@ -147,12 +164,14 @@ function Home() {
                   <span className="project-card__placeholder">
                     Image placeholder
                   </span>
+
                   {project.badge && (
                     <div className="project-card__badge project-card__badge--top-left">
-                      <Badge {...project.badge}>{project.badge.label}</Badge>
+                      <ProjectBadge badge={project.badge} />
                     </div>
                   )}
                 </div>
+
                 <div className="project-card__caption">
                   <span className="project-card__studio">{project.studio}</span>
                   <h3 className="project-card__title">{project.title}</h3>
@@ -175,15 +194,18 @@ function Home() {
               transition={{ ...spring, delay: 0.15 }}
             >
               <h2 className="home-what__title">What I Do</h2>
+
               <p className="home-what__text">
                 I create simple, smart, and playful designs that spark
                 curiosity, support early development, and bring joy to little
                 ones.
               </p>
+
               <Button as={Link} to="/services" variant="outline" size="md">
                 Explore My Services
               </Button>
             </motion.div>
+
             <motion.div
               className="home-what__media home-what__media--placeholder"
               initial={{ opacity: 0, x: 30 }}
@@ -208,12 +230,14 @@ function Home() {
             transition={{ ...spring, delay: 0.1 }}
           >
             <h2 className="home-words__title">Kind Words</h2>
+
             <blockquote className="home-words__quote">
               <p>
                 "Channing made an extra effort to add elements that were
                 personal to us. She made sure our space reflected us as
                 individuals and as a family."
               </p>
+
               <cite className="home-words__cite">— Jaya Dixon</cite>
             </blockquote>
           </motion.div>
