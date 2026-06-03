@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
 import yellowFlower from '@/assets/svg/yellow-1.svg';
 import shiranBar from '@/assets/images/Shiran-bar.png';
+import { projects } from '@/data';
 import './About.css';
+
+// Real project imagery for the gallery, pulled from the shared data module.
+const galleryImages = projects.slice(3, 6).map((project) => project.heroImage);
 
 const offers = [
   {
@@ -136,9 +140,12 @@ function About() {
                   transition: { type: 'spring', stiffness: 300, damping: 20 },
                 }}
               >
-                <div className="about-gallery__placeholder">
-                  <span>Image {i + 1}</span>
-                </div>
+                <img
+                  className="about-gallery__image"
+                  src={galleryImages[i].src}
+                  alt={galleryImages[i].alt}
+                  loading="lazy"
+                />
               </motion.div>
             ))}
           </div>

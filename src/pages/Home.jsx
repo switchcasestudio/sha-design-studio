@@ -4,52 +4,25 @@ import { useRef } from 'react';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import { siteConfig } from '@/utils/siteConfig';
+import { projects } from '@/data';
 import redShape from '@/assets/svg/red-2.svg';
 import blueShape from '@/assets/svg/blue-2.svg';
 import './Home.css';
 
-const featuredProjects = [
-  {
-    id: 'shape-sorter',
-    title: 'Shape Sorter — Tiny Rocker collection',
-    badge: { label: 'Sorter', src: blueShape },
-    image: null,
-    studio: 'Tiny Love',
-    size: 'large',
-  },
-  {
-    id: 'rattle-toy',
-    title: 'Take Along Rattle Toy — Garden Of Adventure',
-    badge: { label: 'Way cool!', src: redShape },
-    image: null,
-    studio: 'Tiny Love',
-    size: 'medium',
-  },
-  {
-    id: 'retro-living-room',
-    title: 'Retro minimal living room remodel',
-    badge: null,
-    image: null,
-    studio: 'Tiny Love',
-    size: 'medium',
-  },
-  {
-    id: 'play-gym',
-    title: 'Retro minimal living room remodel',
-    badge: null,
-    image: null,
-    studio: 'Tiny Love',
-    size: 'medium',
-  },
-  {
-    id: 'bohemian-studio',
-    title: 'Minimal Bohemian Brooklyn studio',
-    badge: null,
-    image: null,
-    studio: 'Tiny Love',
-    size: 'medium',
-  },
-];
+// First project fills the large feature slot; the next four fill the grid.
+// Playful SVG badges stay as scaffold decoration on the first two cards.
+const homeBadges = [blueShape, redShape];
+
+const featuredProjects = projects.slice(0, 5).map((project, i) => ({
+  id: project.id,
+  title: project.title,
+  studio: project.client,
+  image: project.heroImage,
+  badge:
+    i < homeBadges.length
+      ? { label: project.category.split('/')[0].trim(), src: homeBadges[i] }
+      : null,
+}));
 
 const spring = { type: 'spring', stiffness: 200, damping: 20 };
 const springBouncy = { type: 'spring', stiffness: 300, damping: 15 };
@@ -123,10 +96,12 @@ function Home() {
               transition={{ ...spring, delay: 0.1 }}
               whileHover={{ y: -6 }}
             >
-              <div className="project-card__media project-card__media--placeholder">
-                <span className="project-card__placeholder">
-                  Project image placeholder
-                </span>
+              <div className="project-card__media">
+                <img
+                  className="project-card__image"
+                  src={featuredProjects[0].image.src}
+                  alt={featuredProjects[0].image.alt}
+                />
 
                 {featuredProjects[0].badge && (
                   <div className="project-card__badge project-card__badge--top-right">
@@ -160,10 +135,13 @@ function Home() {
                   transition: { type: 'spring', stiffness: 400, damping: 20 },
                 }}
               >
-                <div className="project-card__media project-card__media--placeholder">
-                  <span className="project-card__placeholder">
-                    Image placeholder
-                  </span>
+                <div className="project-card__media">
+                  <img
+                    className="project-card__image"
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    loading="lazy"
+                  />
 
                   {project.badge && (
                     <div className="project-card__badge project-card__badge--top-left">

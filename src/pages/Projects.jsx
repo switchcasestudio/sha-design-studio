@@ -1,42 +1,14 @@
 import { motion } from 'motion/react';
+import { projects } from '@/data';
 import blueShape from '@/assets/svg/blue-1.svg';
 import yellowShape from '@/assets/svg/yellow-1.svg';
+import redShape from '@/assets/svg/red-1.svg';
 import './Projects.css';
 
-const projects = [
-  {
-    year: '2023',
-    title: 'Activity center',
-    badge: {
-      label: 'Activity center',
-      src: blueShape,
-      variant: 'blue',
-    },
-    description:
-      'It all begins with an idea. Maybe you want to launch a business. Maybe you want to turn a hobby into something more. Whatever it is, the way you tell your story online can make all the difference.',
-    images: 2,
-  },
-  {
-    year: '2022',
-    title: 'Gymini',
-    badge: {
-      label: 'Gymini',
-      src: yellowShape,
-      variant: 'yellow',
-    },
-    description:
-      'It all begins with an idea. Maybe you want to launch a business. Maybe you want to turn a hobby into something more. Whatever it is, the way you tell your story online can make all the difference.',
-    images: 2,
-  },
-  {
-    year: '2022',
-    title: 'Wooden toys collection',
-    badge: null,
-    description:
-      'It all begins with an idea. Maybe you want to launch a business. Maybe you want to turn a hobby into something more. Whatever it is, the way you tell your story online can make all the difference.',
-    images: 1,
-    background: 'light',
-  },
+const badgeVariants = [
+  { src: blueShape, variant: 'blue' },
+  { src: yellowShape, variant: 'yellow' },
+  { src: redShape, variant: 'red' },
 ];
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -69,41 +41,50 @@ function Projects() {
       </section>
 
       <div className="container projects-page__list">
-        {projects.map((project, idx) => (
-          <motion.article
-            key={project.title}
-            className="project-entry"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ ...spring, delay: 0.1 }}
-          >
-            <motion.div
-              className={`project-entry__media project-entry__media--${
-                project.background || 'orange'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <div className="project-entry__images">
-                {Array.from({ length: project.images }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="project-entry__image-placeholder"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ ...spring, delay: 0.2 + i * 0.1 }}
-                  >
-                    <span>Image placeholder</span>
-                  </motion.div>
-                ))}
+        {projects.map((project, idx) => {
+          const badge = badgeVariants[idx % badgeVariants.length];
+          const entryImages = [project.heroImage, project.images[1]].filter(
+            Boolean
+          );
 
-                {project.badge && (
+          return (
+            <motion.article
+              key={project.id}
+              className="project-entry"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ ...spring, delay: 0.1 }}
+            >
+              <motion.div
+                className="project-entry__media project-entry__media--orange"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                <div className="project-entry__images">
+                  {entryImages.map((image, i) => (
+                    <motion.figure
+                      key={image.src}
+                      className="project-entry__image"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ ...spring, delay: 0.2 + i * 0.1 }}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        width={image.width ?? undefined}
+                        height={image.height ?? undefined}
+                        loading={idx === 0 ? 'eager' : 'lazy'}
+                      />
+                    </motion.figure>
+                  ))}
+
                   <motion.div
                     className={`project-entry__badge project-entry__badge--${
-                      project.images > 1 ? 'right' : 'left'
-                    } project-entry__badge--${project.badge.variant}`}
+                      entryImages.length > 1 ? 'right' : 'left'
+                    } project-entry__badge--${badge.variant}`}
                     initial={{ scale: 0, rotate: -20 }}
                     whileInView={{ scale: 1, rotate: 0 }}
                     viewport={{ once: true }}
@@ -115,33 +96,38 @@ function Projects() {
                     }}
                   >
                     <img
-                      src={project.badge.src}
+                      src={badge.src}
                       alt=""
                       className="project-entry__badge-shape"
                       aria-hidden="true"
                     />
                     <span className="project-entry__badge-text">
-                      {project.badge.label}
+                      {project.category.split('/')[0].trim()}
                     </span>
                   </motion.div>
-                )}
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
 
-            <motion.div
-              className="project-entry__caption"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.3 }}
-            >
-              <span className="project-entry__year">{project.year}</span>
-              <p className="project-entry__description">
-                {project.description}
-              </p>
-            </motion.div>
-          </motion.article>
-        ))}
+              <motion.div
+                className="project-entry__caption"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ ...spring, delay: 0.3 }}
+              >
+                <span className="project-entry__category">
+                  {project.category}
+                </span>
+                <div className="project-entry__text">
+                  <h2 className="project-entry__title">{project.title}</h2>
+                  <p className="project-entry__description">
+                    {project.summary}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.article>
+          );
+        })}
       </div>
     </div>
   );
