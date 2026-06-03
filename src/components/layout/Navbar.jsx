@@ -16,7 +16,7 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
 
-  const theme = THEMES[pathname] || { route: 'navbar--home', logo: 'colorful' };
+  const theme = THEMES[pathname] || { route: 'navbar--home', logo: 'orange' };
   const closeMobile = () => setMobileOpen(false);
 
   return (

@@ -5,9 +5,9 @@
    ========================================================================== */
 
 .navbar {
-  /* Defaults (Home) */
+  /* Defaults (Home) — brand orange logo, links, and CTA on cream */
   --nav-bg: var(--color-cream);
-  --nav-fg: var(--color-ink);
+  --nav-fg: var(--color-orange);
   --nav-accent: var(--color-orange);
 
   position: sticky;
@@ -73,7 +73,7 @@
 .navbar__link {
   font-family: var(--font-body);
   font-size: var(--text-base);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
   color: var(--nav-fg);
   padding: var(--space-2) 0;
   position: relative;
@@ -98,6 +98,7 @@
   color: var(--nav-accent);
 }
 
+.navbar__link:hover::after,
 .navbar__link--active::after {
   width: 100%;
   left: 0;
@@ -131,16 +132,16 @@
   color: var(--nav-bg);
 }
 
-/* Home gets a filled ink CTA — explicit override of the outline default */
+/* Home gets a filled orange CTA — explicit override of the outline default */
 .navbar--home .navbar__cta {
-  background-color: var(--color-ink);
-  border-color: var(--color-ink);
+  background-color: var(--color-orange);
+  border-color: var(--color-orange);
   color: var(--color-cream);
 }
 
 .navbar--home .navbar__cta:hover {
-  background-color: var(--color-orange);
-  border-color: var(--color-orange);
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
   color: var(--color-cream);
 }
 
