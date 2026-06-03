@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Twitter } from 'lucide-react';
+// import { Instagram, Facebook, Twitter } from 'lucide-react';
 import { motion } from 'motion/react';
 import { siteConfig, footerNavigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
@@ -13,7 +13,8 @@ function Footer() {
     <footer className="footer">
       {/* Orange contact panel */}
       <div className="footer__panel">
-        <div className="container">
+        <div className="container footer__grid">
+          {/* Brand + menu */}
           <motion.div
             className="footer__brand"
             initial={{ opacity: 0, y: 30 }}
@@ -21,19 +22,10 @@ function Footer() {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ ...spring }}
           >
-            <Logo size={120} variant="cream" />
+            <Logo size={110} variant="cream" />
             <p className="footer__tagline">{siteConfig.tagline}</p>
-          </motion.div>
 
-          <div className="footer__grid">
-            <motion.div
-              className="footer__col"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.1 }}
-            >
-              <h4 className="footer__heading">Menu</h4>
+            <nav aria-label="Footer">
               <ul className="footer__list">
                 {footerNavigation.menu.map((item) => (
                   <li key={item.href}>
@@ -43,46 +35,40 @@ function Footer() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </nav>
 
-            <motion.div
-              className="footer__col"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.2 }}
-            >
-              <h4 className="footer__heading">Social</h4>
-              <ul className="footer__list">
-                {footerNavigation.social.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className="footer__link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            {/* Social links — re-enable when the profiles are live
+            <ul className="footer__list footer__list--social">
+              {footerNavigation.social.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="footer__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            */}
+          </motion.div>
 
-            <motion.div
-              className="footer__col footer__col--form"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.3 }}
-            >
-              <h4 className="footer__heading">Let's stay connected</h4>
-              <p className="footer__sub">
-                Reach out about a project, collaboration or just to say hello!
-              </p>
-              <ContactForm />
-            </motion.div>
-          </div>
+          {/* Contact form */}
+          <motion.div
+            className="footer__form"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ ...spring, delay: 0.15 }}
+          >
+            <h4 className="footer__heading">Let's stay connected</h4>
+            <p className="footer__sub">
+              Reach out about a project, collaboration or just to say hello!
+            </p>
+            <ContactForm />
+          </motion.div>
         </div>
       </div>
 
@@ -90,6 +76,8 @@ function Footer() {
       <div className="footer__bar">
         <div className="container footer__bar-inner">
           <span className="footer__site">{siteConfig.name}</span>
+
+          {/* Social icons — re-enable when the profiles are live
           <div className="footer__icons">
             {[
               { href: siteConfig.social.instagram, label: 'Instagram', Icon: Instagram },
@@ -110,6 +98,8 @@ function Footer() {
               </motion.a>
             ))}
           </div>
+          */}
+
           <a href={`mailto:${siteConfig.email}`} className="footer__email">
             {siteConfig.email}
           </a>

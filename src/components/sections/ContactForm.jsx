@@ -49,16 +49,6 @@ function ContactForm() {
         />
       </div>
 
-      <label className="contact-form__checkbox">
-        <input
-          type="checkbox"
-          name="newsletter"
-          checked={form.newsletter}
-          onChange={handleChange}
-        />
-        <span>Sign up for news and updates</span>
-      </label>
-
       <div className="contact-form__field">
         <label htmlFor="message" className="contact-form__label">
           Message <span className="contact-form__required">(required)</span>
@@ -73,6 +63,16 @@ function ContactForm() {
           className="contact-form__textarea"
         />
       </div>
+
+      <label className="contact-form__checkbox">
+        <input
+          type="checkbox"
+          name="newsletter"
+          checked={form.newsletter}
+          onChange={handleChange}
+        />
+        <span>Sign up for news and updates</span>
+      </label>
 
       <Button
         type="submit"

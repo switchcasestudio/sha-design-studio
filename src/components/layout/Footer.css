@@ -1,37 +1,36 @@
-
-
 .footer__panel {
   background-color: var(--color-orange);
   color: var(--text-on-orange);
-  padding-block: var(--space-20);
+  padding-block: var(--space-16) var(--space-20);
+}
+
+/* Two columns: brand + menu on the left, contact form on the right */
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--space-16);
+  align-items: start;
 }
 
 .footer__brand {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-bottom: var(--space-16);
+  align-items: flex-start;
+  gap: var(--space-5);
 }
 
 .footer__tagline {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   line-height: var(--leading-snug);
-  margin-top: var(--space-6);
-}
-
-.footer__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
-  gap: var(--space-12);
+  max-width: 16ch;
 }
 
 .footer__heading {
   font-family: var(--font-body);
   font-size: var(--text-xl);
   font-weight: var(--weight-semibold);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-2);
   letter-spacing: var(--tracking-normal);
 }
 
@@ -43,20 +42,25 @@
 
 .footer__link {
   font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   color: var(--text-on-orange);
-  text-decoration: underline;
-  text-underline-offset: 4px;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
 .footer__link:hover {
-  opacity: 0.75;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.85;
 }
 
 .footer__sub {
   font-size: var(--text-sm);
   margin-bottom: var(--space-5);
   opacity: 0.9;
+}
+
+.footer__form {
+  max-width: 520px;
 }
 
 /* ----- Bottom bar ----- */
@@ -93,9 +97,15 @@
 }
 
 .footer__email {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   color: var(--color-ink);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer__email:hover {
+  color: var(--color-orange);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -104,7 +114,11 @@
 @media (max-width: 768px) {
   .footer__grid {
     grid-template-columns: 1fr;
-    gap: var(--space-8);
+    gap: var(--space-10);
+  }
+
+  .footer__form {
+    max-width: none;
   }
 
   .footer__bar-inner {
