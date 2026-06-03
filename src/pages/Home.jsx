@@ -97,29 +97,34 @@ function Home() {
               transition={{ ...spring, delay: 0.1 }}
               whileHover={{ y: -6 }}
             >
-              <div className="project-card__media">
-                <img
-                  className="project-card__image"
-                  src={featuredProjects[0].image.src}
-                  alt={featuredProjects[0].image.alt}
-                />
-              </div>
+              <Link
+                to={`/projects/${featuredProjects[0].id}`}
+                className="project-card__link"
+              >
+                <div className="project-card__media">
+                  <img
+                    className="project-card__image"
+                    src={featuredProjects[0].image.src}
+                    alt={featuredProjects[0].image.alt}
+                  />
+                </div>
+
+                <div className="project-card__caption">
+                  <span className="project-card__studio">
+                    {featuredProjects[0].studio}
+                  </span>
+
+                  <h3 className="project-card__title">
+                    {featuredProjects[0].title}
+                  </h3>
+                </div>
+              </Link>
 
               {featuredProjects[0].badge && (
                 <div className="project-card__badge project-card__badge--top-right">
                   <ProjectBadge badge={featuredProjects[0].badge} />
                 </div>
               )}
-
-              <div className="project-card__caption">
-                <span className="project-card__studio">
-                  {featuredProjects[0].studio}
-                </span>
-
-                <h3 className="project-card__title">
-                  {featuredProjects[0].title}
-                </h3>
-              </div>
             </motion.article>
 
             {/* Secondary projects */}
@@ -136,25 +141,32 @@ function Home() {
                   transition: { type: 'spring', stiffness: 400, damping: 20 },
                 }}
               >
-                <div className="project-card__media">
-                  <img
-                    className="project-card__image"
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    loading="lazy"
-                  />
-                </div>
+                <Link
+                  to={`/projects/${project.id}`}
+                  className="project-card__link"
+                >
+                  <div className="project-card__media">
+                    <img
+                      className="project-card__image"
+                      src={project.image.src}
+                      alt={project.image.alt}
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="project-card__caption">
+                    <span className="project-card__studio">
+                      {project.studio}
+                    </span>
+                    <h3 className="project-card__title">{project.title}</h3>
+                  </div>
+                </Link>
 
                 {project.badge && (
                   <div className="project-card__badge project-card__badge--top-left">
                     <ProjectBadge badge={project.badge} />
                   </div>
                 )}
-
-                <div className="project-card__caption">
-                  <span className="project-card__studio">{project.studio}</span>
-                  <h3 className="project-card__title">{project.title}</h3>
-                </div>
               </motion.article>
             ))}
           </div>

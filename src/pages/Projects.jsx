@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { projects } from '@/data';
 import blueShape from '@/assets/svg/blue-1.svg';
@@ -67,13 +68,19 @@ function Projects() {
                       viewport={{ once: true }}
                       transition={{ ...spring, delay: 0.2 + i * 0.1 }}
                     >
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        width={image.width ?? undefined}
-                        height={image.height ?? undefined}
-                        loading={idx === 0 ? 'eager' : 'lazy'}
-                      />
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="project-entry__image-link"
+                        aria-label={`View project: ${project.title}`}
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          width={image.width ?? undefined}
+                          height={image.height ?? undefined}
+                          loading={idx === 0 ? 'eager' : 'lazy'}
+                        />
+                      </Link>
                     </motion.figure>
                   ))}
 
@@ -115,7 +122,14 @@ function Projects() {
                   {project.category}
                 </span>
                 <div className="project-entry__text">
-                  <h2 className="project-entry__title">{project.title}</h2>
+                  <h2 className="project-entry__title">
+                    <Link
+                      to={`/projects/${project.id}`}
+                      className="project-entry__title-link"
+                    >
+                      {project.title}
+                    </Link>
+                  </h2>
                   <p className="project-entry__description">
                     {project.summary}
                   </p>

@@ -10,6 +10,19 @@
   gap: var(--space-2);
 }
 
+/* Name + phone share a row on wider screens */
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .contact-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .contact-form__label {
   font-size: var(--text-base);
   font-weight: var(--weight-semibold);

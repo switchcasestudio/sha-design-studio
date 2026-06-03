@@ -5,6 +5,8 @@ import './ContactForm.css';
 
 function ContactForm() {
   const [form, setForm] = useState({
+    name: '',
+    phone: '',
     email: '',
     message: '',
     newsletter: false,
@@ -26,7 +28,7 @@ function ContactForm() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 600));
       setStatus('success');
-      setForm({ email: '', message: '', newsletter: false });
+      setForm({ name: '', phone: '', email: '', message: '', newsletter: false });
     } catch (err) {
       setStatus('error');
     }
@@ -34,6 +36,40 @@ function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
+      <div className="contact-form__row">
+        <div className="contact-form__field">
+          <label htmlFor="name" className="contact-form__label">
+            Name <span className="contact-form__required">(required)</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            required
+            value={form.name}
+            onChange={handleChange}
+            className="contact-form__input"
+          />
+        </div>
+
+        <div className="contact-form__field">
+          <label htmlFor="phone" className="contact-form__label">
+            Phone <span className="contact-form__required">(required)</span>
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            required
+            value={form.phone}
+            onChange={handleChange}
+            className="contact-form__input"
+          />
+        </div>
+      </div>
+
       <div className="contact-form__field">
         <label htmlFor="email" className="contact-form__label">
           Email <span className="contact-form__required">(required)</span>
@@ -42,6 +78,7 @@ function ContactForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="email"
           required
           value={form.email}
           onChange={handleChange}

@@ -1,0 +1,196 @@
+.project-detail {
+  background-color: var(--color-orange);
+  color: var(--color-cream);
+  min-height: calc(100vh - 80px);
+  padding-block: var(--space-12) var(--space-24);
+}
+
+/* ---------- Header ---------- */
+.project-detail__header {
+  max-width: 72ch;
+  margin-bottom: var(--space-12);
+}
+
+.project-detail__back {
+  display: inline-block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-cream);
+  margin-bottom: var(--space-8);
+}
+
+.project-detail__back:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.project-detail__category {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: var(--space-3);
+}
+
+.project-detail__title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: clamp(var(--text-3xl), 4.5vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  color: var(--color-cream);
+  margin-bottom: var(--space-5);
+}
+
+.project-detail__summary {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  max-width: 60ch;
+  margin-bottom: var(--space-8);
+}
+
+/* ---------- Meta ---------- */
+.project-detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-bottom: var(--space-6);
+}
+
+.project-detail__meta-item dt {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: var(--space-1);
+}
+
+.project-detail__meta-item dd {
+  font-size: var(--text-base);
+}
+
+.project-detail__products {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.project-detail__products a {
+  color: var(--color-cream);
+}
+
+.project-detail__products a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.project-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.project-detail__tag {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  border: 1px solid color-mix(in srgb, var(--color-cream) 60%, transparent);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+}
+
+/* ---------- Hero image ---------- */
+.project-detail__hero {
+  margin: 0 0 var(--space-6);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-cream);
+}
+
+.project-detail__hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- Gallery ---------- */
+.project-detail__gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.project-detail__gallery-item {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-cream);
+}
+
+.project-detail__gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.project-detail__gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* ---------- Footer nav ---------- */
+.project-detail__nav {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-top: var(--space-16);
+}
+
+.project-detail__nav .project-detail__back {
+  margin-bottom: 0;
+}
+
+.project-detail__next {
+  text-align: right;
+  color: var(--color-cream);
+}
+
+.project-detail__next-label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: var(--space-1);
+}
+
+.project-detail__next-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.project-detail__next:hover .project-detail__next-title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .project-detail__gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-detail__next {
+    text-align: left;
+  }
+}
