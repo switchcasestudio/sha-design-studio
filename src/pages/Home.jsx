@@ -5,6 +5,7 @@ import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import { siteConfig } from '@/utils/siteConfig';
 import { projects } from '@/data';
+import { testimonials } from '@/data/testimonials';
 import redShape from '@/assets/svg/red-2.svg';
 import blueShape from '@/assets/svg/blue-2.svg';
 import './Home.css';
@@ -209,15 +210,35 @@ function Home() {
           >
             <h2 className="home-words__title">Kind Words</h2>
 
-            <blockquote className="home-words__quote">
-              <p>
-                "Channing made an extra effort to add elements that were
-                personal to us. She made sure our space reflected us as
-                individuals and as a family."
-              </p>
+            {testimonials.map((testimonial) => (
+              <blockquote
+                key={testimonial.id}
+                className="home-words__quote"
+              >
+                <p>"{testimonial.comment}"</p>
 
-              <cite className="home-words__cite">— Jaya Dixon</cite>
-            </blockquote>
+                <footer className="home-words__attribution">
+                  {testimonial.image && (
+                    <img
+                      className="home-words__avatar"
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      loading="lazy"
+                    />
+                  )}
+                  <cite className="home-words__cite">
+                    <span className="home-words__name">
+                      — {testimonial.name}
+                    </span>
+                    {testimonial.title && (
+                      <span className="home-words__role">
+                        {testimonial.title}
+                      </span>
+                    )}
+                  </cite>
+                </footer>
+              </blockquote>
+            ))}
           </motion.div>
         </div>
       </Section>

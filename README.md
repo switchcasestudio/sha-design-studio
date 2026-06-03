@@ -86,6 +86,10 @@ sha-design-studio/
 │   │   ├── layout/               # Navbar, Footer, Layout shell
 │   │   ├── sections/             # Composable page sections (ContactForm, etc.)
 │   │   └── ui/                   # Reusable primitives (Button, Badge, Logo)
+│   ├── data/
+│   │   ├── projects.js           # Raw project/content export (source of truth)
+│   │   ├── index.js              # Adapter: resolves image paths, sorts, filters
+│   │   └── testimonials.js       # "Kind Words" testimonial entries
 │   ├── context/                  # React Context providers (theme, etc.)
 │   ├── hooks/                    # Custom React hooks
 │   ├── pages/                    # Route-level page components
@@ -155,6 +159,49 @@ npx shadcn@latest add @reactbits-pro/hero-1
 Components install to `src/components/react-bits/` and blocks to `src/components/blocks/`.
 
 > **Note:** Some React Bits blocks ship with Tailwind classes. Since this project uses vanilla CSS, you may need to translate or strip those classes after installing. The `cn()` helper in `src/utils/cn.js` handles both cases.
+
+## Content & Data
+
+All site content renders dynamically from modules in `src/data/` — no project
+or testimonial copy is hardcoded in components.
+
+### Projects
+
+- **`src/data/projects.js`** — the raw data export prepared from the VPS
+  handoff (titles, categories, summaries, SEO fields, image paths, alt text).
+  Treat it as the single source of truth; regenerate it from the handoff
+  rather than hand-editing.
+- **`src/data/index.js`** — the adapter every page imports from (`@/data`).
+  It resolves each image's `assetPath` to a Vite-bundled URL via
+  `import.meta.glob`, sorts projects by `order`, and exposes `projects`,
+  `featuredProjects`, and `getProjectById()`.
+- **Images** live under `src/assets/images/projects/products/<product-slug>/`.
+  When adding images, drop the file in the matching slug folder and reference
+  it from the project's `images` array in `projects.js` — the adapter picks it
+  up automatically.
+
+### Testimonials ("Kind Words" on Home)
+
+Edit **`src/data/testimonials.js`**. Each entry:
+
+```js
+{
+  id: 'unique-slug',
+  name: 'Client Name',        // required
+  title: 'Brand Manager',     // optional — rendered under the name when set
+  comment: 'The quote text.', // required, no surrounding quotation marks
+  image: clientPhoto,         // optional — import the asset at the top of the file
+}
+```
+
+To add a client photo, place it in `src/assets/images/` (e.g.
+`src/assets/images/testimonials/`), import it at the top of
+`testimonials.js`, and set it as `image`. Entries without `title`/`image`
+render cleanly without them. Multiple entries stack automatically.
+
+> ⚠️ The current seed entry ("Channing…" / Jaya Dixon) is leftover template
+> copy, **not a real client quote** — replace it with real testimonials
+> before launch.
 
 ## Design System
 
