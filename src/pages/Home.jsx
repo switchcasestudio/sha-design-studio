@@ -69,7 +69,7 @@ function Home() {
             animate={{ scale: 1, rotate: 0 }}
             transition={{ ...springBouncy, delay: 0.1 }}
           >
-            <Logo size={180} variant="colorful" />
+            <Logo size={180} variant="orange" />
           </motion.div>
 
           <motion.h1
@@ -102,13 +102,13 @@ function Home() {
                   src={featuredProjects[0].image.src}
                   alt={featuredProjects[0].image.alt}
                 />
-
-                {featuredProjects[0].badge && (
-                  <div className="project-card__badge project-card__badge--top-right">
-                    <ProjectBadge badge={featuredProjects[0].badge} />
-                  </div>
-                )}
               </div>
+
+              {featuredProjects[0].badge && (
+                <div className="project-card__badge project-card__badge--top-right">
+                  <ProjectBadge badge={featuredProjects[0].badge} />
+                </div>
+              )}
 
               <div className="project-card__caption">
                 <span className="project-card__studio">
@@ -142,13 +142,13 @@ function Home() {
                     alt={project.image.alt}
                     loading="lazy"
                   />
-
-                  {project.badge && (
-                    <div className="project-card__badge project-card__badge--top-left">
-                      <ProjectBadge badge={project.badge} />
-                    </div>
-                  )}
                 </div>
+
+                {project.badge && (
+                  <div className="project-card__badge project-card__badge--top-left">
+                    <ProjectBadge badge={project.badge} />
+                  </div>
+                )}
 
                 <div className="project-card__caption">
                   <span className="project-card__studio">{project.studio}</span>
