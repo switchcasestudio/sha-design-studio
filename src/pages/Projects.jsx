@@ -56,11 +56,7 @@ function Projects() {
               viewport={{ once: true, margin: '-80px' }}
               transition={{ ...spring, delay: 0.1 }}
             >
-              <motion.div
-                className="project-entry__media project-entry__media--orange"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              >
+              <div className="project-entry__media project-entry__media--orange">
                 <div className="project-entry__images">
                   {entryImages.map((image, i) => (
                     <motion.figure
@@ -106,7 +102,7 @@ function Projects() {
                     </span>
                   </motion.div>
                 </div>
-              </motion.div>
+              </div>
 
               <motion.div
                 className="project-entry__caption"
