@@ -100,20 +100,6 @@
   padding: var(--space-1) var(--space-3);
 }
 
-/* ---------- Hero image ---------- */
-.project-detail__hero {
-  margin: 0 0 var(--space-6);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background-color: var(--color-cream);
-}
-
-.project-detail__hero img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 /* ---------- Gallery ---------- */
 .project-detail__gallery {
   display: grid;

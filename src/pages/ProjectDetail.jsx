@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { projects, getProjectById } from '@/data';
 import { siteConfig } from '@/utils/siteConfig';
+import PhotoGallery from '@/components/ui/PhotoGallery';
 import './ProjectDetail.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -28,7 +29,8 @@ function ProjectDetail() {
 
   const index = projects.findIndex((p) => p.id === project.id);
   const nextProject = projects[(index + 1) % projects.length];
-  const [hero, ...gallery] = project.images;
+  const FAN_COUNT = 5;
+  const gallery = project.images.slice(FAN_COUNT);
 
   return (
     <div className="project-detail">
@@ -90,20 +92,8 @@ function ProjectDetail() {
           </ul>
         </motion.header>
 
-        {/* ---------- Hero image ---------- */}
-        <motion.figure
-          className="project-detail__hero"
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ ...spring, delay: 0.15 }}
-        >
-          <img
-            src={hero.src}
-            alt={hero.alt}
-            width={hero.width ?? undefined}
-            height={hero.height ?? undefined}
-          />
-        </motion.figure>
+        {/* ---------- Fanned photo stack ---------- */}
+        <PhotoGallery images={project.images} max={FAN_COUNT} />
 
         {/* ---------- Gallery ---------- */}
         <div className="project-detail__gallery">

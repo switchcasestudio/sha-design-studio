@@ -1,5 +1,5 @@
-import { useLayoutEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useLayoutEffect, useState } from 'react';
+import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -16,6 +16,17 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
+}
+
+/* Freeze the outlet element this route mounted with. During AnimatePresence
+   exits the old wrapper stays mounted while the router already points at the
+   new location — a live <Outlet /> would re-resolve to the WRONG page there
+   (and an exiting ProjectDetail would lose its :projectId param and fire its
+   not-found <Navigate> redirect mid-transition, hijacking navigation). */
+function FrozenOutlet() {
+  const outlet = useOutlet();
+  const [frozen] = useState(outlet);
+  return frozen;
 }
 
 function Layout() {
@@ -39,7 +50,7 @@ function Layout() {
             }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-            <Outlet />
+            <FrozenOutlet />
           </motion.div>
         </AnimatePresence>
       </main>
