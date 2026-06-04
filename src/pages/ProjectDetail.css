@@ -115,6 +115,16 @@
   background-color: var(--color-cream);
 }
 
+.project-detail__gallery-button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
 .project-detail__gallery-item img {
   width: 100%;
   height: 100%;

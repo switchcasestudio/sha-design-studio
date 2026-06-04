@@ -44,7 +44,7 @@ const photoVariants = {
   }),
 };
 
-function Photo({ src, alt, direction }) {
+function Photo({ src, alt, direction, onTap }) {
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
@@ -65,13 +65,15 @@ function Photo({ src, alt, direction }) {
       whileDrag={{ scale: 1.1, zIndex: 9999 }}
       initial={{ rotate: 0 }}
       animate={{ rotate: rotation }}
+      /* onTap only fires for clicks/taps, not after a real drag */
+      onTap={onTap}
     >
       <img src={src} alt={alt} draggable={false} />
     </motion.div>
   );
 }
 
-function PhotoGallery({ images, max = 5, animationDelay = 0.3 }) {
+function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -134,6 +136,9 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3 }) {
                   src={photo.src}
                   alt={photo.alt}
                   direction={photo.direction}
+                  onTap={
+                    onPhotoTap ? () => onPhotoTap(photo.order) : undefined
+                  }
                 />
               </motion.div>
             ))}

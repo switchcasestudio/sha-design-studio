@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { projects, getProjectById } from '@/data';
 import { siteConfig } from '@/utils/siteConfig';
 import PhotoGallery from '@/components/ui/PhotoGallery';
+import Lightbox from '@/components/ui/Lightbox';
 import './ProjectDetail.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -11,6 +12,8 @@ const spring = { type: 'spring', stiffness: 200, damping: 22 };
 function ProjectDetail() {
   const { projectId } = useParams();
   const project = getProjectById(projectId);
+  // Index into project.images currently open in the lightbox (null = closed)
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   // Per-project SEO title from the data, restored on unmount
   useEffect(() => {
@@ -93,7 +96,11 @@ function ProjectDetail() {
         </motion.header>
 
         {/* ---------- Fanned photo stack ---------- */}
-        <PhotoGallery images={project.images} max={FAN_COUNT} />
+        <PhotoGallery
+          images={project.images}
+          max={FAN_COUNT}
+          onPhotoTap={setLightboxIndex}
+        />
 
         {/* ---------- Gallery ---------- */}
         <div className="project-detail__gallery">
@@ -106,15 +113,29 @@ function ProjectDetail() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ ...spring, delay: (i % 3) * 0.06 }}
             >
-              <img
-                src={image.src}
-                alt={image.alt}
-                loading="lazy"
-                decoding="async"
-              />
+              <button
+                type="button"
+                className="project-detail__gallery-button"
+                aria-label={`View image: ${image.alt}`}
+                onClick={() => setLightboxIndex(FAN_COUNT + i)}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
             </motion.figure>
           ))}
         </div>
+
+        <Lightbox
+          images={project.images}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
+        />
 
         {/* ---------- Footer nav ---------- */}
         <nav className="project-detail__nav" aria-label="Project navigation">
