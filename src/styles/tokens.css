@@ -38,7 +38,12 @@
   --text-on-yellow: var(--color-ink);
 
   /* ----- Typography ----- */
-  --font-display: 'Climate Crisis', 'Impact', 'Arial Black', sans-serif;
+  /* Display face for all headings — single-weight (400), never set font-weight on it */
+  --font-display: 'Bagel Fat One', 'Fredoka Variable', system-ui, sans-serif;
+  /* Hero alias — same face now that Bagel is app-wide; kept so the hero can diverge later */
+  --font-hero: var(--font-display);
+  /* Previous display face, kept available for opt-in use */
+  --font-climate: 'Climate Crisis', 'Impact', 'Arial Black', sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Type scale (modular, base 16px) */

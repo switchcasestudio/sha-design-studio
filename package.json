@@ -11,13 +11,15 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@fontsource-variable/fredoka": "^5.2.10",
+    "@fontsource/bagel-fat-one": "^5.2.7",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.445.0",
+    "motion": "^11.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.2",
-    "motion": "^11.11.0",
-    "lucide-react": "^0.445.0"
+    "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",

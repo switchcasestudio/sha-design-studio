@@ -193,7 +193,8 @@
 
   .navbar__mobile-link {
     display: block;
-    font-family: var(--font-display);
+    font-family: var(--font-body);
+    font-weight: var(--weight-semibold);
     font-size: var(--text-2xl);
     color: var(--nav-accent);
     padding: var(--space-3) 0;

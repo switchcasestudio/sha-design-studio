@@ -83,8 +83,8 @@
 }
 
 .service-block__title {
-  font-family: var(--font-body);
-  font-weight: var(--weight-bold);
+  /* Single-weight display face — hierarchy comes from size, not weight */
+  font-family: var(--font-display);
   font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);

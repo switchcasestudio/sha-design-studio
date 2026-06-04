@@ -177,8 +177,7 @@
 }
 
 .project-entry__title {
-  font-family: var(--font-body);
-  font-weight: var(--weight-semibold);
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);

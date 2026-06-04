@@ -12,13 +12,12 @@
 }
 
 .home-hero__title {
-  font-family: var(--font-body);
-  font-weight: var(--weight-bold);
+  /* Accent face — single-weight (400), so no font-weight here */
+  font-family: var(--font-hero);
   font-size: clamp(var(--text-5xl), 8.5vw, var(--text-7xl));
-  /* Optical display-size adjustments: Inter needs tighter tracking and
-     leading at hero scale than the body/heading defaults provide. */
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  /* Bagel Fat One is wide and chunky: neutral tracking, slightly open leading */
+  line-height: 1.08;
+  letter-spacing: var(--tracking-normal);
   text-wrap: balance;
   color: var(--color-orange);
   max-width: 18ch;
@@ -151,9 +150,8 @@
 }
 
 .project-card__title {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: var(--text-base);
-  font-weight: var(--weight-medium);
   color: var(--color-orange);
   letter-spacing: var(--tracking-normal);
   line-height: var(--leading-snug);
