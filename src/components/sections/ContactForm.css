@@ -26,25 +26,27 @@
 .contact-form__label {
   font-size: var(--text-base);
   font-weight: var(--weight-semibold);
+  color: var(--color-ink);
 }
 
 .contact-form__required {
   font-weight: var(--weight-regular);
   font-size: var(--text-sm);
-  opacity: 0.8;
+  color: var(--text-muted);
 }
 
 .contact-form__input,
 .contact-form__textarea {
   width: 100%;
   padding: var(--space-3) var(--space-4);
-  background-color: var(--color-cream);
+  background-color: var(--color-white);
   color: var(--color-ink);
-  border: none;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   font-family: var(--font-body);
   font-size: var(--text-base);
   min-height: 44px;
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
 .contact-form__textarea {
@@ -53,10 +55,16 @@
   min-height: 120px;
 }
 
+.contact-form__input:hover,
+.contact-form__textarea:hover {
+  border-color: var(--color-orange-soft);
+}
+
 .contact-form__input:focus,
 .contact-form__textarea:focus {
-  outline: 2px solid var(--color-cream);
+  outline: 2px solid var(--color-orange);
   outline-offset: 2px;
+  border-color: var(--color-orange);
 }
 
 .contact-form__checkbox {
@@ -64,6 +72,7 @@
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-sm);
+  color: var(--color-ink);
   cursor: pointer;
 }
 
@@ -71,19 +80,12 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: var(--color-cream);
+  accent-color: var(--color-orange);
 }
 
 .contact-form__submit {
-  align-self: flex-start;
-  background-color: transparent;
-  color: var(--color-cream);
-  border-color: var(--color-cream);
-}
-
-.contact-form__submit:hover {
-  background-color: var(--color-cream);
-  color: var(--color-orange);
+  width: 100%;
+  margin-top: var(--space-2);
 }
 
 .contact-form__msg {
@@ -92,9 +94,11 @@
 }
 
 .contact-form__msg--success {
-  color: var(--color-cream);
+  color: var(--color-orange);
+  font-weight: var(--weight-medium);
 }
 
 .contact-form__msg--error {
-  color: var(--color-yellow);
+  color: var(--color-orange-deep);
+  font-weight: var(--weight-medium);
 }

@@ -17,6 +17,13 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-5);
+  align-self: stretch;
+}
+
+/* Push the contact block to the card's bottom edge, Contact2-style */
+.footer__brand .footer__contact {
+  margin-top: auto;
+  padding-top: var(--space-8);
 }
 
 .footer__tagline {
@@ -28,10 +35,38 @@
 
 .footer__heading {
   font-family: var(--font-body);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-semibold);
   margin-bottom: var(--space-2);
   letter-spacing: var(--tracking-normal);
+}
+
+/* Contact intro + details (left column, below the menu) */
+.footer__contact {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+}
+
+.footer__details-label {
+  font-weight: var(--weight-bold);
+}
+
+.footer__details-link {
+  color: var(--text-on-orange);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.footer__details-link:hover {
+  opacity: 0.85;
 }
 
 .footer__list {
@@ -57,10 +92,19 @@
   font-size: var(--text-sm);
   margin-bottom: var(--space-5);
   opacity: 0.9;
+  max-width: 36ch;
 }
 
+/* Cream form card, à la Contact2's bordered card */
 .footer__form {
-  max-width: 520px;
+  max-width: 560px;
+  justify-self: end;
+  width: 100%;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-6), 4vw, var(--space-10));
+  box-shadow: var(--shadow-lg);
 }
 
 /* ----- Bottom bar ----- */

@@ -53,9 +53,25 @@ function Footer() {
               ))}
             </ul>
             */}
+
+            {/* Contact intro + details */}
+            <div className="footer__contact">
+              <h4 className="footer__heading">Let's stay connected</h4>
+              <p className="footer__sub">
+                Reach out about a project, collaboration or just to say hello!
+              </p>
+              <ul className="footer__details">
+                <li>
+                  <span className="footer__details-label">Email: </span>
+                  <a href={`mailto:${siteConfig.email}`} className="footer__details-link">
+                    {siteConfig.email}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </motion.div>
 
-          {/* Contact form */}
+          {/* Contact form card */}
           <motion.div
             className="footer__form"
             initial={{ opacity: 0, y: 20 }}
@@ -63,10 +79,6 @@ function Footer() {
             viewport={{ once: true }}
             transition={{ ...spring, delay: 0.15 }}
           >
-            <h4 className="footer__heading">Let's stay connected</h4>
-            <p className="footer__sub">
-              Reach out about a project, collaboration or just to say hello!
-            </p>
             <ContactForm />
           </motion.div>
         </div>

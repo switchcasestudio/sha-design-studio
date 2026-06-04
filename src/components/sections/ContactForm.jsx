@@ -113,7 +113,7 @@ function ContactForm() {
 
       <Button
         type="submit"
-        variant="outline"
+        variant="primary"
         size="md"
         className="contact-form__submit"
         disabled={status === 'submitting'}
