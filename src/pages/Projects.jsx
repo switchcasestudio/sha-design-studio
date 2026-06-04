@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { ArrowUpRight } from 'lucide-react';
 import { projects } from '@/data';
 import blueShape from '@/assets/svg/blue-1.svg';
 import yellowShape from '@/assets/svg/yellow-1.svg';
@@ -118,9 +119,14 @@ function Projects() {
                 viewport={{ once: true }}
                 transition={{ ...spring, delay: 0.3 }}
               >
-                <span className="project-entry__category">
-                  {project.category}
-                </span>
+                <div className="project-entry__meta">
+                  <span className="project-entry__index">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span className="project-entry__category">
+                    {project.category}
+                  </span>
+                </div>
                 <div className="project-entry__text">
                   <h2 className="project-entry__title">
                     <Link
@@ -133,6 +139,17 @@ function Projects() {
                   <p className="project-entry__description">
                     {project.summary}
                   </p>
+                  <Link
+                    to={`/projects/${project.id}`}
+                    className="project-entry__cta"
+                  >
+                    View project
+                    <ArrowUpRight
+                      size={18}
+                      strokeWidth={2.25}
+                      aria-hidden="true"
+                    />
+                  </Link>
                 </div>
               </motion.div>
             </motion.article>
