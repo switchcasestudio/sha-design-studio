@@ -32,13 +32,20 @@ function ProjectDetail() {
 
   const index = projects.findIndex((p) => p.id === project.id);
   const nextProject = projects[(index + 1) % projects.length];
+
+  // Product titles often repeat the project title ("Boho Chic 5-in-1 Here I
+  // Grow…") — show just the distinct part to keep the sidebar scannable.
+  const productLabel = (title) => {
+    const stripped = title.replace(project.title, '').replace(/\s+/g, ' ').trim();
+    return stripped || title;
+  };
   const FAN_COUNT = 5;
   const gallery = project.images.slice(FAN_COUNT);
 
   return (
     <div className="project-detail">
       <div className="container">
-        {/* ---------- Header ---------- */}
+        {/* ---------- Header: identity left, reference meta right ---------- */}
         <motion.header
           className="project-detail__header"
           initial={{ opacity: 0, y: 30 }}
@@ -49,50 +56,65 @@ function ProjectDetail() {
             ← All Projects
           </Link>
 
-          <span className="project-detail__category">{project.category}</span>
-          <h1 className="project-detail__title">{project.title}</h1>
-          <p className="project-detail__summary">{project.summary}</p>
+          <div className="project-detail__header-grid">
+            <div className="project-detail__intro">
+              <span className="project-detail__category">
+                {project.category}
+              </span>
+              <h1 className="project-detail__title">{project.title}</h1>
+              <p className="project-detail__summary">{project.summary}</p>
 
-          <dl className="project-detail__meta">
-            <div className="project-detail__meta-item">
-              <dt>Client</dt>
-              <dd>{project.client}</dd>
+              <ul className="project-detail__tags">
+                {project.tags.map((tag) => (
+                  <li key={tag} className="project-detail__tag">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="project-detail__meta-item">
-              <dt>Role</dt>
-              <dd>{project.role.join(' · ')}</dd>
-            </div>
+            <aside className="project-detail__aside">
+              <dl className="project-detail__meta">
+                <div className="project-detail__meta-item">
+                  <dt>Client</dt>
+                  <dd>{project.client}</dd>
+                </div>
 
-            {project.products?.length > 0 && (
-              <div className="project-detail__meta-item">
-                <dt>Products</dt>
-                <dd>
-                  <ul className="project-detail__products">
-                    {project.products.map((product) => (
-                      <li key={product.slug}>
-                        <a
-                          href={product.sourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {product.title} ↗
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            )}
-          </dl>
+                <div className="project-detail__meta-item">
+                  <dt>Role</dt>
+                  <dd>
+                    <ul className="project-detail__roles">
+                      {project.role.map((role) => (
+                        <li key={role}>{role}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
 
-          <ul className="project-detail__tags">
-            {project.tags.map((tag) => (
-              <li key={tag} className="project-detail__tag">
-                {tag}
-              </li>
-            ))}
-          </ul>
+                {project.products?.length > 0 && (
+                  <div className="project-detail__meta-item">
+                    <dt>Products</dt>
+                    <dd>
+                      <ul className="project-detail__products">
+                        {project.products.map((product) => (
+                          <li key={product.slug}>
+                            <a
+                              href={product.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={product.title}
+                            >
+                              {productLabel(product.title)} ↗
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </aside>
+          </div>
         </motion.header>
 
         {/* ---------- Fanned photo stack ---------- */}

@@ -7,8 +7,15 @@
 
 /* ---------- Header ---------- */
 .project-detail__header {
-  max-width: 72ch;
   margin-bottom: var(--space-12);
+}
+
+/* Identity (category/title/summary/tags) left, reference meta right */
+.project-detail__header-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+  gap: var(--space-12);
+  align-items: start;
 }
 
 .project-detail__back {
@@ -31,7 +38,7 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   opacity: 0.85;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .project-detail__title {
@@ -40,22 +47,26 @@
   font-size: clamp(var(--text-3xl), 4.5vw, var(--text-5xl));
   line-height: var(--leading-tight);
   color: var(--color-cream);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .project-detail__summary {
-  font-size: var(--text-lg);
-  line-height: var(--leading-snug);
-  max-width: 60ch;
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  max-width: 48ch;
   margin-bottom: var(--space-8);
 }
 
-/* ---------- Meta ---------- */
+/* ---------- Meta sidebar ---------- */
+.project-detail__aside {
+  border-left: 1px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
+  padding-left: var(--space-8);
+}
+
 .project-detail__meta {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--space-8);
-  margin-bottom: var(--space-6);
 }
 
 .project-detail__meta-item dt {
@@ -64,24 +75,28 @@
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   opacity: 0.75;
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
 }
 
 .project-detail__meta-item dd {
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
 }
 
+.project-detail__roles,
 .project-detail__products {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-3);
 }
 
 .project-detail__products a {
   color: var(--color-cream);
+  opacity: 0.9;
 }
 
 .project-detail__products a:hover {
+  opacity: 1;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -176,6 +191,20 @@
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .project-detail__header-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .project-detail__aside {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
+    padding-left: 0;
+    padding-top: var(--space-6);
+  }
+}
+
 @media (max-width: 600px) {
   .project-detail__gallery {
     grid-template-columns: 1fr;
