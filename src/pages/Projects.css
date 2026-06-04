@@ -105,25 +105,15 @@
 }
 
 /* ---------- SVG badges ---------- */
-/* One uniform size for every badge color, matching the home grid */
+/* Sits in the meta column, above the index + category text */
 .project-entry__badge {
-  position: absolute;
-  z-index: 2;
-  width: clamp(72px, 7vw, 104px);
+  position: relative;
+  width: clamp(88px, 8vw, 112px);
   aspect-ratio: 1 / 1;
   pointer-events: none;
-}
-
-.project-entry__badge--left {
-  top: 0;
-  left: var(--space-4);
-  transform: translateY(-45%);
-}
-
-.project-entry__badge--right {
-  top: 0;
-  right: 50%;
-  transform: translate(50%, -45%);
+  margin-bottom: var(--space-3);
+  /* A touch of tilt keeps the blob playful */
+  rotate: -6deg;
 }
 
 .project-entry__badge-shape {
@@ -141,7 +131,7 @@
   padding: var(--space-3);
   color: var(--color-cream);
   font-family: var(--font-body);
-  font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   font-weight: var(--weight-bold);
   line-height: 1.1;
   text-align: center;
@@ -149,6 +139,10 @@
 
 .project-entry__badge--yellow .project-entry__badge-text {
   color: var(--color-ink);
+}
+
+.project-entry__badge--cream .project-entry__badge-text {
+  color: var(--color-orange);
 }
 
 /* ---------- Caption ---------- */
@@ -280,23 +274,21 @@
     gap: var(--space-3);
   }
 
-  /* Index + category sit on one line on small screens */
+  /* Badge, index + category sit on one line on small screens */
   .project-entry__meta {
     flex-direction: row;
-    align-items: baseline;
+    align-items: center;
     gap: var(--space-3);
     padding-top: 0;
   }
 
-  .project-entry__title {
-    font-size: var(--text-2xl);
+  .project-entry__badge {
+    width: 72px;
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
 
-  .project-entry__badge--left,
-  .project-entry__badge--right {
-    top: 0;
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -45%);
+  .project-entry__title {
+    font-size: var(--text-2xl);
   }
 }

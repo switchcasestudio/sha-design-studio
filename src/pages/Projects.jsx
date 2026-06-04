@@ -2,15 +2,23 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '@/data';
-import blueShape from '@/assets/svg/blue-1.svg';
-import yellowShape from '@/assets/svg/yellow-1.svg';
-import redShape from '@/assets/svg/red-1.svg';
+import blueShape1 from '@/assets/svg/blue-1.svg';
+import blueShape2 from '@/assets/svg/blue-2.svg';
+import yellowShape1 from '@/assets/svg/yellow-1.svg';
+import yellowShape2 from '@/assets/svg/yellow-2.svg';
+import creamShape1 from '@/assets/svg/cream-1.svg';
+import creamShape2 from '@/assets/svg/cream-2.svg';
 import './Projects.css';
 
+/* Red shapes are skipped on this page — they'd disappear into the
+   orange background. */
 const badgeVariants = [
-  { src: blueShape, variant: 'blue' },
-  { src: yellowShape, variant: 'yellow' },
-  { src: redShape, variant: 'red' },
+  { src: blueShape1, variant: 'blue' },
+  { src: yellowShape1, variant: 'yellow' },
+  { src: creamShape1, variant: 'cream' },
+  { src: blueShape2, variant: 'blue' },
+  { src: yellowShape2, variant: 'yellow' },
+  { src: creamShape2, variant: 'cream' },
 ];
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -84,11 +92,19 @@ function Projects() {
                       </Link>
                     </motion.figure>
                   ))}
+                </div>
+              </div>
 
+              <motion.div
+                className="project-entry__caption"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ ...spring, delay: 0.3 }}
+              >
+                <div className="project-entry__meta">
                   <motion.div
-                    className={`project-entry__badge project-entry__badge--${
-                      entryImages.length > 1 ? 'right' : 'left'
-                    } project-entry__badge--${badge.variant}`}
+                    className={`project-entry__badge project-entry__badge--${badge.variant}`}
                     initial={{ scale: 0, rotate: -20 }}
                     whileInView={{ scale: 1, rotate: 0 }}
                     viewport={{ once: true }}
@@ -109,17 +125,6 @@ function Projects() {
                       {project.category.split('/')[0].trim()}
                     </span>
                   </motion.div>
-                </div>
-              </div>
-
-              <motion.div
-                className="project-entry__caption"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ ...spring, delay: 0.3 }}
-              >
-                <div className="project-entry__meta">
                   <span className="project-entry__index">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
