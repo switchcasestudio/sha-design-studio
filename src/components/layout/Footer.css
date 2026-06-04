@@ -1,10 +1,11 @@
+/* ---------- Orange contact panel ---------- */
 .footer__panel {
   background-color: var(--color-orange);
   color: var(--text-on-orange);
   padding-block: var(--space-16) var(--space-20);
 }
 
-/* Two columns: brand + menu on the left, contact form on the right */
+/* Two columns: contact intro on the left, form card on the right */
 .footer__grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
@@ -12,39 +13,28 @@
   align-items: start;
 }
 
-.footer__brand {
+/* Intro column: heading at the top, details pinned to the card's bottom edge */
+.footer__intro {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-5);
+  justify-content: space-between;
+  gap: var(--space-8);
   align-self: stretch;
-}
-
-/* Push the contact block to the card's bottom edge, Contact2-style */
-.footer__brand .footer__contact {
-  margin-top: auto;
-  padding-top: var(--space-8);
-}
-
-.footer__tagline {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-snug);
-  max-width: 16ch;
 }
 
 .footer__heading {
   font-family: var(--font-body);
-  font-size: var(--text-2xl);
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
   font-weight: var(--weight-semibold);
-  margin-bottom: var(--space-2);
-  letter-spacing: var(--tracking-normal);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-3);
 }
 
-/* Contact intro + details (left column, below the menu) */
-.footer__contact {
-  display: flex;
-  flex-direction: column;
+.footer__sub {
+  font-size: var(--text-base);
+  opacity: 0.9;
+  max-width: 36ch;
 }
 
 .footer__details {
@@ -69,32 +59,6 @@
   opacity: 0.85;
 }
 
-.footer__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.footer__link {
-  font-size: var(--text-base);
-  font-weight: var(--weight-medium);
-  color: var(--text-on-orange);
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.footer__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  opacity: 0.85;
-}
-
-.footer__sub {
-  font-size: var(--text-sm);
-  margin-bottom: var(--space-5);
-  opacity: 0.9;
-  max-width: 36ch;
-}
-
 /* Cream form card, à la Contact2's bordered card */
 .footer__form {
   max-width: 560px;
@@ -107,51 +71,89 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* ----- Bottom bar ----- */
+/* ---------- Cream footer (brand / nav / tagline / legal) ---------- */
 .footer__bar {
   background-color: var(--color-cream);
-  padding-block: var(--space-6);
+  color: var(--color-ink);
+  padding-block: var(--space-12) var(--space-8);
 }
 
-.footer__bar-inner {
+.footer__cols {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.footer__ident {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
+  align-items: flex-start;
+  gap: var(--space-5);
 }
 
-.footer__site {
+.footer__wordmark {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: clamp(var(--text-xl), 2.5vw, var(--text-3xl));
+  line-height: 1.05;
+  text-transform: uppercase;
   color: var(--color-ink);
 }
 
-.footer__icons {
+.footer__col {
   display: flex;
-  gap: var(--space-4);
-  color: var(--color-ink);
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
-.footer__icons a {
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.footer__icons a:hover {
-  color: var(--color-orange);
-}
-
-.footer__email {
+.footer__eyebrow {
   font-family: var(--font-body);
-  font-size: var(--text-base);
+  font-size: var(--text-xs);
   font-weight: var(--weight-medium);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.footer__link {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
   color: var(--color-ink);
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.footer__email:hover {
+.footer__link:hover {
   color: var(--color-orange);
+}
+
+.footer__who {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-ink);
+}
+
+.footer__legal {
+  margin-top: var(--space-12);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Footer7-style bottom link: muted, warms up on hover */
+.footer__legal-link {
+  color: var(--text-muted);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer__legal-link:hover {
+  color: var(--color-orange);
 }
 
 /* ---------- Responsive ---------- */
@@ -163,10 +165,15 @@
 
   .footer__form {
     max-width: none;
+    justify-self: stretch;
   }
 
-  .footer__bar-inner {
-    flex-direction: column;
-    text-align: center;
+  .footer__cols {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .footer__legal {
+    margin-top: var(--space-10);
   }
 }
