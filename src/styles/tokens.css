@@ -44,7 +44,8 @@
   --font-hero: var(--font-display);
   /* Previous display face, kept available for opt-in use */
   --font-climate: 'Climate Crisis', 'Impact', 'Arial Black', sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Body face for running text and links — variable weight (300–700) */
+  --font-body: 'Fredoka Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Type scale (modular, base 16px) */
   --text-xs: 0.75rem;       /* 12px */
@@ -65,11 +66,12 @@
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
 
-  /* Font weights */
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --weight-bold: 700;
+  /* Font weights — tuned for Fredoka, which renders ~one step heavier
+     than a neutral sans at the same number (variable axis: 300–700) */
+  --weight-regular: 300;
+  --weight-medium: 350;
+  --weight-semibold: 400;
+  --weight-bold: 500;
 
   /* Letter spacing */
   --tracking-tight: -0.02em;
