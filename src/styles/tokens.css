@@ -5,26 +5,26 @@
 
 :root {
   /* ----- Brand Colors ----- */
-  --color-cream: #F5F0E1;          /* Background / canvas */
-  --color-cream-soft: #FBF7EC;     /* Light card backgrounds */
+  --color-cream: #f5f0e1; /* Background / canvas */
+  --color-cream-soft: #fbf7ec; /* Light card backgrounds */
 
-  --color-orange: #E54B2A;         /* Primary brand — logo, headings, accents */
-  --color-orange-deep: #C93D1F;    /* Hover / pressed states */
-  --color-orange-soft: #F37A5C;    /* Light tint */
+  --color-orange: #e54b2a; /* Primary brand — logo, headings, accents */
+  --color-orange-deep: #c93d1f; /* Hover / pressed states */
+  --color-orange-soft: #f37a5c; /* Light tint */
 
-  --color-yellow: #F2C94C;         /* Service cards, "What I Do" */
-  --color-yellow-deep: #E8B91E;    /* Hover */
-  --color-yellow-soft: #F7DA7A;    /* Light tint */
+  --color-yellow: #f2c94c; /* Service cards, "What I Do" */
+  --color-yellow-deep: #e8b91e; /* Hover */
+  --color-yellow-soft: #f7da7a; /* Light tint */
 
-  --color-blue: #4A7FBF;           /* About, testimonials, Full-service */
-  --color-blue-deep: #3A6BA5;      /* Hover */
-  --color-blue-soft: #7AA0D2;      /* Light tint / badge fill */
+  --color-blue: #4a7fbf; /* About, testimonials, Full-service */
+  --color-blue-deep: #3a6ba5; /* Hover */
+  --color-blue-soft: #7aa0d2; /* Light tint / badge fill */
 
-  --color-ink: #1A1A1A;            /* Body text / dark cards */
-  --color-ink-soft: #2C2C2C;       /* Secondary text */
-  --color-ink-muted: #5A5A5A;      /* Tertiary / captions */
+  --color-ink: #1a1a1a; /* Body text / dark cards */
+  --color-ink-soft: #2c2c2c; /* Secondary text */
+  --color-ink-muted: #5a5a5a; /* Tertiary / captions */
 
-  --color-white: #FFFFFF;
+  --color-white: #ffffff;
   --color-border: rgba(26, 26, 26, 0.12);
 
   /* ----- Semantic Colors ----- */
@@ -45,20 +45,22 @@
   /* Previous display face, kept available for opt-in use */
   --font-climate: 'Climate Crisis', 'Impact', 'Arial Black', sans-serif;
   /* Body face for running text and links — variable weight (300–700) */
-  --font-body: 'Fredoka Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:
+    'Fredoka Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
 
   /* Type scale (modular, base 16px) */
-  --text-xs: 0.75rem;       /* 12px */
-  --text-sm: 0.875rem;      /* 14px */
-  --text-base: 1rem;        /* 16px */
-  --text-lg: 1.125rem;      /* 18px */
-  --text-xl: 1.25rem;       /* 20px */
-  --text-2xl: 1.5rem;       /* 24px */
-  --text-3xl: 2rem;         /* 32px */
-  --text-4xl: 2.5rem;       /* 40px */
-  --text-5xl: 3.5rem;       /* 56px */
-  --text-6xl: 4.5rem;       /* 72px */
-  --text-7xl: 6rem;         /* 96px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1.03rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 2rem; /* 32px */
+  --text-4xl: 2.5rem; /* 40px */
+  --text-5xl: 3.5rem; /* 56px */
+  --text-6xl: 4.5rem; /* 72px */
+  --text-7xl: 6rem; /* 96px */
 
   /* Line heights */
   --leading-tight: 1.1;
@@ -68,10 +70,10 @@
 
   /* Font weights — tuned for Fredoka, which renders ~one step heavier
      than a neutral sans at the same number (variable axis: 300–700) */
-  --weight-regular: 300;
-  --weight-medium: 350;
-  --weight-semibold: 400;
-  --weight-bold: 500;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
 
   /* Letter spacing */
   --tracking-tight: -0.02em;
@@ -79,19 +81,19 @@
   --tracking-wide: 0.05em;
 
   /* ----- Spacing scale (4px base) ----- */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-5: 1.25rem;   /* 20px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
-  --space-32: 8rem;     /* 128px */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-32: 8rem; /* 128px */
 
   /* ----- Layout ----- */
   --max-width-content: 1280px;
@@ -99,11 +101,11 @@
   --gutter: clamp(1rem, 4vw, 2.5rem);
 
   /* ----- Border radius ----- */
-  --radius-sm: 0.375rem;    /* 6px */
-  --radius-md: 0.75rem;     /* 12px */
-  --radius-lg: 1rem;        /* 16px */
-  --radius-xl: 1.5rem;      /* 24px */
-  --radius-2xl: 2rem;       /* 32px */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.5rem; /* 24px */
+  --radius-2xl: 2rem; /* 32px */
   --radius-pill: 999px;
   --radius-full: 50%;
 
@@ -131,11 +133,11 @@
 /* ----- Responsive scale adjustments ----- */
 @media (max-width: 768px) {
   :root {
-    --text-7xl: 4rem;       /* 64px */
-    --text-6xl: 3rem;       /* 48px */
-    --text-5xl: 2.25rem;    /* 36px */
-    --text-4xl: 1.875rem;   /* 30px */
-    --text-3xl: 1.5rem;     /* 24px */
+    --text-7xl: 4rem; /* 64px */
+    --text-6xl: 3rem; /* 48px */
+    --text-5xl: 2.25rem; /* 36px */
+    --text-4xl: 1.875rem; /* 30px */
+    --text-3xl: 1.5rem; /* 24px */
   }
 }
 
