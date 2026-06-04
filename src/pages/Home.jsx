@@ -3,6 +3,7 @@ import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
+import GooeyText from '@/components/ui/GooeyText';
 import { siteConfig } from '@/utils/siteConfig';
 import { projects } from '@/data';
 import { testimonials } from '@/data/testimonials';
@@ -27,6 +28,13 @@ const featuredProjects = projects.slice(0, 5).map((project, i) => ({
 
 const spring = { type: 'spring', stiffness: 200, damping: 20 };
 const springBouncy = { type: 'spring', stiffness: 300, damping: 15 };
+
+// Hero headline phrases — gooey-morphed in place.
+const heroPhrases = [
+  'Designing Playful Products',
+  'Designing Thoughtful Products',
+  'Simple, Smart, Full of Wonder',
+];
 
 function ProjectBadge({ badge }) {
   return (
@@ -79,7 +87,12 @@ function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...spring, delay: 0.3 }}
           >
-            {siteConfig.tagline}
+            <GooeyText
+              texts={heroPhrases}
+              morphTime={1.2}
+              cooldownTime={2.5}
+              label={siteConfig.tagline}
+            />
           </motion.h1>
         </div>
       </section>

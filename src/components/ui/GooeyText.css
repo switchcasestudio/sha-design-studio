@@ -1,0 +1,42 @@
+/* GooeyText — morphing headline. Inherits font, size, and color from
+   its parent so it can drop into any heading. */
+.gooey-text {
+  display: block;
+}
+
+.gooey-text__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* All children share one grid cell: the invisible sizers set the
+   height of the tallest phrase, the two morph spans paint over them. */
+.gooey-text__stage {
+  display: grid;
+  align-items: center;
+  text-align: center;
+}
+
+.gooey-text__sizer,
+.gooey-text__morph {
+  grid-area: 1 / 1;
+  text-wrap: balance;
+}
+
+.gooey-text__sizer {
+  visibility: hidden;
+}
+
+.gooey-text__morph {
+  user-select: none;
+  will-change: filter, opacity;
+}
+
+/* Static fallback when the user prefers reduced motion: the JS loop
+   is skipped, the first phrase is shown without the threshold filter. */
+@media (prefers-reduced-motion: reduce) {
+  .gooey-text__stage {
+    filter: none !important;
+  }
+}
