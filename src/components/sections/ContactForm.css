@@ -4,6 +4,11 @@
   gap: var(--space-4);
 }
 
+/* Honeypot — visually gone but still in the DOM for bots to trip on */
+.contact-form__botcheck {
+  display: none;
+}
+
 .contact-form__field {
   display: flex;
   flex-direction: column;

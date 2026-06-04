@@ -26,7 +26,28 @@ function ContactForm() {
     setStatus('submitting');
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      // Web3Forms delivers submissions to the inbox tied to the access key
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          botcheck: e.target.botcheck.checked,
+          subject: `New inquiry from ${form.name} — Sha Design Studio`,
+          from_name: 'Sha Design Studio Website',
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          message: form.message,
+          newsletter: form.newsletter ? 'Yes' : 'No',
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
       setStatus('success');
       setForm({ name: '', phone: '', email: '', message: '', newsletter: false });
     } catch (err) {
@@ -36,6 +57,16 @@ function ContactForm() {
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
+      {/* Honeypot: hidden from humans; Web3Forms drops submissions where it's checked */}
+      <input
+        type="checkbox"
+        name="botcheck"
+        className="contact-form__botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
+
       <div className="contact-form__row">
         <div className="contact-form__field">
           <label htmlFor="name" className="contact-form__label">
