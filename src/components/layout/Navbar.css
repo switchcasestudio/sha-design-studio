@@ -13,9 +13,23 @@
   position: sticky;
   top: 0;
   z-index: var(--z-nav);
-  background-color: var(--nav-bg);
+  /* Slightly translucent + blur: page content glows through when it slides under */
+  background-color: color-mix(in srgb, var(--nav-bg) 90%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   color: var(--nav-fg);
-  transition: background-color var(--duration-base) var(--ease-out);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+/* Elevation cue once content scrolls underneath */
+.navbar--scrolled {
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--color-ink) 10%, transparent);
+}
+
+.navbar--scrolled .navbar__inner {
+  padding-block: var(--space-3);
 }
 
 .navbar--projects {
@@ -43,6 +57,7 @@
   justify-content: space-between;
   gap: var(--space-6);
   padding-block: var(--space-4);
+  transition: padding var(--duration-base) var(--ease-out);
 }
 
 .navbar__logo {
@@ -66,42 +81,46 @@
 .navbar__list {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  gap: var(--space-2);
 }
 
 /* ── Links ── */
 .navbar__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px; /* comfortable touch target */
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: var(--weight-semibold);
   color: var(--nav-fg);
-  padding: var(--space-2) 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
   position: relative;
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.navbar__link::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--nav-accent);
   transition:
-    width var(--duration-base) var(--ease-out),
-    left var(--duration-base) var(--ease-out);
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
 }
 
-.navbar__link:hover,
+.navbar__link:hover {
+  color: var(--nav-accent);
+  background-color: color-mix(in srgb, var(--nav-accent) 8%, transparent);
+}
+
 .navbar__link--active {
   color: var(--nav-accent);
 }
 
-.navbar__link:hover::after,
-.navbar__link--active::after {
-  width: 100%;
-  left: 0;
+/* Shared-layout pill rendered behind the active link (springs between routes) */
+.navbar__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--nav-accent) 14%, transparent);
+}
+
+.navbar__link-label {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── CTA button ── */
@@ -114,6 +133,7 @@
 .navbar__cta {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   padding: var(--space-2) var(--space-5);
   font-family: var(--font-body);
   font-size: var(--text-sm);
@@ -124,12 +144,14 @@
   color: var(--nav-accent);
   transition:
     background-color var(--duration-base) var(--ease-out),
-    color var(--duration-base) var(--ease-out);
+    color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
 }
 
 .navbar__cta:hover {
   background-color: var(--nav-accent);
   color: var(--nav-bg);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--nav-accent) 35%, transparent);
 }
 
 /* Home gets a filled orange CTA — explicit override of the outline default */

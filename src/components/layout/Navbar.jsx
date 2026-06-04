@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -14,7 +14,16 @@ const THEMES = {
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
+
+  // Elevation cue: shadow + condensed padding once the page scrolls under the bar
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Prefix match so nested routes (e.g. /projects/:id) keep their theme
   const themeKey = Object.keys(THEMES).find((path) =>
@@ -24,7 +33,9 @@ function Navbar() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className={`navbar ${theme.route}`}>
+    <header
+      className={`navbar ${theme.route}${scrolled ? ' navbar--scrolled' : ''}`}
+    >
       <div className="navbar__inner container">
         <Link
           to="/"
@@ -51,7 +62,19 @@ function Navbar() {
                     `navbar__link${isActive ? ' navbar__link--active' : ''}`
                   }
                 >
-                  {item.label}
+                  {({ isActive }) => (
+                    <>
+                      {/* Shared-layout pill springs between links on route change */}
+                      {isActive && (
+                        <motion.span
+                          layoutId="navbar-active-pill"
+                          className="navbar__pill"
+                          transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                      <span className="navbar__link-label">{item.label}</span>
+                    </>
+                  )}
                 </NavLink>
               </li>
             ))}
