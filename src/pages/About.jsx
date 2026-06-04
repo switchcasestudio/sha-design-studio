@@ -8,7 +8,11 @@ import { projects } from '@/data';
 import './About.css';
 
 // Real project imagery for the gallery, pulled from the shared data module.
-const galleryImages = projects.slice(3, 6).map((project) => project.heroImage);
+// Three hero shots plus one secondary image to fill the 2x2 grid.
+const galleryImages = [
+  ...projects.slice(3, 6).map((project) => project.heroImage),
+  projects[3]?.images?.[5] ?? projects[4]?.images?.[1],
+].filter(Boolean);
 
 const offers = [
   {
@@ -127,7 +131,9 @@ function About() {
       <section className="about-gallery">
         <div className="container">
           <div className="about-gallery__grid">
-            {['small', 'large', 'medium'].map((size, i) => (
+            {['small', 'large', 'medium', 'wide']
+              .slice(0, galleryImages.length)
+              .map((size, i) => (
               <motion.div
                 key={size}
                 className={`about-gallery__item about-gallery__item--${size}`}
