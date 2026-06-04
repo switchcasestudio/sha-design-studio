@@ -28,7 +28,8 @@ export const footerNavigation = {
     { label: 'Services', href: '/services' },
     { label: 'Work', href: '/projects' },
     { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
+    // In-page anchor: the contact form lives in the footer, there is no /contact route
+    { label: 'Contact', href: '#contact' },
   ],
   social: [
     { label: 'Instagram', href: siteConfig.social.instagram },

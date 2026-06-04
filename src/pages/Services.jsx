@@ -110,7 +110,7 @@ function ServiceBlock({ service, index }) {
 
         {service.cta && (
           <p className="service-block__cta">
-            <a href="/contact" className="service-block__inquire">
+            <a href="#contact" className="service-block__inquire">
               Inquire
             </a>{' '}
             for a custom quote.

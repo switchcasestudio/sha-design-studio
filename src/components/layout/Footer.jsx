@@ -11,8 +11,8 @@ const spring = { type: 'spring', stiffness: 200, damping: 22 };
 function Footer() {
   return (
     <footer className="footer">
-      {/* Orange contact panel */}
-      <div className="footer__panel">
+      {/* Orange contact panel — #contact anchor target for "Inquire Now" CTAs */}
+      <div className="footer__panel" id="contact">
         <div className="container footer__grid">
           {/* Brand + menu */}
           <motion.div
@@ -29,9 +29,16 @@ function Footer() {
               <ul className="footer__list">
                 {footerNavigation.menu.map((item) => (
                   <li key={item.href}>
-                    <Link to={item.href} className="footer__link">
-                      {item.label}
-                    </Link>
+                    {/* Hash links stay native so the browser handles the smooth in-page scroll */}
+                    {item.href.startsWith('#') ? (
+                      <a href={item.href} className="footer__link">
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link to={item.href} className="footer__link">
+                        {item.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

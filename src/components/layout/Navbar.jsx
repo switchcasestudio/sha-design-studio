@@ -64,9 +64,10 @@ function Navbar() {
             whileTap={{ scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           >
-            <Link to="/contact" className="navbar__cta">
+            {/* Native anchor: the contact form lives in the footer on every page */}
+            <a href="#contact" className="navbar__cta">
               Inquire Now
-            </Link>
+            </a>
           </motion.div>
         </div>
 
@@ -138,13 +139,13 @@ function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navigation.length * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
               >
-                <Link
-                  to="/contact"
+                <a
+                  href="#contact"
                   className="navbar__mobile-link"
                   onClick={closeMobile}
                 >
                   Inquire Now
-                </Link>
+                </a>
               </motion.li>
             </ul>
           </motion.div>
