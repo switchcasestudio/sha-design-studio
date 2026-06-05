@@ -90,8 +90,8 @@
   align-items: center;
   min-height: 44px; /* comfortable touch target */
   font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
   color: var(--nav-fg);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
@@ -136,8 +136,8 @@
   min-height: 44px;
   padding: var(--space-2) var(--space-5);
   font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   border: 2px solid var(--nav-accent);
   border-radius: var(--radius-pill);
   background-color: transparent;
