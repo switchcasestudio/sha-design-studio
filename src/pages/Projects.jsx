@@ -48,6 +48,47 @@ function Projects() {
             design.
           </motion.p>
         </div>
+
+        {/* Overview grid — a clickable glimpse of every project, jumping
+            straight to each one. The full case studies live below. */}
+        <div className="container">
+          <ul className="projects-overview">
+            {projects.map((project, idx) => {
+              const image = project.heroImage ?? project.images[0];
+              return (
+                <motion.li
+                  key={project.id}
+                  className="overview-card"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...spring, delay: 0.35 + idx * 0.06 }}
+                >
+                  <Link
+                    to={`/projects/${project.id}`}
+                    className="overview-card__link"
+                  >
+                    <div className="overview-card__media">
+                      {image && (
+                        <img
+                          className="overview-card__image"
+                          src={image.src}
+                          alt={image.alt}
+                          loading={idx < 3 ? 'eager' : 'lazy'}
+                        />
+                      )}
+                    </div>
+                    <div className="overview-card__body">
+                      <span className="overview-card__studio">
+                        {project.client}
+                      </span>
+                      <h2 className="overview-card__title">{project.title}</h2>
+                    </div>
+                  </Link>
+                </motion.li>
+              );
+            })}
+          </ul>
+        </div>
       </section>
 
       <div className="container projects-page__list">
