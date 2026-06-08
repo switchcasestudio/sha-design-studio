@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
-import Logo from '@/components/ui/Logo';
 import Button from '@/components/ui/Button';
 import GooeyText from '@/components/ui/GooeyText';
 import { siteConfig } from '@/utils/siteConfig';
@@ -9,6 +8,7 @@ import { projects } from '@/data';
 import { testimonials } from '@/data/testimonials';
 import redShape from '@/assets/svg/red-2.svg';
 import blueShape from '@/assets/svg/blue-2.svg';
+import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
 import './Home.css';
 
 // First project fills the large feature slot; the next four fill the grid.
@@ -73,13 +73,14 @@ function Home() {
       {/* ---------- Hero ---------- */}
       <section className="home-hero">
         <div className="container home-hero__inner">
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
+          <motion.p
+            className="home-hero__brand"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ ...springBouncy, delay: 0.1 }}
           >
-            <Logo size={180} variant="orange" />
-          </motion.div>
+            {siteConfig.name}
+          </motion.p>
 
           <motion.h1
             className="home-hero__title"
@@ -211,13 +212,18 @@ function Home() {
             </motion.div>
 
             <motion.div
-              className="home-what__media home-what__media--placeholder"
+              className="home-what__media"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ ...spring, delay: 0.25 }}
             >
-              <span>Designer at work — image placeholder</span>
+              <img
+                className="home-what__image"
+                src={shiranAtWork}
+                alt={`${siteConfig.designer} at work in a product photoshoot`}
+                loading="lazy"
+              />
             </motion.div>
           </div>
         </div>
