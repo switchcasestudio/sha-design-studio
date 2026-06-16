@@ -12,8 +12,10 @@ const spring = { type: 'spring', stiffness: 200, damping: 22 };
 function ProjectDetail() {
   const { projectId } = useParams();
   const project = getProjectById(projectId);
-  // Index into project.images currently open in the lightbox (null = closed)
+  // Index into the active image set currently open in the lightbox (null = closed)
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  // Which product collection (color world) is shown, for multi-collection projects
+  const [collectionIndex, setCollectionIndex] = useState(0);
 
   // Per-project SEO title from the data, restored on unmount
   useEffect(() => {
@@ -25,6 +27,12 @@ function ProjectDetail() {
       document.title = `${siteConfig.name} — ${siteConfig.tagline}`;
     };
   }, [project]);
+
+  // Reset the collection + lightbox when navigating to a different project
+  useEffect(() => {
+    setCollectionIndex(0);
+    setLightboxIndex(null);
+  }, [projectId]);
 
   if (!project) {
     return <Navigate to="/projects" replace />;
@@ -39,8 +47,24 @@ function ProjectDetail() {
     const stripped = title.replace(project.title, '').replace(/\s+/g, ' ').trim();
     return stripped || title;
   };
+
+  // Multi-collection projects (e.g. the activity center's 5 color worlds) show
+  // a switcher; selecting one swaps every displayed image set to that
+  // collection. Single-collection projects fall back to the flat image list.
+  const collections = project.collections ?? [];
+  const hasCollections = collections.length > 1;
+  const activeCollection = hasCollections
+    ? collections[Math.min(collectionIndex, collections.length - 1)]
+    : null;
+  const activeImages = activeCollection ? activeCollection.images : project.images;
+
   const FAN_COUNT = 5;
-  const gallery = project.images.slice(FAN_COUNT);
+  const gallery = activeImages.slice(FAN_COUNT);
+
+  const selectCollection = (i) => {
+    setCollectionIndex(i);
+    setLightboxIndex(null);
+  };
 
   return (
     <div className="project-detail">
@@ -117,9 +141,45 @@ function ProjectDetail() {
           </div>
         </motion.header>
 
+        {/* ---------- Collection (color world) switcher ---------- */}
+        {hasCollections && (
+          <div
+            className="project-detail__collections"
+            role="group"
+            aria-label="Choose a collection"
+          >
+            <span className="project-detail__collections-label">Collections</span>
+            <ul className="project-detail__swatches">
+              {collections.map((collection, i) => (
+                <li key={collection.slug}>
+                  <button
+                    type="button"
+                    className="project-detail__swatch"
+                    aria-pressed={i === collectionIndex}
+                    onClick={() => selectCollection(i)}
+                  >
+                    <span className="project-detail__swatch-thumb">
+                      <img
+                        src={collection.images[0].src}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                    <span className="project-detail__swatch-name">
+                      {productLabel(collection.title)}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* ---------- Fanned photo stack ---------- */}
         <PhotoGallery
-          images={project.images}
+          key={activeCollection ? activeCollection.slug : 'all'}
+          images={activeImages}
           max={FAN_COUNT}
           onPhotoTap={setLightboxIndex}
         />
@@ -153,7 +213,7 @@ function ProjectDetail() {
         </div>
 
         <Lightbox
-          images={project.images}
+          images={activeImages}
           index={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onNavigate={setLightboxIndex}

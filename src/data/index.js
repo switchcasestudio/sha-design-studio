@@ -37,12 +37,40 @@ function normalizeImage(image) {
 }
 
 /** All projects, ordered, with images resolved to local bundled URLs. */
+/**
+ * Group a project's images into its product collections (e.g. the activity
+ * center's Black & White / Boho Chic / … color worlds). Each image's
+ * `assetPath` lives under a folder named after the product `slug`, so the
+ * grouping is derived from that. Returns [] for single-collection projects so
+ * the UI can fall back to the flat image list.
+ */
+function buildCollections(project) {
+  const products = project.products ?? [];
+  if (products.length < 2) return [];
+
+  const collections = products
+    .map((product) => ({
+      slug: product.slug,
+      title: product.title,
+      sourceUrl: product.sourceUrl,
+      images: (project.images ?? [])
+        .filter((image) => (image.assetPath ?? '').includes(`/${product.slug}/`))
+        .map(normalizeImage)
+        .filter(Boolean),
+    }))
+    .filter((collection) => collection.images.length > 0);
+
+  // Only meaningful when there's more than one collection to switch between.
+  return collections.length > 1 ? collections : [];
+}
+
 export const projects = [...shaProjects]
   .sort((a, b) => a.order - b.order)
   .map((project) => ({
     ...project,
     heroImage: normalizeImage(project.heroImage),
     images: (project.images ?? []).map(normalizeImage).filter(Boolean),
+    collections: buildCollections(project),
   }));
 
 /** Projects flagged as featured in the source data. */
