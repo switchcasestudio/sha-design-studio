@@ -9,6 +9,7 @@ import {
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
 import GooeyText from '@/components/ui/GooeyText';
+import HomeAssemble from '@/components/sections/HomeAssemble';
 import {
   badgeBloom,
   gridCard,
@@ -132,6 +133,9 @@ function Home() {
           </motion.h1>
         </motion.div>
       </section>
+
+      {/* ---------- Signature scroll-pinned assemble (GSAP) ---------- */}
+      <HomeAssemble />
 
       {/* ---------- Featured projects grid ---------- */}
       <section className="home-projects">

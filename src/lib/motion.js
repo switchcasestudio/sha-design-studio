@@ -15,6 +15,9 @@ export const ease = {
   settle: [0.16, 1, 0.3, 1], // power3.out — same curve as the --ease-out token
   scatter: [0.55, 0.085, 0.68, 0.53], // power2.in
   drift: 'linear',
+  // GSAP dialect of the same curves, for the one ScrollTrigger section.
+  bloomGsap: 'back.out(1.7)',
+  scatterGsap: 'power2.in',
 };
 
 export const duration = {
