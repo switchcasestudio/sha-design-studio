@@ -9,6 +9,46 @@ import './ProjectDetail.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
+// How a project's multiple collections relate to each other. Kept app-side
+// because the source data is generated ("do not edit by hand").
+//   default  — a colorway set (same product, different looks)
+//   family   — distinct products that share a style
+//   mixed    — a deliverable + the products it covers (e.g. packaging + toys)
+const COLLECTION_KIND = {
+  'wooden-toy-design': 'family',
+  'garden-of-adventures-packaging': 'mixed',
+};
+
+// Reduce a set of collection titles to the distinctive part of each by
+// stripping the words they all share at the start and/or end — so
+// "Boho Chic Wooden Ride on Trike" / "…Stacking Train" become "Ride on Trike"
+// / "Stacking Train", and the activity-center titles become their color names.
+function distinctiveLabels(titles) {
+  const rows = titles.map((t) => t.trim().split(/\s+/));
+  if (rows.length === 0) return [];
+  const minLen = Math.min(...rows.map((r) => r.length));
+  const eq = (a, b) => (a ?? '').toLowerCase() === (b ?? '').toLowerCase();
+
+  let lead = 0;
+  while (lead < minLen - 1 && rows.every((r) => eq(r[lead], rows[0][lead]))) {
+    lead += 1;
+  }
+  let trail = 0;
+  while (
+    trail < minLen - lead - 1 &&
+    rows.every((r) =>
+      eq(r[r.length - 1 - trail], rows[0][rows[0].length - 1 - trail])
+    )
+  ) {
+    trail += 1;
+  }
+
+  return rows.map((words, i) => {
+    const mid = words.slice(lead, words.length - trail).join(' ').trim();
+    return mid || titles[i];
+  });
+}
+
 function ProjectDetail() {
   const { projectId } = useParams();
   const project = getProjectById(projectId);
@@ -41,18 +81,23 @@ function ProjectDetail() {
   const index = projects.findIndex((p) => p.id === project.id);
   const nextProject = projects[(index + 1) % projects.length];
 
-  // Product titles often repeat the project title ("Boho Chic 5-in-1 Here I
-  // Grow…") — show just the distinct part to keep the sidebar scannable.
-  const productLabel = (title) => {
-    const stripped = title.replace(project.title, '').replace(/\s+/g, ' ').trim();
-    return stripped || title;
-  };
-
-  // Multi-collection projects (e.g. the activity center's 5 color worlds) show
-  // a switcher; selecting one swaps every displayed image set to that
-  // collection. Single-collection projects fall back to the flat image list.
+  // Multi-collection projects show a switcher; selecting one swaps every
+  // displayed image set to that collection. Single-collection projects fall
+  // back to the flat image list. A "family" is distinct products that share a
+  // style (shown as larger product cards); the default is a colorway set.
   const collections = project.collections ?? [];
   const hasCollections = collections.length > 1;
+  const collectionKind = COLLECTION_KIND[project.id];
+  const isFamily = collectionKind === 'family';
+  const isMixed = collectionKind === 'mixed';
+  // Both families and mixed sets read better as larger, name-forward cards.
+  const useCards = isFamily || isMixed;
+  const collectionsHeading = isMixed
+    ? 'In this project'
+    : isFamily
+      ? 'Products in this family'
+      : 'Collections';
+  const collectionLabels = distinctiveLabels(collections.map((c) => c.title));
   const activeCollection = hasCollections
     ? collections[Math.min(collectionIndex, collections.length - 1)]
     : null;
@@ -122,14 +167,24 @@ function ProjectDetail() {
           </div>
         </motion.header>
 
-        {/* ---------- Collection (color world) switcher ---------- */}
+        {/* ---------- Collection switcher (colorways or product family) ---------- */}
         {hasCollections && (
           <div
-            className="project-detail__collections"
+            className={`project-detail__collections${
+              useCards ? ' project-detail__collections--cards' : ''
+            }`}
             role="group"
-            aria-label="Choose a collection"
+            aria-label={collectionsHeading}
           >
-            <span className="project-detail__collections-label">Collections</span>
+            <span className="project-detail__collections-label">
+              {collectionsHeading}
+              {isFamily && (
+                <span className="project-detail__collections-count">
+                  {' · '}
+                  {collections.length}
+                </span>
+              )}
+            </span>
             <ul className="project-detail__swatches">
               {collections.map((collection, i) => (
                 <li key={collection.slug}>
@@ -148,7 +203,7 @@ function ProjectDetail() {
                       />
                     </span>
                     <span className="project-detail__swatch-name">
-                      {productLabel(collection.title)}
+                      {collectionLabels[i]}
                     </span>
                   </button>
                 </li>

@@ -200,6 +200,31 @@
   font-weight: var(--weight-semibold);
 }
 
+.project-detail__collections-count {
+  opacity: 0.7;
+}
+
+/* Product-family variant: larger, name-forward product cards — these are
+   distinct products that share a style, not colorways of one product. */
+.project-detail__collections--cards .project-detail__swatches {
+  gap: var(--space-6);
+}
+
+.project-detail__collections--cards .project-detail__swatch {
+  width: clamp(128px, 17vw, 184px);
+  color: rgba(245, 240, 225, 0.88);
+}
+
+.project-detail__collections--cards .project-detail__swatch-thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xl);
+}
+
+.project-detail__collections--cards .project-detail__swatch-name {
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+}
+
 /* ---------- Footer nav ---------- */
 .project-detail__nav {
   display: flex;
