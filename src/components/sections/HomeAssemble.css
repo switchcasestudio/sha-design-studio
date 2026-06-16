@@ -31,20 +31,21 @@
 /* Display face — single-weight (400), so no font-weight here */
 .home-assemble__brand {
   font-family: var(--font-display);
-  font-size: clamp(var(--text-2xl), 3.4vw, var(--text-4xl));
+  font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
   line-height: 1.05;
   color: var(--color-orange);
 }
 
-/* Accent face (Bagel Fat One) — single-weight; never set font-weight on it */
+/* Accent face (Bagel Fat One) — single-weight; never set font-weight on it.
+   The dominant element on the page — shapes orbit it. */
 .home-assemble__headline {
   font-family: var(--font-hero);
-  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-6xl));
-  line-height: 1.08;
+  font-size: clamp(var(--text-5xl), 7.4vw, var(--text-7xl));
+  line-height: 1.04;
   letter-spacing: var(--tracking-normal);
   text-wrap: balance;
   color: var(--color-orange);
-  max-width: 14ch;
+  max-width: 13ch;
 }
 
 /* Decorative motifs sit behind the product (z-index 1), resting in the side
@@ -56,10 +57,6 @@
   height: auto;
   pointer-events: none;
   display: block;
-  /* Subtle lift gives the dense composition depth — and lets the cream shapes
-     (filled with the page cream) read against the cream background. Static
-     filter only; the scroll animation stays transform/opacity. */
-  filter: drop-shadow(0 6px 14px rgba(26, 26, 26, 0.12));
 }
 
 @media (max-width: 767px) {

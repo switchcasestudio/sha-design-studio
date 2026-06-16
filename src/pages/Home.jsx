@@ -19,14 +19,14 @@ import {
 import { siteConfig } from '@/utils/siteConfig';
 import { projects } from '@/data';
 import { testimonials } from '@/data/testimonials';
-import redShape from '@/assets/svg/red-2.svg';
+import orangeShape from '@/assets/svg/orange-2.svg';
 import blueShape from '@/assets/svg/blue-2.svg';
 import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
 import './Home.css';
 
 // First project fills the large feature slot; the next four fill the grid.
 // Playful SVG badges stay as scaffold decoration on the first two cards.
-const homeBadges = [blueShape, redShape];
+const homeBadges = [blueShape, orangeShape];
 
 const featuredProjects = projects.slice(0, 5).map((project, i) => ({
   id: project.id,
