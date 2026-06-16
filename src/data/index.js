@@ -38,6 +38,24 @@ function normalizeImage(image) {
 
 /** All projects, ordered, with images resolved to local bundled URLs. */
 /**
+ * Extra collections that aren't part of the generated `products` data —
+ * manually-added image sets (e.g. Garden of Adventures' packaging design).
+ * Prepended so they lead the switcher. Images resolve through the same glob.
+ */
+const EXTRA_COLLECTIONS = {
+  'garden-of-adventures-packaging': [
+    {
+      slug: 'package-design',
+      title: 'Garden of Adventures Packaging Design',
+      images: [1, 2, 3, 4, 5].map((n) => ({
+        assetPath: `src/assets/images/projects/products/package-design/package-design-${n}.png`,
+        alt: `Garden of Adventures eco-conscious packaging design ${n} for Tiny Love`,
+      })),
+    },
+  ],
+};
+
+/**
  * Group a project's images into its product collections (e.g. the activity
  * center's Black & White / Boho Chic / … color worlds). Each image's
  * `assetPath` lives under a folder named after the product `slug`, so the
@@ -45,10 +63,12 @@ function normalizeImage(image) {
  * the UI can fall back to the flat image list.
  */
 function buildCollections(project) {
-  const products = project.products ?? [];
-  if (products.length < 2) return [];
+  const extra = (EXTRA_COLLECTIONS[project.id] ?? []).map((collection) => ({
+    ...collection,
+    images: collection.images.map(normalizeImage).filter(Boolean),
+  }));
 
-  const collections = products
+  const fromProducts = (project.products ?? [])
     .map((product) => ({
       slug: product.slug,
       title: product.title,
@@ -59,6 +79,10 @@ function buildCollections(project) {
         .filter(Boolean),
     }))
     .filter((collection) => collection.images.length > 0);
+
+  const collections = [...extra, ...fromProducts].filter(
+    (collection) => collection.images.length > 0
+  );
 
   // Only meaningful when there's more than one collection to switch between.
   return collections.length > 1 ? collections : [];
