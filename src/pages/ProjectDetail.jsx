@@ -58,8 +58,10 @@ function ProjectDetail() {
     : null;
   const activeImages = activeCollection ? activeCollection.images : project.images;
 
+  // Only the fanned marketing shots are shown for now; the grid of remaining
+  // photos was removed and will be replaced by creation/process imagery later.
   const FAN_COUNT = 5;
-  const gallery = activeImages.slice(FAN_COUNT);
+  const fanImages = activeImages.slice(0, FAN_COUNT);
 
   const selectCollection = (i) => {
     setCollectionIndex(i);
@@ -115,27 +117,6 @@ function ProjectDetail() {
                   </dd>
                 </div>
 
-                {project.products?.length > 0 && (
-                  <div className="project-detail__meta-item">
-                    <dt>Products</dt>
-                    <dd>
-                      <ul className="project-detail__products">
-                        {project.products.map((product) => (
-                          <li key={product.slug}>
-                            <a
-                              href={product.sourceUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title={product.title}
-                            >
-                              {productLabel(product.title)} ↗
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </dd>
-                  </div>
-                )}
               </dl>
             </aside>
           </div>
@@ -179,41 +160,13 @@ function ProjectDetail() {
         {/* ---------- Fanned photo stack ---------- */}
         <PhotoGallery
           key={activeCollection ? activeCollection.slug : 'all'}
-          images={activeImages}
+          images={fanImages}
           max={FAN_COUNT}
           onPhotoTap={setLightboxIndex}
         />
 
-        {/* ---------- Gallery ---------- */}
-        <div className="project-detail__gallery">
-          {gallery.map((image, i) => (
-            <motion.figure
-              key={image.src}
-              className="project-detail__gallery-item"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ ...spring, delay: (i % 3) * 0.06 }}
-            >
-              <button
-                type="button"
-                className="project-detail__gallery-button"
-                aria-label={`View image: ${image.alt}`}
-                onClick={() => setLightboxIndex(FAN_COUNT + i)}
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </button>
-            </motion.figure>
-          ))}
-        </div>
-
         <Lightbox
-          images={activeImages}
+          images={fanImages}
           index={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onNavigate={setLightboxIndex}
