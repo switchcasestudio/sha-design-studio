@@ -116,6 +116,13 @@
   left: var(--space-4);
 }
 
+/* Animated wrapper: fills the badge box so the shape + label keep their
+   existing positioning while parallax/bloom transforms ride on this element. */
+.project-card__badge-motif {
+  position: absolute;
+  inset: 0;
+}
+
 .project-card__badge-shape {
   width: 100%;
   height: 100%;

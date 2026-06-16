@@ -1,8 +1,23 @@
 import { Link } from 'react-router-dom';
-import { motion, useInView } from 'motion/react';
+import {
+  motion,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react';
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
 import GooeyText from '@/components/ui/GooeyText';
+import {
+  badgeBloom,
+  gridCard,
+  gridContainer,
+  heroContainer,
+  heroLine,
+  reducedReveal,
+  slideUp,
+} from '@/lib/motion';
 import { siteConfig } from '@/utils/siteConfig';
 import { projects } from '@/data';
 import { testimonials } from '@/data/testimonials';
@@ -26,9 +41,6 @@ const featuredProjects = projects.slice(0, 5).map((project, i) => ({
       : null,
 }));
 
-const spring = { type: 'spring', stiffness: 200, damping: 20 };
-const springBouncy = { type: 'spring', stiffness: 300, damping: 15 };
-
 // Hero headline phrases — gooey-morphed in place.
 const heroPhrases = [
   'Designing Playful Products',
@@ -36,9 +48,15 @@ const heroPhrases = [
   'Simple, Smart, Full of Wonder',
 ];
 
-function ProjectBadge({ badge }) {
+// Decorative motif: continuous parallax drift (style.y) wraps a one-shot
+// bloom (scale/rotate via variants) — different MotionValues, no conflict.
+function ProjectBadge({ badge, driftY, reduce }) {
   return (
-    <>
+    <motion.div
+      className="project-card__badge-motif"
+      style={reduce ? undefined : { y: driftY }}
+      variants={reduce ? reducedReveal : badgeBloom}
+    >
       <img
         src={badge.src}
         alt=""
@@ -46,21 +64,24 @@ function ProjectBadge({ badge }) {
         aria-hidden="true"
       />
       <span className="project-card__badge-text">{badge.label}</span>
-    </>
+    </motion.div>
   );
 }
 
-function Section({ children, className }) {
+// Color-world block: slides up and settles on enter (position/opacity only —
+// the block's own background color is never touched).
+function ColorWorld({ children, className }) {
   const ref = useRef(null);
+  const reduce = useReducedMotion();
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
     <motion.section
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ ...spring, duration: 0.6 }}
+      variants={reduce ? reducedReveal : slideUp}
+      initial={reduce ? 'show' : 'hidden'}
+      animate={inView ? 'show' : undefined}
     >
       {children}
     </motion.section>
@@ -68,25 +89,39 @@ function Section({ children, className }) {
 }
 
 function Home() {
+  const reduce = useReducedMotion();
+
+  // Ambient parallax for the badge motifs, driven by the grid's scroll
+  // position. Two different speeds + directions give a sense of depth.
+  const gridRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: gridRef,
+    offset: ['start end', 'end start'],
+  });
+  const driftSlow = useTransform(scrollYProgress, [0, 1], [18, -18]);
+  const driftFast = useTransform(scrollYProgress, [0, 1], [-26, 26]);
+  const drifts = [driftSlow, driftFast];
+
   return (
     <>
       {/* ---------- Hero ---------- */}
       <section className="home-hero">
-        <div className="container home-hero__inner">
+        <motion.div
+          className="container home-hero__inner"
+          variants={reduce ? reducedReveal : heroContainer}
+          initial={reduce ? 'show' : 'hidden'}
+          animate="show"
+        >
           <motion.p
             className="home-hero__brand"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...springBouncy, delay: 0.1 }}
+            variants={reduce ? reducedReveal : heroLine}
           >
             {siteConfig.name}
           </motion.p>
 
           <motion.h1
             className="home-hero__title"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...spring, delay: 0.3 }}
+            variants={reduce ? reducedReveal : heroLine}
           >
             <GooeyText
               texts={heroPhrases}
@@ -95,21 +130,25 @@ function Home() {
               label={siteConfig.tagline}
             />
           </motion.h1>
-        </div>
+        </motion.div>
       </section>
 
       {/* ---------- Featured projects grid ---------- */}
-      <Section className="home-projects">
+      <section className="home-projects">
         <div className="container">
-          <div className="home-projects__grid">
+          <motion.div
+            ref={gridRef}
+            className="home-projects__grid"
+            variants={reduce ? reducedReveal : gridContainer}
+            initial={reduce ? 'show' : 'hidden'}
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
             {/* Featured / large project */}
             <motion.article
               className="project-card project-card--feature"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ ...spring, delay: 0.1 }}
-              whileHover={{ y: -6 }}
+              variants={reduce ? reducedReveal : gridCard}
+              whileHover={reduce ? undefined : { y: -6 }}
             >
               <Link
                 to={`/projects/${featuredProjects[0].id}`}
@@ -120,6 +159,8 @@ function Home() {
                     className="project-card__image"
                     src={featuredProjects[0].image.src}
                     alt={featuredProjects[0].image.alt}
+                    width={featuredProjects[0].image.width}
+                    height={featuredProjects[0].image.height}
                   />
                 </div>
 
@@ -136,7 +177,11 @@ function Home() {
 
               {featuredProjects[0].badge && (
                 <div className="project-card__badge project-card__badge--top-right">
-                  <ProjectBadge badge={featuredProjects[0].badge} />
+                  <ProjectBadge
+                    badge={featuredProjects[0].badge}
+                    driftY={drifts[0]}
+                    reduce={reduce}
+                  />
                 </div>
               )}
             </motion.article>
@@ -146,14 +191,8 @@ function Home() {
               <motion.article
                 key={project.id}
                 className="project-card"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ ...spring, delay: 0.1 + i * 0.08 }}
-                whileHover={{
-                  y: -6,
-                  transition: { type: 'spring', stiffness: 400, damping: 20 },
-                }}
+                variants={reduce ? reducedReveal : gridCard}
+                whileHover={reduce ? undefined : { y: -6 }}
               >
                 <Link
                   to={`/projects/${project.id}`}
@@ -164,6 +203,8 @@ function Home() {
                       className="project-card__image"
                       src={project.image.src}
                       alt={project.image.alt}
+                      width={project.image.width}
+                      height={project.image.height}
                       loading="lazy"
                     />
                   </div>
@@ -178,26 +219,24 @@ function Home() {
 
                 {project.badge && (
                   <div className="project-card__badge project-card__badge--top-left">
-                    <ProjectBadge badge={project.badge} />
+                    <ProjectBadge
+                      badge={project.badge}
+                      driftY={drifts[i + 1] ?? drifts[1]}
+                      reduce={reduce}
+                    />
                   </div>
                 )}
               </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </Section>
+      </section>
 
       {/* ---------- "What I Do" CTA ---------- */}
-      <Section className="home-what">
+      <ColorWorld className="home-what">
         <div className="container">
           <div className="home-what__panel">
-            <motion.div
-              className="home-what__copy"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.15 }}
-            >
+            <div className="home-what__copy">
               <h2 className="home-what__title">What I Do</h2>
 
               <p className="home-what__text">
@@ -209,43 +248,28 @@ function Home() {
               <Button as={Link} to="/services" variant="outline" size="md">
                 Explore My Services
               </Button>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="home-what__media"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.25 }}
-            >
+            <div className="home-what__media">
               <img
                 className="home-what__image"
                 src={shiranAtWork}
                 alt={`${siteConfig.designer} at work in a product photoshoot`}
                 loading="lazy"
               />
-            </motion.div>
+            </div>
           </div>
         </div>
-      </Section>
+      </ColorWorld>
 
       {/* ---------- Kind Words / Testimonials ---------- */}
-      <Section className="home-words">
+      <ColorWorld className="home-words">
         <div className="container">
-          <motion.div
-            className="home-words__panel"
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ ...spring, delay: 0.1 }}
-          >
+          <div className="home-words__panel">
             <h2 className="home-words__title">Kind Words</h2>
 
             {testimonials.map((testimonial) => (
-              <blockquote
-                key={testimonial.id}
-                className="home-words__quote"
-              >
+              <blockquote key={testimonial.id} className="home-words__quote">
                 <p>"{testimonial.comment}"</p>
 
                 <footer className="home-words__attribution">
@@ -270,9 +294,9 @@ function Home() {
                 </footer>
               </blockquote>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </Section>
+      </ColorWorld>
     </>
   );
 }
