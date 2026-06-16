@@ -56,6 +56,10 @@
   height: auto;
   pointer-events: none;
   display: block;
+  /* Subtle lift gives the dense composition depth — and lets the cream shapes
+     (filled with the page cream) read against the cream background. Static
+     filter only; the scroll animation stays transform/opacity. */
+  filter: drop-shadow(0 6px 14px rgba(26, 26, 26, 0.12));
 }
 
 @media (max-width: 767px) {
@@ -68,10 +72,9 @@
     width: min(360px, 82vw);
   }
 
-  /* Keep motifs smaller so they don't crowd the product in the non-pinned
-     mobile flow. Later rule + equal specificity overrides the base width
-     (the size now comes from a CSS var, not an inline width). */
-  .home-assemble__motif {
-    width: 64px;
+  /* Thin the dense set in the non-pinned mobile flow to avoid clutter; the
+     remaining motifs keep their (viewport-relative, naturally small) sizes. */
+  .home-assemble__motif[data-mobile='hide'] {
+    display: none;
   }
 }
