@@ -6,7 +6,7 @@ import {
   useScroll,
   useTransform,
 } from 'motion/react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Button from '@/components/ui/Button';
 import GooeyText from '@/components/ui/GooeyText';
 import {
@@ -93,28 +93,9 @@ function ColorWorld({ children, className }) {
 function Home() {
   const reduce = useReducedMotion();
 
-  // Session-gated intro: the orchestrated entrance plays only on the first
-  // landing of a browser session (per-tab; sessionStorage clears on close).
-  // Read synchronously in a lazy initializer so it's known BEFORE first paint
-  // — repeat visitors must never flash the pre-intro (hidden/offset) state.
-  const [playIntro] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const seen = window.sessionStorage.getItem('sha:introSeen') === '1';
-    const prefersReduced = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-    return !seen && !prefersReduced;
-  });
-
-  // Mark the intro as seen once it finishes (set on completion, not mount, so
-  // StrictMode's dev double-mount doesn't suppress the first real playthrough).
-  const markIntroSeen = () => {
-    if (playIntro) window.sessionStorage.setItem('sha:introSeen', '1');
-  };
-
-  // When the intro isn't playing (repeat visit or reduced motion), elements
-  // start in their final "show" state — no entrance, no delay.
-  const introStart = playIntro ? 'hidden' : 'show';
+  // Under reduced motion, elements start in their final "show" state — no
+  // entrance. Otherwise the orchestrated entrance plays on every load.
+  const introStart = reduce ? 'show' : 'hidden';
 
   // Ambient parallax for the badge motifs, driven by the grid's scroll
   // position. Two different speeds + directions give a sense of depth.
@@ -136,7 +117,6 @@ function Home() {
           variants={heroContainer}
           initial={introStart}
           animate="show"
-          onAnimationComplete={markIntroSeen}
         >
           <motion.p className="home-hero__brand" variants={heroLine}>
             {siteConfig.name}
