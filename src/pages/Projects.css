@@ -105,8 +105,9 @@
 }
 
 .overview-card__title {
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
+  /* Reading face, not the display face — long product titles stay legible */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
   font-size: var(--text-lg);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-normal);
@@ -267,7 +268,9 @@
 }
 
 .project-entry__title {
-  font-family: var(--font-display);
+  /* Reading face, not the display face — long product titles stay legible */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
   font-size: var(--text-3xl);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
