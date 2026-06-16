@@ -1,33 +1,36 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { projects } from '@/data';
 import { ease } from '@/lib/motion';
+import { siteConfig } from '@/utils/siteConfig';
 import blueShape1 from '@/assets/svg/blue-1.svg';
 import blueShape2 from '@/assets/svg/blue-2.svg';
 import redShape1 from '@/assets/svg/red-1.svg';
+import redShape2 from '@/assets/svg/red-2.svg';
 import redShape3 from '@/assets/svg/red-3.svg';
-import yellowShape1 from '@/assets/svg/yellow-1.svg';
+import yellowShape2 from '@/assets/svg/yellow-2.svg';
+import yellowShape3 from '@/assets/svg/yellow-3.svg';
 import './HomeAssemble.css';
 
-// Centerpiece: the strongest product shot (5-in-1 activity center hero).
-const centerpiece =
-  projects.find((p) => p.id === 'here-i-grow-activity-center')?.heroImage ??
-  projects[0].heroImage;
-
-// ~5 curated motifs resting in the side margins / corners — never over the
-// centred product. `from` is the edge each converges from; `fy` a small
-// vertical offset for variety; `rot` the resting tilt.
+/* Curated motif set — shapes used in their DESIGNED colors (no recolor); the
+   multi-color variety comes from which shapes are placed where. Balanced so no
+   color clusters on one side: blue on opposite corners, reds spread top/left/
+   right, yellows top-right + bottom. `x`/`y` are rest positions (% of the
+   section); each converges in from off-screen in the direction of its rest
+   spot and scatters back out the same way. All rest spots stay in the margins,
+   clear of the centred headline. */
 const MOTIFS = [
-  { src: blueShape1, left: '9%', top: '20%', size: '10vw', from: 'left', fy: -6, rot: -14 },
-  { src: redShape1, left: '85%', top: '15%', size: '8vw', from: 'right', fy: -8, rot: 12 },
-  { src: blueShape2, left: '12%', top: '70%', size: '9vw', from: 'left', fy: 10, rot: 9 },
-  { src: redShape3, left: '83%', top: '66%', size: '11vw', from: 'right', fy: 8, rot: -10 },
-  { src: yellowShape1, left: '92%', top: '42%', size: '7vw', from: 'right', fy: -4, rot: 16 },
+  { src: blueShape1, x: 11, y: 25, size: '8vw', rot: -12 }, // blob/flower, upper-left
+  { src: redShape3, x: 50, y: 9, size: '6.5vw', rot: 6 }, // splat, top-centre
+  { src: yellowShape3, x: 88, y: 19, size: '6vw', rot: 12 }, // smiley, upper-right
+  { src: redShape1, x: 8, y: 63, size: '7vw', rot: 8 }, // heart, lower-left
+  { src: blueShape2, x: 90, y: 64, size: '8.5vw', rot: -10 }, // flower, lower-right
+  { src: yellowShape2, x: 50, y: 92, size: '6.5vw', rot: -6 }, // flower, bottom-centre
+  { src: redShape2, x: 82, y: 43, size: '5.5vw', rot: 14 }, // blob, right-mid (closer in)
 ];
 
 function HomeAssemble() {
   const sectionRef = useRef(null);
-  const productRef = useRef(null);
+  const headlineRef = useRef(null);
 
   useGSAP(
     () => {
@@ -59,25 +62,29 @@ function HomeAssemble() {
             },
           });
 
-          // Centerpiece: subtle scale through the pinned frame.
+          // Headline centerpiece: subtle scale through the pinned frame.
           tl.fromTo(
-            productRef.current,
-            { scale: 0.95 },
+            headlineRef.current,
+            { scale: 0.97 },
             { scale: 1, ease: 'none', duration: 0.6 },
             0
-          ).to(productRef.current, { scale: 1.05, ease: 'none', duration: 0.4 }, 0.6);
+          ).to(headlineRef.current, { scale: 1.03, ease: 'none', duration: 0.4 }, 0.6);
 
-          // Motifs: converge (0→0.6, playful overshoot) then scatter (0.6→1).
+          // Motifs converge from off-screen (0→0.6, playful overshoot) toward
+          // their resting spots, then scatter back out (0.6→1).
           motifs.forEach((el) => {
-            const dir = el.dataset.from === 'right' ? 1 : -1;
-            const fy = Number(el.dataset.fy) || 0;
+            const cx = Number(el.dataset.x);
+            const cy = Number(el.dataset.y);
             const rot = Number(el.dataset.rot) || 0;
-            const enterX = () => dir * window.innerWidth * 0.55;
-            const exitX = () => dir * window.innerWidth * 0.6;
+            // Direction = where the motif rests relative to centre, pushed off-edge.
+            const dirX = (cx - 50) / 50;
+            const dirY = (cy - 50) / 50;
+            const enterX = () => dirX * window.innerWidth * 0.6;
+            const enterY = () => dirY * window.innerHeight * 0.6;
 
             tl.fromTo(
               el,
-              { x: enterX, y: () => fy, scale: 0.4, autoAlpha: 0, rotation: rot - 30 },
+              { x: enterX, y: enterY, scale: 0.4, autoAlpha: 0, rotation: rot - 30 },
               {
                 x: 0,
                 y: 0,
@@ -91,12 +98,12 @@ function HomeAssemble() {
             ).to(
               el,
               {
-                x: exitX,
-                y: () => fy,
-                scale: 0.6,
+                x: () => enterX() * 1.1,
+                y: () => enterY() * 1.1,
+                scale: 0.55,
                 autoAlpha: 0,
                 rotation: rot - 20,
-                ease: 'power2.in',
+                ease: ease.scatterGsap,
                 duration: 0.4,
               },
               0.6
@@ -114,7 +121,7 @@ function HomeAssemble() {
             autoAlpha: 0,
             y: 20,
             scale: 0.8,
-            stagger: 0.08,
+            stagger: 0.07,
             duration: 0.5,
             ease: 'power3.out',
             scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
@@ -122,10 +129,10 @@ function HomeAssemble() {
         }
       );
 
-      // ---- Reduced motion: no JS — base CSS already shows the final layout ----
+      // ---- Reduced motion: no JS — base CSS shows the final layout ----
 
-      // Fonts change layout once loaded; recompute pin math afterwards.
-      // (ScrollTrigger already refreshes on resize.)
+      // Text centerpiece + font load both shift layout; recompute pin math
+      // afterwards. (ScrollTrigger already refreshes on resize.)
       if (document.fonts?.ready) {
         document.fonts.ready.then(() => ScrollTrigger.refresh());
       }
@@ -134,7 +141,7 @@ function HomeAssemble() {
   );
 
   return (
-    <section ref={sectionRef} className="home-assemble" aria-label="Playful by design">
+    <section ref={sectionRef} className="home-assemble">
       {MOTIFS.map((m) => (
         <img
           key={m.src}
@@ -142,24 +149,16 @@ function HomeAssemble() {
           src={m.src}
           alt=""
           aria-hidden="true"
-          data-from={m.from}
-          data-fy={m.fy}
+          data-x={m.x}
+          data-y={m.y}
           data-rot={m.rot}
-          style={{ left: m.left, top: m.top, '--motif-size': m.size }}
+          style={{ left: `${m.x}%`, top: `${m.y}%`, '--motif-size': m.size }}
         />
       ))}
 
-      <div className="home-assemble__inner">
-        <figure className="home-assemble__product" ref={productRef}>
-          <img
-            src={centerpiece.src}
-            alt={centerpiece.alt}
-            width={centerpiece.width}
-            height={centerpiece.height}
-            loading="lazy"
-          />
-        </figure>
-        <p className="home-assemble__caption">Designed for the way little ones play</p>
+      <div className="home-assemble__inner" ref={headlineRef}>
+        <p className="home-assemble__brand">{siteConfig.name}</p>
+        <h1 className="home-assemble__headline">Designing Thoughtful Products</h1>
       </div>
     </section>
   );

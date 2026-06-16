@@ -16,41 +16,35 @@
   padding-block: var(--space-16);
 }
 
-/* Centred product + caption — the safe zone motifs never enter. */
+/* Centred brand headline — the legibility safe zone motifs never enter. */
 .home-assemble__inner {
   position: relative;
   z-index: 2;
-  width: min(440px, 60vw);
+  width: min(520px, 54vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
   text-align: center;
 }
 
-.home-assemble__product {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  margin: 0;
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  background-color: var(--color-cream-soft);
-  box-shadow: var(--shadow-lg);
-}
-
-.home-assemble__product img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.home-assemble__caption {
+/* Display face — single-weight (400), so no font-weight here */
+.home-assemble__brand {
   font-family: var(--font-display);
-  font-size: clamp(var(--text-lg), 2.4vw, var(--text-2xl));
-  line-height: var(--leading-snug);
+  font-size: clamp(var(--text-2xl), 3.4vw, var(--text-4xl));
+  line-height: 1.05;
   color: var(--color-orange);
-  max-width: 20ch;
+}
+
+/* Accent face (Bagel Fat One) — single-weight; never set font-weight on it */
+.home-assemble__headline {
+  font-family: var(--font-hero);
+  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-6xl));
+  line-height: 1.08;
+  letter-spacing: var(--tracking-normal);
+  text-wrap: balance;
+  color: var(--color-orange);
+  max-width: 14ch;
 }
 
 /* Decorative motifs sit behind the product (z-index 1), resting in the side

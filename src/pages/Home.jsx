@@ -8,14 +8,11 @@ import {
 } from 'motion/react';
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
-import GooeyText from '@/components/ui/GooeyText';
 import HomeAssemble from '@/components/sections/HomeAssemble';
 import {
   badgeBloom,
   gridCard,
   gridContainer,
-  heroContainer,
-  heroLine,
   reducedReveal,
   slideUp,
 } from '@/lib/motion';
@@ -41,13 +38,6 @@ const featuredProjects = projects.slice(0, 5).map((project, i) => ({
       ? { label: project.category.split('/')[0].trim(), src: homeBadges[i] }
       : null,
 }));
-
-// Hero headline phrases — gooey-morphed in place.
-const heroPhrases = [
-  'Designing Playful Products',
-  'Designing Thoughtful Products',
-  'Simple, Smart, Full of Wonder',
-];
 
 // Decorative motif: continuous parallax drift (style.y) wraps a one-shot
 // bloom (scale/rotate via variants) — different MotionValues, no conflict.
@@ -111,30 +101,10 @@ function Home() {
 
   return (
     <>
-      {/* ---------- Hero ---------- */}
-      <section className="home-hero">
-        <motion.div
-          className="container home-hero__inner"
-          variants={heroContainer}
-          initial={introStart}
-          animate="show"
-        >
-          <motion.p className="home-hero__brand" variants={heroLine}>
-            {siteConfig.name}
-          </motion.p>
-
-          <motion.h1 className="home-hero__title" variants={heroLine}>
-            <GooeyText
-              texts={heroPhrases}
-              morphTime={1.2}
-              cooldownTime={2.5}
-              label={siteConfig.tagline}
-            />
-          </motion.h1>
-        </motion.div>
-      </section>
-
-      {/* ---------- Signature scroll-pinned assemble (GSAP) ---------- */}
+      {/* ---------- Signature hero: scroll-pinned brand assemble (GSAP) ----------
+          This IS the home headline — it replaces the old static hero so the
+          wording ("Sha Design Studio" / "Designing Thoughtful Products") only
+          appears once, now assembling on scroll. */}
       <HomeAssemble />
 
       {/* ---------- Featured projects grid ---------- */}

@@ -1,36 +1,5 @@
-/* ---------- Hero ---------- */
-.home-hero {
-  padding-block: clamp(var(--space-12), 8vw, var(--space-20));
-  text-align: center;
-}
-
-.home-hero__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-6);
-}
-
-.home-hero__brand {
-  /* Display face — single-weight (400), so no font-weight here */
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
-  line-height: 1.05;
-  color: var(--color-orange);
-}
-
-.home-hero__title {
-  /* Accent face — single-weight (400), so no font-weight here */
-  font-family: var(--font-hero);
-  font-size: clamp(var(--text-5xl), 8.5vw, var(--text-7xl));
-  /* Bagel Fat One is wide and chunky: neutral tracking, slightly open leading */
-  line-height: 1.08;
-  letter-spacing: var(--tracking-normal);
-  text-wrap: balance;
-  color: var(--color-orange);
-  max-width: 18ch;
-  margin-inline: auto;
-}
+/* The home hero headline now lives in the GSAP assemble section
+   (HomeAssemble.css) — it replaced the old static .home-hero. */
 
 /* ---------- Project grid ---------- */
 .home-projects {
