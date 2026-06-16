@@ -59,6 +59,18 @@
   display: block;
 }
 
+/* Recolored abstract shapes: the brand-token background-color is clipped to the
+   SVG silhouette via mask. Height comes from the inline aspect-ratio + width.
+   (mask-image + background-color + aspect-ratio are set per element inline.) */
+.home-assemble__motif--mask {
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
 @media (max-width: 767px) {
   .home-assemble {
     min-height: auto;

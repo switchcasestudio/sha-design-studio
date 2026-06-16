@@ -12,32 +12,41 @@ import yellowShape2 from '@/assets/svg/yellow-2.svg';
 import yellowShape3 from '@/assets/svg/yellow-3.svg'; // smiley
 import './HomeAssemble.css';
 
-/* Dense, balanced motif set — blue / orange / yellow only (cream vanishes on
-   cream; no black). Distinct silhouettes (heart, splat, blobs, flowers,
-   smiley), some duplicated at different sizes for rhythm.
-   x/y = rest position (% of the section). size varies dramatically (big hero
-   shapes ↔ small accents). pull = how far out (% of viewport) it starts /
-   scatters along its outward direction: small for the edge "hint" shapes that
-   peek into the first viewport, large for the flyers that sweep in from beyond
-   the frame. All rest spots stay in the margins, clear of the centred headline.
-   mobile:false shapes are hidden in the non-pinned mobile flow. */
+// Recolor the abstract shapes (flowers/blobs/splats) to any brand token by
+// masking the silhouette and filling with background-color — the SVGs bake
+// their fill into an embedded <style>, so masking is the clean way to theme
+// them without SVGR/inlining. The heart + smiley keep their designed colors.
+const COLOR_VAR = {
+  orange: 'var(--color-orange)',
+  blue: 'var(--color-blue)',
+  yellow: 'var(--color-yellow)',
+};
+
+/* Dense, balanced motif set. `color` recolors an abstract shape (stable, hand-
+   balanced so all three appear and the same silhouette shows in different
+   colors with no spatial clustering); `fixed:true` keeps the heart/smiley in
+   their own color as <img>. `ar` = viewBox aspect ratio (the masked span has
+   no intrinsic size). x/y = rest position (%); size varies dramatically; pull =
+   how far out (% of viewport) it starts/scatters — small for the edge "hint"
+   shapes that peek into the first viewport, large for flyers. Rest spots stay
+   in the margins, clear of the headline. mobile:false = hidden on mobile. */
 const MOTIFS = [
   // Edge "hint" shapes — peek into the first viewport before any scroll.
-  { src: yellowShape2, x: 6, y: 22, size: '16vw', rot: -8, pull: 8, mobile: true },
-  { src: orangeShape2, x: 94, y: 26, size: '15vw', rot: 7, pull: 8, mobile: true },
-  { src: blueShape2, x: 90, y: 82, size: '16vw', rot: -6, pull: 8, mobile: true },
-  { src: orangeShape3, x: 10, y: 84, size: '14vw', rot: 9, pull: 8, mobile: true },
+  { src: yellowShape2, ar: 1.146, color: 'blue', x: 6, y: 22, size: '16vw', rot: -8, pull: 8, mobile: true },
+  { src: orangeShape2, ar: 1.011, color: 'yellow', x: 94, y: 26, size: '15vw', rot: 7, pull: 8, mobile: true },
+  { src: blueShape2, ar: 1.061, color: 'orange', x: 90, y: 82, size: '16vw', rot: -6, pull: 8, mobile: true },
+  { src: orangeShape3, ar: 1.035, color: 'blue', x: 10, y: 84, size: '14vw', rot: 9, pull: 8, mobile: true },
   // Mids — fly in from further out.
-  { src: blueShape1, x: 8, y: 50, size: '9.5vw', rot: -12, pull: 48, mobile: true },
-  { src: yellowShape1, x: 92, y: 52, size: '9.5vw', rot: 12, pull: 48, mobile: true },
-  { src: orangeShape1, x: 33, y: 91, size: '8vw', rot: 8, pull: 46, mobile: true }, // heart
-  { src: yellowShape3, x: 68, y: 10, size: '7.5vw', rot: -10, pull: 50, mobile: false }, // smiley
+  { src: blueShape1, ar: 1.053, color: 'yellow', x: 8, y: 50, size: '9.5vw', rot: -12, pull: 48, mobile: true },
+  { src: yellowShape1, ar: 1.078, color: 'orange', x: 92, y: 52, size: '9.5vw', rot: 12, pull: 48, mobile: true },
+  { src: orangeShape1, ar: 1.051, fixed: true, x: 33, y: 91, size: '8vw', rot: 8, pull: 46, mobile: true }, // heart
+  { src: yellowShape3, ar: 0.917, fixed: true, x: 68, y: 10, size: '7.5vw', rot: -10, pull: 50, mobile: false }, // smiley
   // Small accents — sweep in from far off-frame.
-  { src: orangeShape3, x: 50, y: 8, size: '6.5vw', rot: 6, pull: 56, mobile: false },
-  { src: blueShape1, x: 95, y: 40, size: '5.5vw', rot: -14, pull: 64, mobile: false },
-  { src: yellowShape2, x: 40, y: 6, size: '6vw', rot: -7, pull: 58, mobile: false },
-  { src: orangeShape2, x: 72, y: 90, size: '6vw', rot: 14, pull: 60, mobile: false },
-  { src: blueShape2, x: 18, y: 12, size: '7vw', rot: 11, pull: 54, mobile: false },
+  { src: orangeShape3, ar: 1.035, color: 'yellow', x: 50, y: 8, size: '6.5vw', rot: 6, pull: 56, mobile: false },
+  { src: blueShape1, ar: 1.053, color: 'blue', x: 95, y: 40, size: '5.5vw', rot: -14, pull: 64, mobile: false },
+  { src: yellowShape2, ar: 1.146, color: 'orange', x: 40, y: 6, size: '6vw', rot: -7, pull: 58, mobile: false },
+  { src: orangeShape2, ar: 1.011, color: 'blue', x: 72, y: 90, size: '6vw', rot: 14, pull: 60, mobile: false },
+  { src: blueShape2, ar: 1.061, color: 'yellow', x: 18, y: 12, size: '7vw', rot: 11, pull: 54, mobile: false },
 ];
 
 function HomeAssemble() {
@@ -180,21 +189,52 @@ function HomeAssemble() {
 
   return (
     <section ref={sectionRef} className="home-assemble">
-      {MOTIFS.map((m, i) => (
-        <img
-          key={i}
-          className="home-assemble__motif"
-          src={m.src}
-          alt=""
-          aria-hidden="true"
-          data-x={m.x}
-          data-y={m.y}
-          data-pull={m.pull}
-          data-rot={m.rot}
-          data-mobile={m.mobile ? 'show' : 'hide'}
-          style={{ left: `${m.x}%`, top: `${m.y}%`, '--motif-size': m.size }}
-        />
-      ))}
+      {MOTIFS.map((m, i) => {
+        const dataProps = {
+          'data-x': m.x,
+          'data-y': m.y,
+          'data-pull': m.pull,
+          'data-rot': m.rot,
+          'data-mobile': m.mobile ? 'show' : 'hide',
+        };
+        const baseStyle = {
+          left: `${m.x}%`,
+          top: `${m.y}%`,
+          '--motif-size': m.size,
+        };
+
+        // Heart + smiley: keep their designed colors as images.
+        if (m.fixed) {
+          return (
+            <img
+              key={i}
+              className="home-assemble__motif"
+              src={m.src}
+              alt=""
+              aria-hidden="true"
+              {...dataProps}
+              style={baseStyle}
+            />
+          );
+        }
+
+        // Abstract shapes: mask the silhouette, fill from a brand token.
+        return (
+          <span
+            key={i}
+            className="home-assemble__motif home-assemble__motif--mask"
+            aria-hidden="true"
+            {...dataProps}
+            style={{
+              ...baseStyle,
+              aspectRatio: String(m.ar),
+              backgroundColor: COLOR_VAR[m.color],
+              WebkitMaskImage: `url(${m.src})`,
+              maskImage: `url(${m.src})`,
+            }}
+          />
+        );
+      })}
 
       <div className="home-assemble__inner" ref={headlineRef}>
         <p className="home-assemble__brand">{siteConfig.name}</p>
