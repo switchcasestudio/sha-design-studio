@@ -5,12 +5,12 @@
 .services-page {
   background-color: var(--color-yellow);
   color: var(--color-ink);
-  padding-bottom: var(--space-16);
+  padding-bottom: var(--space-24);
 }
 
 /* Hero */
 .services-page__hero {
-  padding-block: var(--space-12) var(--space-8);
+  padding-block: var(--space-12) var(--space-16);
 }
 
 .services-page__hero-inner {
@@ -26,33 +26,11 @@
 }
 
 .services-page__intro {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
   color: var(--color-ink);
-  max-width: 42ch;
+  max-width: 46ch;
   justify-self: end;
-}
-
-/* Hero image */
-.services-page__hero-image {
-  padding-bottom: var(--space-16);
-}
-
-.services-page__image-placeholder {
-  aspect-ratio: 16 / 6;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(26, 26, 26, 0.08),
-    rgba(26, 26, 26, 0.08) 10px,
-    rgba(26, 26, 26, 0.03) 10px,
-    rgba(26, 26, 26, 0.03) 20px
-  );
-  border: 1px solid var(--color-ink);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-ink-muted);
-  font-style: italic;
 }
 
 /* Service blocks */
@@ -63,250 +41,176 @@
 }
 
 .service-block {
+  /* Each card sets its own fg/bg via these vars so children inherit cleanly */
+  --card-bg: var(--color-cream-soft);
+  --card-fg: var(--color-ink);
+  --card-line: rgba(26, 26, 26, 0.18);
+  --card-accent: var(--color-orange);
+
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: var(--space-12);
-  padding-block: var(--space-16);
-  border-top: 2px solid var(--color-ink);
+  grid-template-columns: 1fr 1.4fr;
+  gap: clamp(var(--space-8), 5vw, var(--space-16));
+  background-color: var(--card-bg);
+  color: var(--card-fg);
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-8), 5vw, var(--space-16));
   align-items: start;
 }
 
-.service-block:last-child {
-  border-bottom: 2px solid var(--color-ink);
+/* Color themes */
+.service-block--orange {
+  --card-bg: var(--color-orange);
+  --card-fg: var(--color-cream);
+  --card-line: color-mix(in srgb, var(--color-cream) 35%, transparent);
+  --card-accent: var(--color-ink);
 }
 
-/* Left column */
+.service-block--ink {
+  --card-bg: var(--color-ink);
+  --card-fg: var(--color-cream);
+  --card-line: color-mix(in srgb, var(--color-cream) 28%, transparent);
+  --card-accent: var(--color-yellow);
+}
+
+.service-block--blue {
+  --card-bg: var(--color-blue);
+  --card-fg: var(--color-cream);
+  --card-line: color-mix(in srgb, var(--color-cream) 35%, transparent);
+  --card-accent: var(--color-yellow);
+}
+
+.service-block--cream {
+  --card-bg: var(--color-cream-soft);
+  --card-fg: var(--color-ink);
+  --card-line: rgba(26, 26, 26, 0.18);
+  --card-accent: var(--color-orange);
+}
+
+/* Left column — index + title */
 .service-block__left {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  position: sticky;
+  top: var(--space-8);
+}
+
+.service-block__index {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  /* Match the title color — number and title read as one unit */
+  color: var(--card-fg);
 }
 
 .service-block__title {
   /* Single-weight display face — hierarchy comes from size, not weight */
   font-family: var(--font-display);
-  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
-  white-space: pre-line;
+  color: var(--card-fg);
 }
 
-.service-block__price {
-  font-family: var(--font-body);
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-bold);
-  color: var(--color-ink);
-}
-
-/* Right column */
+/* Right column — description + deliverables */
 .service-block__right {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-8);
 }
 
 .service-block__description {
   font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
-  color: var(--color-ink);
+  color: var(--card-fg);
 }
 
-.service-block__cta {
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--color-ink);
-}
-
-.service-block__inquire {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  color: var(--color-ink);
-}
-
-.service-block__inquire:hover {
-  color: var(--color-orange);
-}
-
-/* Accordion list */
-.service-block__list {
+.service-block__includes {
   display: flex;
   flex-direction: column;
-  margin-top: var(--space-4);
-}
-
-.service-block__item {
-  border-top: 1px solid var(--color-ink);
-}
-
-.service-block__item:last-child {
-  border-bottom: 1px solid var(--color-ink);
-}
-
-.service-block__row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-5) 0;
-  background: transparent;
-  font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
-  color: var(--color-ink);
-  text-align: left;
-}
-
-.service-block__row:hover {
-  color: var(--color-orange);
-}
-
-.service-block__detail {
-  padding-bottom: var(--space-4);
-  font-size: var(--text-base);
-  color: var(--color-ink);
-  opacity: 0.85;
-}
-
-/* First card: Full-service */
-.service-block:first-child {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-8), 5vw, var(--space-16));
-  min-height: 460px;
-}
-
-.service-block:first-child,
-.service-block:first-child .service-block__right,
-.service-block:first-child .service-block__description,
-.service-block:first-child .service-block__cta,
-.service-block:first-child .service-block__list,
-.service-block:first-child .service-block__item,
-.service-block:first-child .service-block__row,
-.service-block:first-child .service-block__detail,
-.service-block:first-child .service-block__inquire,
-.service-block:first-child .service-block__price,
-.service-block:first-child .service-block__title {
-  background-color: var(--color-orange);
-  color: var(--color-cream) !important;
-  border-color: var(--color-cream);
-}
-
-.service-block:first-child .service-block__row:hover,
-.service-block:first-child .service-block__inquire:hover {
-  color: var(--color-ink) !important;
-}
-
-/* Second card: Room Redesign */
-.service-block:nth-child(2) {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-8), 5vw, var(--space-16));
-  min-height: 520px;
-}
-
-.service-block:nth-child(2),
-.service-block:nth-child(2) .service-block__right,
-.service-block:nth-child(2) .service-block__description,
-.service-block:nth-child(2) .service-block__cta,
-.service-block:nth-child(2) .service-block__list,
-.service-block:nth-child(2) .service-block__item,
-.service-block:nth-child(2) .service-block__row,
-.service-block:nth-child(2) .service-block__detail,
-.service-block:nth-child(2) .service-block__inquire,
-.service-block:nth-child(2) .service-block__price,
-.service-block:nth-child(2) .service-block__title {
-  background-color: var(--color-ink);
-  color: var(--color-cream) !important;
-  border-color: var(--color-cream);
-}
-
-.service-block:nth-child(2) .service-block__inquire {
-  text-decoration-thickness: 2px;
-}
-
-.service-block:nth-child(2) .service-block__list {
-  margin-top: var(--space-6);
-}
-
-.service-block:nth-child(2) .service-block__item {
-  border-top: 1px solid var(--color-cream);
-}
-
-.service-block:nth-child(2) .service-block__item:last-child {
-  border-bottom: 1px solid var(--color-cream);
-}
-
-.service-block:nth-child(2) .service-block__detail {
-  opacity: 0.85;
-}
-
-.service-block:nth-child(2) .service-block__row:hover,
-.service-block:nth-child(2) .service-block__inquire:hover {
-  color: var(--color-yellow) !important;
-}
-
-/* Purchase row */
-.service-block__purchase {
-  display: flex;
-  align-items: center;
   gap: var(--space-4);
-  margin-top: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-line);
 }
 
-/* Quantity stepper */
-.qty-stepper {
-  display: inline-flex;
-  align-items: center;
-  background-color: var(--color-cream);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
+.service-block__includes-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.85;
 }
 
-.qty-stepper__btn {
+.service-block__chips {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  color: var(--color-ink);
-  transition: background-color var(--duration-fast) var(--ease-out);
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
 }
 
-.qty-stepper__btn:hover {
-  background-color: rgba(26, 26, 26, 0.08);
-}
-
-.qty-stepper__value {
-  min-width: 32px;
-  text-align: center;
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  color: var(--color-ink);
-}
-
-/* Purchase button */
-.service-block__buy-btn {
-  flex: 1;
-  padding: var(--space-3) var(--space-8);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  border: 2px solid var(--color-ink);
+.service-block__chip {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-regular);
+  line-height: 1.2;
+  color: var(--card-fg);
+  border: 1px solid var(--card-line);
   border-radius: var(--radius-pill);
-  background-color: transparent;
-  color: var(--color-ink);
   transition:
     background-color var(--duration-base) var(--ease-out),
-    color var(--duration-base) var(--ease-out);
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
 }
 
-.service-block__buy-btn:hover {
+.service-block__chip:hover {
+  background-color: var(--card-accent);
+  border-color: var(--card-accent);
+  color: var(--card-bg);
+}
+
+/* Areas of expertise */
+.services-page__expertise {
+  padding-top: var(--space-24);
+}
+
+.services-page__expertise-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  align-items: center;
+  text-align: center;
+}
+
+.services-page__expertise-title {
+  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  color: var(--color-ink);
+}
+
+.services-page__expertise-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.services-page__expertise-item {
+  padding: var(--space-4) var(--space-8);
+  /* Reading face, not the display face */
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: clamp(var(--text-base), 2vw, var(--text-xl));
+  color: var(--color-cream);
   background-color: var(--color-ink);
-  color: var(--color-yellow);
+  border-radius: var(--radius-pill);
+}
+
+.services-page__expertise-item:nth-child(2) {
+  background-color: var(--color-orange);
+}
+
+.services-page__expertise-item:nth-child(3) {
+  background-color: var(--color-blue);
 }
 
 /* Responsive */
@@ -320,39 +224,17 @@
     justify-self: start;
   }
 
-  .service-block,
-  .service-block:first-child,
-  .service-block:nth-child(2) {
+  .service-block {
     grid-template-columns: 1fr;
     gap: var(--space-6);
     padding: var(--space-8);
-    min-height: unset;
   }
 
-  .service-block:nth-child(2) .service-block__title {
-    font-size: clamp(4rem, 18vw, 6rem);
+  .service-block__left {
+    position: static;
   }
 
-  .service-block:first-child .service-block__title,
-  .service-block:nth-child(2) .service-block__title {
-    font-size: clamp(2rem, 13vw, 2rem);
-    line-height: 0.95;
-  }
-
-  .service-block:nth-child(2) .service-block__description {
-    font-size: var(--text-2xl);
-  }
-
-  .service-block:nth-child(2) .service-block__cta {
-    font-size: var(--text-xl);
-  }
-
-  .service-block__purchase {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .service-block__buy-btn {
-    flex: unset;
+  .service-block__title {
+    font-size: clamp(var(--text-2xl), 7vw, var(--text-3xl));
   }
 }

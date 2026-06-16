@@ -240,9 +240,9 @@ function Home() {
               <h2 className="home-what__title">What I Do</h2>
 
               <p className="home-what__text">
-                I create simple, smart, and playful designs that spark
-                curiosity, support early development, and bring joy to little
-                ones.
+                I help brands, startups and entrepreneurs turn ideas into
+                meaningful products — from research and concept development to
+                product design, 3D visualization and development support.
               </p>
 
               <Button as={Link} to="/services" variant="outline" size="md">

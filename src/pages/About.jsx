@@ -16,19 +16,24 @@ const galleryImages = [
 
 const offers = [
   {
-    title: 'Virtual Design Guidance Sessions',
+    title: 'Research & Concept Development',
     description:
-      'One-on-one sessions to talk through your project, get feedback on concepts, and plan next steps, all from anywhere in the world.',
+      'Transforming early-stage ideas into clear product directions through research, exploration and concept development.',
   },
   {
-    title: 'Room Revival and Refinement',
+    title: 'Product Design & Development',
     description:
-      'A targeted refresh for a single room, color, layout, and key product recommendations to bring the space to life.',
+      'Developing concepts into thoughtful, functional and engaging products.',
   },
   {
-    title: 'Complete Home Transformation',
+    title: '3D Development & Product Visualization',
     description:
-      'A full-scope design partnership covering every room, every detail, end to end.',
+      'Bringing concepts to life through 3D modeling and visual communication.',
+  },
+  {
+    title: 'Product Documentation & Development Support',
+    description:
+      'Preparing products for development and supporting the process through implementation.',
   },
 ];
 
@@ -175,12 +180,16 @@ function About() {
               viewport={{ once: true }}
               transition={{ ...spring, delay: 0.15 }}
             >
-              <h2 className="about-offer__title">What I Offer</h2>
+              <h2 className="about-offer__title">My Approach</h2>
 
               <p className="about-offer__text">
-                Whether a single room or a full home makeover, I can offer
-                tailored solutions to elevate your living spaces to new levels
-                of elegance and comfort. Here are some of the services I offer:
+                I help brands, startups and entrepreneurs transform ideas into
+                meaningful products through research, concept development and
+                product design. With extensive experience in toys, baby products
+                and consumer goods, I combine strategic thinking, creativity and
+                hands-on product development to create products that are
+                engaging, functional and ready for the next stage of
+                development.
               </p>
 
               <Button variant="primary" size="md">
