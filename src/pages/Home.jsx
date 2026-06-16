@@ -6,7 +6,7 @@ import {
   useScroll,
   useTransform,
 } from 'motion/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Button from '@/components/ui/Button';
 import GooeyText from '@/components/ui/GooeyText';
 import {
@@ -50,12 +50,14 @@ const heroPhrases = [
 
 // Decorative motif: continuous parallax drift (style.y) wraps a one-shot
 // bloom (scale/rotate via variants) — different MotionValues, no conflict.
+// The bloom only plays when the grid's intro runs; otherwise the parent
+// starts at "show" and the badge is rendered already settled.
 function ProjectBadge({ badge, driftY, reduce }) {
   return (
     <motion.div
       className="project-card__badge-motif"
       style={reduce ? undefined : { y: driftY }}
-      variants={reduce ? reducedReveal : badgeBloom}
+      variants={badgeBloom}
     >
       <img
         src={badge.src}
@@ -91,6 +93,29 @@ function ColorWorld({ children, className }) {
 function Home() {
   const reduce = useReducedMotion();
 
+  // Session-gated intro: the orchestrated entrance plays only on the first
+  // landing of a browser session (per-tab; sessionStorage clears on close).
+  // Read synchronously in a lazy initializer so it's known BEFORE first paint
+  // — repeat visitors must never flash the pre-intro (hidden/offset) state.
+  const [playIntro] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const seen = window.sessionStorage.getItem('sha:introSeen') === '1';
+    const prefersReduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    return !seen && !prefersReduced;
+  });
+
+  // Mark the intro as seen once it finishes (set on completion, not mount, so
+  // StrictMode's dev double-mount doesn't suppress the first real playthrough).
+  const markIntroSeen = () => {
+    if (playIntro) window.sessionStorage.setItem('sha:introSeen', '1');
+  };
+
+  // When the intro isn't playing (repeat visit or reduced motion), elements
+  // start in their final "show" state — no entrance, no delay.
+  const introStart = playIntro ? 'hidden' : 'show';
+
   // Ambient parallax for the badge motifs, driven by the grid's scroll
   // position. Two different speeds + directions give a sense of depth.
   const gridRef = useRef(null);
@@ -108,21 +133,16 @@ function Home() {
       <section className="home-hero">
         <motion.div
           className="container home-hero__inner"
-          variants={reduce ? reducedReveal : heroContainer}
-          initial={reduce ? 'show' : 'hidden'}
+          variants={heroContainer}
+          initial={introStart}
           animate="show"
+          onAnimationComplete={markIntroSeen}
         >
-          <motion.p
-            className="home-hero__brand"
-            variants={reduce ? reducedReveal : heroLine}
-          >
+          <motion.p className="home-hero__brand" variants={heroLine}>
             {siteConfig.name}
           </motion.p>
 
-          <motion.h1
-            className="home-hero__title"
-            variants={reduce ? reducedReveal : heroLine}
-          >
+          <motion.h1 className="home-hero__title" variants={heroLine}>
             <GooeyText
               texts={heroPhrases}
               morphTime={1.2}
@@ -139,15 +159,14 @@ function Home() {
           <motion.div
             ref={gridRef}
             className="home-projects__grid"
-            variants={reduce ? reducedReveal : gridContainer}
-            initial={reduce ? 'show' : 'hidden'}
-            whileInView="show"
-            viewport={{ once: true, margin: '-60px' }}
+            variants={gridContainer}
+            initial={introStart}
+            animate="show"
           >
             {/* Featured / large project */}
             <motion.article
               className="project-card project-card--feature"
-              variants={reduce ? reducedReveal : gridCard}
+              variants={gridCard}
               whileHover={reduce ? undefined : { y: -6 }}
             >
               <Link
@@ -191,7 +210,7 @@ function Home() {
               <motion.article
                 key={project.id}
                 className="project-card"
-                variants={reduce ? reducedReveal : gridCard}
+                variants={gridCard}
                 whileHover={reduce ? undefined : { y: -6 }}
               >
                 <Link
