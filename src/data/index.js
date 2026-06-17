@@ -48,7 +48,7 @@ const EXTRA_COLLECTIONS = {
       slug: 'package-design',
       title: 'Garden of Adventures Packaging Design',
       images: [1, 2, 3, 4, 5].map((n) => ({
-        assetPath: `src/assets/images/projects/products/package-design/package-design-${n}.png`,
+        assetPath: `src/assets/images/projects/products/package-design/package-design-${n}.webp`,
         alt: `Garden of Adventures eco-conscious packaging design ${n} for Tiny Love`,
       })),
     },
