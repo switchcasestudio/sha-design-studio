@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
-import yellowFlower from '@/assets/svg/yellow-1.svg';
+import yellowFlower from '@/assets/svg/yellow-2.svg';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import { projects } from '@/data';
 import './About.css';

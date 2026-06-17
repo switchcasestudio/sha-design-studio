@@ -1,52 +1,50 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { ease } from '@/lib/motion';
 import { siteConfig } from '@/utils/siteConfig';
-import blueShape1 from '@/assets/svg/blue-1.svg';
-import blueShape2 from '@/assets/svg/blue-2.svg';
-import orangeShape1 from '@/assets/svg/orange-1.svg'; // heart
-import orangeShape2 from '@/assets/svg/orange-2.svg'; // blob
-import orangeShape3 from '@/assets/svg/orange-3.svg'; // splat
-import yellowShape1 from '@/assets/svg/yellow-1.svg';
-import yellowShape2 from '@/assets/svg/yellow-2.svg';
-import yellowShape3 from '@/assets/svg/yellow-3.svg'; // smiley
+// Rounded / soft brand motifs — already authored in the palette, so they're
+// shown in their native colors (no masking/recolor needed). The angular shape-
+// sorter pieces (squares, triangles, L, dome…) were retired to keep the hero
+// round and soft.
+import circle from '@/assets/svg/02_circle.svg';
+import squiggle from '@/assets/svg/04_squiggle.svg';
+import pacman from '@/assets/svg/05_pacman.svg';
+import rectangle from '@/assets/svg/09_rectangle.svg';
+import star from '@/assets/svg/12_star.svg';
+import ring from '@/assets/svg/13_ring.svg';
+import sShape from '@/assets/svg/15_S.svg';
+// Organic blobs + heart.
+import blueBlob from '@/assets/svg/blue-1.svg';
+import blueBlob2 from '@/assets/svg/blue-2.svg';
+import orangeHeart from '@/assets/svg/orange-1.svg';
+import orangeSplat from '@/assets/svg/orange-3.svg';
+import yellowBlob from '@/assets/svg/yellow-2.svg';
 import './HomeAssemble.css';
 
-// Recolor the abstract shapes (flowers/blobs/splats) to any brand token by
-// masking the silhouette and filling with background-color — the SVGs bake
-// their fill into an embedded <style>, so masking is the clean way to theme
-// them without SVGR/inlining. The heart + smiley keep their designed colors.
-const COLOR_VAR = {
-  orange: 'var(--color-orange)',
-  blue: 'var(--color-blue)',
-  yellow: 'var(--color-yellow)',
-};
-
-/* Dense, balanced motif set. `color` recolors an abstract shape (stable, hand-
-   balanced so all three appear and the same silhouette shows in different
-   colors with no spatial clustering); `fixed:true` keeps the heart/smiley in
-   their own color as <img>. `ar` = viewBox aspect ratio (the masked span has
-   no intrinsic size). x/y = rest position (%); size varies dramatically; pull =
-   how far out (% of viewport) it starts/scatters — small for the edge "hint"
-   shapes that peek into the first viewport, large for flyers. Rest spots stay
-   in the margins, clear of the headline. mobile:false = hidden on mobile. */
+/* The round/soft motif set (12 brand shapes — 5 yellow / 5 blue / 2 orange),
+   hand-placed so the same color never clusters and the central headline stays
+   clear. Each is shown in its native brand color as an <img>. x/y = rest
+   position (%); size varies; rot = static resting tilt; pull = how far out (% of
+   viewport) it starts — small for the edge "hint" shapes that peek into the
+   first screen, large for the accents that travel in from far off-frame. Both
+   oranges (heart + splat) are hint shapes so the warm accent reads on the first
+   frame. Every shape moves A→B exactly ONCE and stays. mobile:false = hidden on
+   the thinner mobile flow. */
 const MOTIFS = [
-  // Edge "hint" shapes — peek into the first viewport before any scroll.
-  { src: yellowShape2, ar: 1.146, color: 'blue', x: 6, y: 22, size: '16vw', rot: -8, pull: 8, mobile: true },
-  { src: orangeShape2, ar: 1.011, color: 'yellow', x: 94, y: 26, size: '15vw', rot: 7, pull: 8, mobile: true },
-  { src: blueShape2, ar: 1.061, color: 'orange', x: 90, y: 82, size: '16vw', rot: -6, pull: 8, mobile: true },
-  { src: orangeShape3, ar: 1.035, color: 'blue', x: 10, y: 84, size: '14vw', rot: 9, pull: 8, mobile: true },
-  // Mids — fly in from further out.
-  { src: blueShape1, ar: 1.053, color: 'yellow', x: 8, y: 50, size: '9.5vw', rot: -12, pull: 48, mobile: true },
-  { src: yellowShape1, ar: 1.078, color: 'orange', x: 92, y: 52, size: '9.5vw', rot: 12, pull: 48, mobile: true },
-  { src: orangeShape1, ar: 1.051, fixed: true, x: 33, y: 91, size: '8vw', rot: 8, pull: 46, mobile: true }, // heart
-  { src: yellowShape3, ar: 0.917, fixed: true, x: 68, y: 10, size: '7.5vw', rot: -10, pull: 50, mobile: false }, // smiley
-  // Small accents — sweep in from far off-frame.
-  { src: orangeShape3, ar: 1.035, color: 'yellow', x: 50, y: 8, size: '6.5vw', rot: 6, pull: 56, mobile: false },
-  { src: blueShape1, ar: 1.053, color: 'blue', x: 95, y: 40, size: '5.5vw', rot: -14, pull: 64, mobile: false },
-  { src: yellowShape2, ar: 1.146, color: 'orange', x: 40, y: 6, size: '6vw', rot: -7, pull: 58, mobile: false },
-  { src: orangeShape2, ar: 1.011, color: 'blue', x: 72, y: 90, size: '6vw', rot: 14, pull: 60, mobile: false },
-  { src: blueShape2, ar: 1.061, color: 'yellow', x: 18, y: 12, size: '7vw', rot: 11, pull: 54, mobile: false },
+  // Edge "hint" shapes — peek into the first screen, travel a short distance.
+  { src: blueBlob, x: 6, y: 22, size: '14vw', rot: -8, pull: 8, mobile: true },
+  { src: circle, x: 94, y: 26, size: '11vw', rot: 7, pull: 8, mobile: true },
+  { src: orangeSplat, x: 90, y: 82, size: '14vw', rot: -6, pull: 8, mobile: true },
+  { src: orangeHeart, x: 10, y: 84, size: '12vw', rot: 9, pull: 8, mobile: true }, // heart
+  // Mids — travel in from further out.
+  { src: star, x: 8, y: 50, size: '8vw', rot: -12, pull: 46, mobile: true },
+  { src: blueBlob2, x: 95, y: 44, size: '9vw', rot: 10, pull: 46, mobile: true },
+  { src: yellowBlob, x: 92, y: 62, size: '8vw', rot: -8, pull: 46, mobile: true },
+  { src: pacman, x: 66, y: 11, size: '7vw', rot: -9, pull: 48, mobile: true },
+  // Accents — sweep in from far off-frame.
+  { src: squiggle, x: 40, y: 7, size: '7vw', rot: 6, pull: 56, mobile: false },
+  { src: rectangle, x: 40, y: 92, size: '7vw', rot: -5, pull: 58, mobile: false },
+  { src: sShape, x: 62, y: 90, size: '6vw', rot: 10, pull: 60, mobile: false },
+  { src: ring, x: 8, y: 68, size: '6vw', rot: -14, pull: 62, mobile: false },
 ];
 
 function HomeAssemble() {
@@ -61,95 +59,118 @@ function HomeAssemble() {
       );
       const mm = gsap.matchMedia();
 
-      // ---- Headline entrance + float (any width, motion allowed) ----
-      // The headline IS the hero: it scales up, rises and fades in with a
-      // playful overshoot, then breathes with a subtle continuous float so it
-      // never feels dead while pinned.
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.from(lines, {
-          autoAlpha: 0,
-          y: 44,
-          scale: 0.84,
-          transformOrigin: '50% 100%',
-          stagger: 0.12,
-          duration: 0.7,
-          ease: ease.bloomGsap,
+      // Center each shape on its left/top anchor + bake the static resting tilt.
+      // GSAP only animates translate/scale (and the headline's opacity) on top.
+      const placeMotifs = () =>
+        gsap.set(motifs, {
+          xPercent: -50,
+          yPercent: -50,
+          rotation: (i, el) => Number(el.dataset.rot) || 0,
         });
-      });
 
-      // ---- Desktop: shapes assemble once on load, then stay put ----
-      // No scroll pinning: a scrubbed pin locked the viewport while everything
-      // moved, which read as shaky/disorienting. Instead the shapes sweep in
-      // from off-frame on load, settle around the headline, and stay — so
-      // scrolling the page is completely normal and the composed hero just
-      // scrolls away with the section.
+      // Off-frame start offset for a motif: it begins `pull`% of the viewport
+      // outward along its radial direction from the headline and converges to
+      // rest (x:0, y:0). Returned as zero-arg closures (capturing the per-shape
+      // direction) so GSAP re-resolves them against the live viewport size.
+      const enterX = (el) => {
+        const ux = Number(el.dataset.x) - 50;
+        const uy = Number(el.dataset.y) - 50;
+        const len = Math.hypot(ux, uy) || 1;
+        const pull = Number(el.dataset.pull) || 40;
+        return () => (ux / len) * (pull / 100) * window.innerWidth;
+      };
+      const enterY = (el) => {
+        const ux = Number(el.dataset.x) - 50;
+        const uy = Number(el.dataset.y) - 50;
+        const len = Math.hypot(ux, uy) || 1;
+        const pull = Number(el.dataset.pull) || 40;
+        return () => (uy / len) * (pull / 100) * window.innerHeight;
+      };
+
+      // ---- Desktop: pin + scrub. Scroll position drives the assemble in BOTH
+      // directions — scroll down converges the shapes around the headline,
+      // scroll up reverses it. Motion is smooth (power2.inOut underneath), the
+      // user's scroll speed sets the pace; no bounce/overshoot. ----
       mm.add(
         '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
         () => {
-          gsap.set(motifs, { xPercent: -50, yPercent: -50 });
+          placeMotifs();
 
-          const tl = gsap.timeline({
-            defaults: { ease: ease.bloomGsap },
-            delay: 0.15,
+          // Headline is present from the FIRST frame — it reveals once on load
+          // (not tied to scroll), so the hero is never an empty frame. The
+          // shapes then assemble around the already-visible headline on scroll.
+          gsap.from(lines, {
+            autoAlpha: 0,
+            y: 24,
+            scale: 0.96,
+            transformOrigin: '50% 100%',
+            stagger: 0.08,
+            duration: 0.6,
+            ease: 'power2.out',
           });
 
-          motifs.forEach((el, i) => {
-            const cx = Number(el.dataset.x);
-            const cy = Number(el.dataset.y);
-            const pull = Number(el.dataset.pull) || 40;
-            const restRot = Number(el.dataset.rot) || 0;
-            const ux = cx - 50;
-            const uy = cy - 50;
-            const len = Math.hypot(ux, uy) || 1;
-            const nx = ux / len;
-            const ny = uy / len;
-            const enterX = () => nx * (pull / 100) * window.innerWidth;
-            const enterY = () => ny * (pull / 100) * window.innerHeight;
+          const tl = gsap.timeline({
+            defaults: { ease: 'power2.inOut' },
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              pin: true,
+              start: 'top top',
+              end: '+=110%',
+              scrub: 0.6,
+            },
+          });
 
+          // Every shape converges over the full progress (0→1), tracking scroll.
+          // Visible the whole time (the 4 hint shapes peek at the corners on the
+          // first frame; far accents are clipped off-frame), so there's no fade
+          // flicker — just a translate + gentle scale toward rest.
+          motifs.forEach((el) => {
             tl.fromTo(
               el,
-              {
-                x: enterX,
-                y: enterY,
-                scale: 0.6,
-                rotation: restRot - 10,
-                autoAlpha: 0,
-              },
-              {
-                x: 0,
-                y: 0,
-                scale: 1,
-                rotation: restRot,
-                autoAlpha: 1,
-                duration: 0.7,
-              },
-              i * 0.05
+              { x: enterX(el), y: enterY(el), scale: 0.8 },
+              { x: 0, y: 0, scale: 1, duration: 1 },
+              0
             );
           });
         }
       );
 
-      // ---- Mobile: no pin, simple fade/slide-in as the section enters ----
+      // ---- Mobile: no pin (a pinned/scrubbed section fights touch scroll).
+      // A simple non-scrubbed reveal as the section enters. ----
       mm.add(
         '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
         () => {
-          gsap.set(motifs, { xPercent: -50, yPercent: -50 });
+          placeMotifs();
+          const trigger = { trigger: sectionRef.current, start: 'top 80%' };
+
           gsap.from(motifs, {
             autoAlpha: 0,
             y: 20,
-            scale: 0.8,
-            stagger: 0.06,
+            scale: 0.85,
+            stagger: 0.05,
             duration: 0.5,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
+            ease: 'power2.out',
+            scrollTrigger: trigger,
+          });
+          gsap.from(lines, {
+            autoAlpha: 0,
+            y: 24,
+            scale: 0.96,
+            stagger: 0.08,
+            duration: 0.5,
+            ease: 'power2.out',
+            scrollTrigger: trigger,
           });
         }
       );
 
-      // ---- Reduced motion: no JS — base CSS shows the final layout ----
+      // ---- Reduced motion: render the static settled layout, no transforms. ----
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        placeMotifs();
+      });
 
-      // Text centerpiece + font load both shift layout; recompute pin math
-      // afterwards. (ScrollTrigger already refreshes on resize.)
+      // Font load shifts the headline's size; recompute pin/trigger geometry
+      // after it resolves. (ScrollTrigger already refreshes on resize.)
       if (document.fonts?.ready) {
         document.fonts.ready.then(() => ScrollTrigger.refresh());
       }
@@ -159,52 +180,21 @@ function HomeAssemble() {
 
   return (
     <section ref={sectionRef} className="home-assemble">
-      {MOTIFS.map((m, i) => {
-        const dataProps = {
-          'data-x': m.x,
-          'data-y': m.y,
-          'data-pull': m.pull,
-          'data-rot': m.rot,
-          'data-mobile': m.mobile ? 'show' : 'hide',
-        };
-        const baseStyle = {
-          left: `${m.x}%`,
-          top: `${m.y}%`,
-          '--motif-size': m.size,
-        };
-
-        // Heart + smiley: keep their designed colors as images.
-        if (m.fixed) {
-          return (
-            <img
-              key={i}
-              className="home-assemble__motif"
-              src={m.src}
-              alt=""
-              aria-hidden="true"
-              {...dataProps}
-              style={baseStyle}
-            />
-          );
-        }
-
-        // Abstract shapes: mask the silhouette, fill from a brand token.
-        return (
-          <span
-            key={i}
-            className="home-assemble__motif home-assemble__motif--mask"
-            aria-hidden="true"
-            {...dataProps}
-            style={{
-              ...baseStyle,
-              aspectRatio: String(m.ar),
-              backgroundColor: COLOR_VAR[m.color],
-              WebkitMaskImage: `url(${m.src})`,
-              maskImage: `url(${m.src})`,
-            }}
-          />
-        );
-      })}
+      {MOTIFS.map((m, i) => (
+        <img
+          key={i}
+          className="home-assemble__motif"
+          src={m.src}
+          alt=""
+          aria-hidden="true"
+          data-x={m.x}
+          data-y={m.y}
+          data-pull={m.pull}
+          data-rot={m.rot}
+          data-mobile={m.mobile ? 'show' : 'hide'}
+          style={{ left: `${m.x}%`, top: `${m.y}%`, '--motif-size': m.size }}
+        />
+      ))}
 
       <div className="home-assemble__inner" ref={headlineRef}>
         <p className="home-assemble__brand">{siteConfig.name}</p>

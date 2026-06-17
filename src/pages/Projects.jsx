@@ -2,23 +2,25 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { projects } from '@/data';
-import blueShape1 from '@/assets/svg/blue-1.svg';
-import blueShape2 from '@/assets/svg/blue-2.svg';
-import yellowShape1 from '@/assets/svg/yellow-1.svg';
-import yellowShape2 from '@/assets/svg/yellow-2.svg';
-import creamShape1 from '@/assets/svg/cream-1.svg';
-import creamShape2 from '@/assets/svg/cream-2.svg';
+import blueBlob from '@/assets/svg/blue-1.svg';
+import blueBlob2 from '@/assets/svg/blue-2.svg';
+import yellowBlob from '@/assets/svg/yellow-2.svg';
+import pacman from '@/assets/svg/05_pacman.svg';
+import circle from '@/assets/svg/02_circle.svg';
+import star from '@/assets/svg/12_star.svg';
 import './Projects.css';
 
-/* Red shapes are skipped on this page — they'd disappear into the
-   orange background. */
+/* Badges sit on the orange media panel, so they alternate blue and yellow —
+   both read clearly there. Orange/red shapes are skipped (they'd disappear
+   into the background). A mix of organic blobs + solid geometric shapes keeps
+   the cycling set varied across many projects. */
 const badgeVariants = [
-  { src: blueShape1, variant: 'blue' },
-  { src: yellowShape1, variant: 'yellow' },
-  { src: creamShape1, variant: 'cream' },
-  { src: blueShape2, variant: 'blue' },
-  { src: yellowShape2, variant: 'yellow' },
-  { src: creamShape2, variant: 'cream' },
+  { src: blueBlob, variant: 'blue' },
+  { src: yellowBlob, variant: 'yellow' },
+  { src: pacman, variant: 'blue' },
+  { src: circle, variant: 'yellow' },
+  { src: blueBlob2, variant: 'blue' },
+  { src: star, variant: 'yellow' },
 ];
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };

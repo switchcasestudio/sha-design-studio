@@ -1,8 +1,9 @@
 /* ==========================================================================
-   Home assemble — the signature scroll-pinned moment.
-   Base styles render the FINAL layout (product centred, motifs at rest) so the
-   section is correct with JS off and under reduced motion. GSAP overrides
-   transforms on desktop/mobile when motion is allowed.
+   Home assemble — the signature scroll-pinned (scrub) moment.
+   Base styles render the FINAL layout (headline centred, motifs at rest) so the
+   section is correct with JS off and under reduced motion. On desktop, GSAP
+   pins the section and the scroll position drives the motif convergence both
+   ways (down = converge, up = reverse).
    ========================================================================== */
 .home-assemble {
   position: relative;
@@ -48,8 +49,10 @@
   max-width: 13ch;
 }
 
-/* Decorative motifs sit behind the product (z-index 1), resting in the side
-   margins. Positioned by inline left/top/width; GSAP owns the transform. */
+/* Decorative motifs sit behind the headline (z-index 1), resting in the side
+   margins. Each is a pre-colored brand shape shown in its native color.
+   Positioned by inline left/top/width; GSAP owns the transform. Height comes
+   from the SVG's intrinsic aspect ratio. */
 .home-assemble__motif {
   position: absolute;
   z-index: 1;
@@ -57,18 +60,6 @@
   height: auto;
   pointer-events: none;
   display: block;
-}
-
-/* Recolored abstract shapes: the brand-token background-color is clipped to the
-   SVG silhouette via mask. Height comes from the inline aspect-ratio + width.
-   (mask-image + background-color + aspect-ratio are set per element inline.) */
-.home-assemble__motif--mask {
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
 }
 
 @media (max-width: 767px) {
