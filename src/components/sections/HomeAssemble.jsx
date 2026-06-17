@@ -75,42 +75,24 @@ function HomeAssemble() {
           duration: 0.7,
           ease: ease.bloomGsap,
         });
-        gsap.to(headlineRef.current, {
-          y: 10,
-          duration: 3.4,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
       });
 
-      // ---- Desktop: full pin + scrubbed assemble of the orbiting shapes ----
+      // ---- Desktop: shapes assemble once on load, then stay put ----
+      // No scroll pinning: a scrubbed pin locked the viewport while everything
+      // moved, which read as shaky/disorienting. Instead the shapes sweep in
+      // from off-frame on load, settle around the headline, and stay — so
+      // scrolling the page is completely normal and the composed hero just
+      // scrolls away with the section.
       mm.add(
         '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
         () => {
           gsap.set(motifs, { xPercent: -50, yPercent: -50 });
 
           const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: '+=140%',
-              scrub: 0.6,
-              pin: true,
-              // Layout wraps each route in a transformed motion.div; pinning
-              // via transform (not position:fixed) stays correct inside it.
-              pinType: 'transform',
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              // Dev-only scrub readout (verification aid; stripped from prod builds).
-              onUpdate: import.meta.env.DEV
-                ? (self) => console.log('[home-assemble] progress', self.progress.toFixed(2))
-                : undefined,
-            },
+            defaults: { ease: ease.bloomGsap },
+            delay: 0.15,
           });
 
-          // Shapes orbit the headline: sweep in from off-frame with rotation +
-          // scale (overshoot), settle by ~0.55, then sweep back out and fade.
           motifs.forEach((el, i) => {
             const cx = Number(el.dataset.x);
             const cy = Number(el.dataset.y);
@@ -121,39 +103,27 @@ function HomeAssemble() {
             const len = Math.hypot(ux, uy) || 1;
             const nx = ux / len;
             const ny = uy / len;
-            // Stable per-element start tilt (-50°..+50°), never re-randomized.
-            const startRot = (i % 2 ? 1 : -1) * (32 + ((i * 9) % 18));
-
             const enterX = () => nx * (pull / 100) * window.innerWidth;
             const enterY = () => ny * (pull / 100) * window.innerHeight;
-            const exitX = () => nx * 0.85 * window.innerWidth;
-            const exitY = () => ny * 0.85 * window.innerHeight;
 
             tl.fromTo(
               el,
-              { x: enterX, y: enterY, scale: 0.4, rotation: startRot, autoAlpha: 1 },
+              {
+                x: enterX,
+                y: enterY,
+                scale: 0.6,
+                rotation: restRot - 10,
+                autoAlpha: 0,
+              },
               {
                 x: 0,
                 y: 0,
                 scale: 1,
                 rotation: restRot,
                 autoAlpha: 1,
-                ease: ease.bloomGsap,
-                duration: 0.55,
+                duration: 0.7,
               },
-              0
-            ).to(
-              el,
-              {
-                x: exitX,
-                y: exitY,
-                scale: 0.5,
-                rotation: startRot * -0.6,
-                autoAlpha: 0,
-                ease: ease.scatterGsap,
-                duration: 0.45,
-              },
-              0.55
+              i * 0.05
             );
           });
         }
