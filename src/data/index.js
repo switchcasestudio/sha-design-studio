@@ -19,7 +19,11 @@ function resolveAssetUrl(assetPath) {
   // Exported paths are relative to the repo root ("src/assets/...");
   // glob keys are relative to this file ("../assets/...").
   const key = assetPath.replace(/^src\/assets\//, '../assets/');
-  return imageUrls[key] ?? null;
+  // Project images are re-encoded to WebP; prefer the .webp sibling and fall
+  // back to the referenced file when no WebP exists. (Lets the generated data
+  // keep its original .jpg paths untouched.)
+  const webpKey = key.replace(/\.(jpe?g|png)$/i, '.webp');
+  return imageUrls[webpKey] ?? imageUrls[key] ?? null;
 }
 
 function normalizeImage(image) {
