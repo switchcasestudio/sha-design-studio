@@ -119,6 +119,15 @@
   opacity: 0.75;
 }
 
+/* ---------- Marquee ribbon ---------- */
+.home-marquee {
+  /* No band — orange text scrolling on the page's cream background */
+  color: var(--color-orange);
+  overflow: hidden;
+  padding-block: var(--space-6);
+  margin-block: var(--space-12);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .home-what__panel {

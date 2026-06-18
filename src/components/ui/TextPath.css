@@ -1,0 +1,37 @@
+/* Text-on-a-path marquee. Inherits its colour from the parent (currentColor)
+   and uses the brand display face. */
+.text-path {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-path__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* The path itself is invisible — only the text rides it. */
+.text-path__svg path {
+  fill: none;
+  stroke: none;
+}
+
+.text-path__svg text {
+  font-family: var(--font-display);
+  fill: currentColor;
+}
+
+.text-path__measure {
+  fill: none;
+  stroke: none;
+  visibility: hidden;
+}
+
+.text-path__text {
+  /* Fades in once measured, to avoid a flash of unsized text */
+  transition: opacity var(--duration-base, 250ms) ease-out;
+}

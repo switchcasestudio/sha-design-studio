@@ -3,6 +3,7 @@ import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
 import HomeAssemble from '@/components/sections/HomeAssemble';
+import TextPath from '@/components/ui/TextPath';
 import { reducedReveal, slideUp } from '@/lib/motion';
 import { siteConfig } from '@/utils/siteConfig';
 import { testimonials } from '@/data/testimonials';
@@ -102,6 +103,18 @@ function Home() {
             ))}
           </div>
         </div>
+      </ColorWorld>
+
+      {/* ---------- Marquee ribbon: brand line scrolling along a wave ---------- */}
+      <ColorWorld className="home-marquee">
+        <TextPath
+          text="Designing Playful, Thoughtful Products  ·  Simple, Smart & Full of Wonder  ·  "
+          path="M0 80 C 130 30 270 30 400 80 S 670 130 800 80 S 1070 30 1200 80 S 1470 130 1600 80"
+          viewBox="0 0 1600 160"
+          fontSize="52px"
+          duration={20}
+          reversed
+        />
       </ColorWorld>
     </>
   );
