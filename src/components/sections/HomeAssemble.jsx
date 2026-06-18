@@ -1,6 +1,15 @@
 import { useMemo, useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { siteConfig } from '@/utils/siteConfig';
+import GooeyText from '@/components/ui/GooeyText';
+
+// The hero headline morphs between these (canonical first, so it's the static
+// fallback under reduced motion). Restored from the original gooey hero.
+const HERO_PHRASES = [
+  'Designing Thoughtful Products',
+  'Designing Playful Products',
+  'Simple, Smart, Full of Wonder',
+];
 // Shapes are imported as raw SVG source (?raw) so they can be recolored at
 // runtime: every shape is normalized to `currentColor`, and each placed
 // instance sets its wrapper's CSS `color` to a brand token. That lets ANY shape
@@ -249,7 +258,9 @@ function HomeAssemble() {
               trigger: sectionRef.current,
               pin: true,
               start: 'top top',
-              end: '+=110%',
+              // Shorter runway: the shapes finish assembling in ~0.6 viewport of
+              // scroll, so the hero doesn't hold the page pinned for too long.
+              end: '+=60%',
               scrub: 0.6,
             },
           });
@@ -335,7 +346,14 @@ function HomeAssemble() {
 
       <div className="home-assemble__inner" ref={headlineRef}>
         <p className="home-assemble__brand">{siteConfig.name}</p>
-        <h1 className="home-assemble__headline">Designing Thoughtful Products</h1>
+        <h1 className="home-assemble__headline">
+          <GooeyText
+            texts={HERO_PHRASES}
+            morphTime={1}
+            cooldownTime={2.2}
+            label="Designing Thoughtful Products"
+          />
+        </h1>
       </div>
     </section>
   );

@@ -56,9 +56,10 @@ function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
-      {/* Site-wide cursor follower — sits outside the route transition so it
-          persists across navigation. pointer-events:none, so it never blocks UI. */}
-      <TrailingCursorText />
+      {/* Cursor follower — restricted to the hero: only shows while the cursor
+          is over the home hero section (which only exists on the home page).
+          pointer-events:none, so it never blocks UI. */}
+      <TrailingCursorText boundsSelector=".home-assemble" />
     </div>
   );
 }

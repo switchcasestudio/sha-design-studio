@@ -24,6 +24,9 @@ function TrailingCursorText({
   stiffness = 4, // how rigidly the body holds its spacing (1–10)
   upright = false, // keep glyphs upright instead of rotating with the curve
   idleMs = 1400, // fade out after this long without mouse movement
+  // When set, the trail only shows while the cursor is over the element matched
+  // by this selector (e.g. the hero). Absent element → never shows.
+  boundsSelector = null,
 }) {
   const chars = useMemo(() => Array.from(text), [text]);
 
@@ -92,7 +95,26 @@ function TrailingCursorText({
       const pos = posRef.current;
       const mouse = mouseRef.current;
       const now = performance.now();
-      const active = mouse && lastMove > lastScroll && now - lastMove < idleMs;
+
+      // Optional spatial gate: only show while the cursor is over the bounds
+      // element (e.g. the hero). No element / outside it → inactive.
+      let inBounds = true;
+      if (boundsSelector) {
+        const el = document.querySelector(boundsSelector);
+        if (!el || !mouse) {
+          inBounds = false;
+        } else {
+          const r = el.getBoundingClientRect();
+          inBounds =
+            mouse.x >= r.left &&
+            mouse.x <= r.right &&
+            mouse.y >= r.top &&
+            mouse.y <= r.bottom;
+        }
+      }
+
+      const active =
+        mouse && inBounds && lastMove > lastScroll && now - lastMove < idleMs;
 
       if (rootRef.current) rootRef.current.style.opacity = active ? '1' : '0';
 
@@ -156,6 +178,7 @@ function TrailingCursorText({
     stiffness,
     upright,
     idleMs,
+    boundsSelector,
   ]);
 
   const thickness = fontSize + highlightPadding * 2;
