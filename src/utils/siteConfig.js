@@ -9,7 +9,7 @@ export const siteConfig = {
   description:
     'Industrial design for toys and baby products by Shiran Bar. Simple, smart, and full of wonder.',
   designer: 'Shiran Bar',
-  email: 'hello@shadesignstudio.com',
+  email: 'hayonshiran@gmail.com',
   social: {
     instagram: 'https://instagram.com/',
     facebook: 'https://facebook.com/',
@@ -28,8 +28,8 @@ export const navigation = [
 
 export const footerNavigation = {
   menu: [
-    { label: 'Services', href: '/services' },
     { label: 'Work', href: '/projects' },
+    { label: 'Services', href: '/services' },
     { label: 'About', href: '/about' },
     // Contact lives on its own route now (the form was moved out of the footer)
     { label: 'Inquire', href: '/inquire' },

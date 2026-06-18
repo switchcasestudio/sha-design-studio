@@ -21,7 +21,8 @@
 }
 
 .services-page__title {
-  font-size: clamp(var(--text-5xl), 9vw, var(--text-7xl));
+  /* Same big clamp as the Work page heading */
+  font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
   color: var(--color-ink);
 }
 
@@ -123,10 +124,11 @@
 }
 
 .service-block__title {
-  /* Single-weight display face (Bagel) — never set font-weight on it; hierarchy
-     comes from size. Line-height loosened from 1.1 → 1.2 so multi-line titles
-     like "Research & Concept Development" don't read cramped. */
-  font-family: var(--font-display);
+  /* Reading face (Fredoka) at medium weight per design — lighter than the Bagel
+     display face it used to use. Still large (≥24px), so cream on the bright
+     orange/blue cards clears the 3:1 large-text bar. */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
   font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
   letter-spacing: var(--tracking-tight);
   line-height: 1.2;
@@ -142,7 +144,7 @@
 
 .service-block__description {
   font-size: var(--text-xl);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-regular);
   line-height: var(--leading-snug);
   color: var(--card-fg);
 }
@@ -192,25 +194,12 @@
   color: var(--card-accent-fg);
 }
 
-/* ── Bright brand cards (orange + blue): AA-safe small text ──
-   Bright orange/blue can't carry normal-size text against any colour, so on
-   these cards the deliverable chips and the INCLUDES label sit on solid tags
-   (ink on cream = 15.3:1, cream on ink = 15.3:1). The description is set bold so
-   at 20px it reads as large text (cream on orange/blue 3.43–3.63:1 ≥ 3:1). */
-.service-block--orange .service-block__description,
-.service-block--blue .service-block__description {
-  font-weight: var(--weight-bold);
-}
-
-.service-block--orange .service-block__includes-label,
-.service-block--blue .service-block__includes-label {
-  align-self: flex-start;
-  padding: var(--space-1) var(--space-3);
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-  border-radius: var(--radius-pill);
-}
-
+/* ── Bright brand cards (orange + blue) ──
+   The deliverable chips sit on solid cream tags (ink text = 15.3:1). The title,
+   index and description are kept lighter per design; on the bright cards the
+   description (20px regular) and the INCLUDES eyebrow (12px) fall below AA 4.5:1
+   (they're ~3.4–3.6:1) — a deliberate brand trade-off favouring the lighter,
+   pill-free look. */
 .service-block--orange .service-block__chip,
 .service-block--blue .service-block__chip {
   background-color: var(--color-cream);
@@ -251,9 +240,9 @@
 
 .services-page__expertise-item {
   padding: var(--space-4) var(--space-8);
-  /* Reading face, not the display face */
+  /* Reading face, not the display face — lighter (medium) weight per design */
   font-family: var(--font-body);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-medium);
   font-size: clamp(var(--text-base), 2vw, var(--text-xl));
   /* Keep each pill on one line; the row wraps between pills. max-width guards
      against overflow on the narrowest screens. */

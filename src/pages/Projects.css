@@ -13,11 +13,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-12);
-  align-items: end;
+  align-items: center;
 }
 
 .projects-page__title {
-  font-size: clamp(var(--text-5xl), 9vw, var(--text-7xl));
+  /* Bigger on desktop and centred (both axes) within its column */
+  font-size: clamp(var(--text-7xl), 13vw, 8rem);
+  text-align: center;
   color: var(--color-cream);
 }
 
@@ -25,10 +27,11 @@
    brand orange can clear with cream (3.43:1 ≥ 3:1). Body-size copy on bright
    orange would fail AA, so the page surface carries large type only. */
 .projects-page__intro {
-  /* Floor is 24px so it always qualifies as WCAG "large text" (≥24px regular),
-     which is the only AA bar bright orange can meet with cream (3.43:1 ≥ 3:1). */
-  font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
-  font-weight: var(--weight-medium);
+  /* Held at 24px (no upsizing on desktop, where it read too large). 24px keeps
+     it WCAG "large text" — the only AA bar bright orange can meet with cream
+     (3.43:1 ≥ 3:1). */
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
   line-height: var(--leading-snug);
   max-width: 28ch;
   justify-self: end;
@@ -101,9 +104,7 @@
   gap: var(--space-2);
 }
 
-/* Two solid pills (client + product type). Both use a high-contrast fill so the
-   12px text passes AA: cream/ink = 15.3:1, ink/cream = 15.3:1. The old single
-   cream-pill-with-orange-text failed (3.43:1). */
+/* Single client pill — cream fill, ink text (15.3:1) */
 .overview-card__tags {
   display: flex;
   flex-wrap: wrap;
@@ -119,25 +120,20 @@
   line-height: 1.3;
 }
 
-/* Client = cream chip, ink text */
 .overview-card__tag--client {
   background-color: var(--color-cream);
   color: var(--color-ink);
 }
 
-/* Product type = ink chip, cream text — distinct from the client chip */
-.overview-card__tag--type {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-}
-
 .overview-card__title {
   /* Reading face, not the display face — long product titles stay legible.
-     Floor 20px + bold(700) → qualifies as WCAG "large text" (≥18.66px bold),
-     so cream on bright orange clears the 3:1 large-text bar. */
+     Lighter (medium) per design; floor 24px keeps it WCAG "large text" (≥24px),
+     so cream on bright orange clears the 3:1 large-text bar at this weight. */
   font-family: var(--font-body);
-  font-weight: var(--weight-bold);
-  font-size: clamp(var(--text-xl), 2.2vw, var(--text-2xl));
+  font-weight: var(--weight-medium);
+  /* Held at 24px (no desktop upsizing — read too large there). Still WCAG
+     "large text" so cream on bright orange clears the 3:1 bar at medium. */
+  font-size: var(--text-2xl);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-normal);
   color: var(--color-cream);
@@ -155,6 +151,13 @@
   .projects-page__hero-inner {
     grid-template-columns: 1fr;
     gap: var(--space-6);
+    align-items: start;
+  }
+
+  /* Mobile keeps the heading left-aligned at the approved (smaller) size */
+  .projects-page__title {
+    text-align: left;
+    font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
   }
 
   .projects-page__intro {

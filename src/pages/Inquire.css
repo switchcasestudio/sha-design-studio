@@ -19,10 +19,11 @@
 
 /* Intro column */
 .inquire-page__title {
-  /* Large display heading — orange on cream (3.43:1) is legal at this size */
-  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  /* Matches the Work / Services page headings (same big clamp). Orange on cream
+     (3.43:1) is legal at this size (large display text). */
+  font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
   color: var(--color-orange);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .inquire-page__lead {
@@ -38,8 +39,9 @@
   font-size: var(--text-base);
 }
 
+/* Same face + weight as the email address itself (regular), not bold */
 .inquire-page__details-label {
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-regular);
 }
 
 /* Ink link (15.3:1) with a permanent underline so it isn't colour-only */

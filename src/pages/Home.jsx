@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button';
 import HomeAssemble from '@/components/sections/HomeAssemble';
 import TextPath from '@/components/ui/TextPath';
 import { reducedReveal, slideUp } from '@/lib/motion';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { siteConfig } from '@/utils/siteConfig';
 import { testimonials } from '@/data/testimonials';
 import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
@@ -31,6 +32,10 @@ function ColorWorld({ children, className }) {
 }
 
 function Home() {
+  // The marquee SVG scales with viewport width, so the same fontSize renders
+  // much smaller on phones — bump it up there.
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
   return (
     <>
       {/* ---------- Signature hero: scroll-pinned brand assemble (GSAP) ----------
@@ -118,7 +123,7 @@ function Home() {
           text="Designing Playful, Thoughtful Products  ·  Simple, Smart & Full of Wonder  ·  "
           path="M0 140 C 130 100 270 100 400 140 S 670 180 800 140 S 1070 100 1200 140 S 1470 180 1600 140"
           viewBox="0 0 1600 280"
-          fontSize="80px"
+          fontSize={isMobile ? '150px' : '80px'}
           duration={20}
           reversed
         />

@@ -66,11 +66,6 @@ function Projects() {
                             {project.client}
                           </span>
                         )}
-                        {project.type && (
-                          <span className="overview-card__tag overview-card__tag--type">
-                            {project.type}
-                          </span>
-                        )}
                       </div>
                       <h2 className="overview-card__title">{project.title}</h2>
                     </div>

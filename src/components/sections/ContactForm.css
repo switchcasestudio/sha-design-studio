@@ -1,7 +1,7 @@
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 /* Honeypot — visually gone but still in the DOM for bots to trip on */
@@ -56,7 +56,9 @@
 .contact-form__input,
 .contact-form__textarea {
   width: 100%;
-  padding: var(--space-3) var(--space-4);
+  /* Tighter vertical padding so fields read less bulky; min-height keeps the
+     44px tap target. */
+  padding: var(--space-2) var(--space-4);
   background-color: var(--color-white);
   color: var(--color-ink);
   /* Clearer 2px boundary so the input edge is visible on any card colour */
@@ -79,7 +81,7 @@
 .contact-form__textarea {
   border-radius: var(--radius-lg);
   resize: vertical;
-  min-height: 120px;
+  min-height: 92px;
 }
 
 .contact-form__input:hover,
