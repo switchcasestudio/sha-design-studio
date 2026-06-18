@@ -3,6 +3,7 @@ import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import TrailingCursorText from '@/components/ui/TrailingCursorText';
 import './Layout.css';
 
 /* Jump to the top when the route changes. Explicitly instant so the
@@ -55,6 +56,9 @@ function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
+      {/* Site-wide cursor follower — sits outside the route transition so it
+          persists across navigation. pointer-events:none, so it never blocks UI. */}
+      <TrailingCursorText />
     </div>
   );
 }
