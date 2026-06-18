@@ -60,40 +60,33 @@ const SHAPES = {
 
 const COLORS = ['var(--color-orange)', 'var(--color-blue)', 'var(--color-yellow)'];
 
-/* Base placements ring the headline (center kept clear). Color is assigned at
-   random per load — since the shapes are now color-neutral, the same path shows
-   up in different colors, which fills the composition out. `pull` = how far out
-   (% of viewport) a motif starts before converging; the 4 corner "hint" shapes
-   peek on the first frame. mobile:false = hidden on the thinner mobile flow. */
-const BASE = [
-  // Corner hint shapes — peek on the first frame.
-  { shape: 'blob1', x: 7, y: 18, size: '13vw', rot: -8, pull: 10, mobile: true },
-  { shape: 'circle', x: 92, y: 20, size: '9vw', rot: 7, pull: 10, mobile: true },
-  { shape: 'splat', x: 88, y: 86, size: '12vw', rot: -6, pull: 10, mobile: true },
-  { shape: 'heart', x: 10, y: 84, size: '12vw', rot: 9, pull: 10, mobile: true },
-  // Mids.
-  { shape: 'blob3', x: 8, y: 50, size: '8vw', rot: -12, pull: 46, mobile: true },
-  { shape: 'blob2', x: 93, y: 45, size: '8.5vw', rot: 10, pull: 46, mobile: true },
-  { shape: 'star', x: 90, y: 64, size: '7vw', rot: -8, pull: 48, mobile: true },
-  { shape: 'pacman', x: 60, y: 9, size: '7vw', rot: -9, pull: 50, mobile: true },
-  // Splats — the "sparkle" the brand loves; prioritized so more survive.
-  { shape: 'splat', x: 22, y: 30, size: '8vw', rot: 14, pull: 52, mobile: false },
-  { shape: 'splat', x: 80, y: 30, size: '7vw', rot: -16, pull: 52, mobile: true },
-  { shape: 'splat', x: 74, y: 88, size: '7.5vw', rot: 10, pull: 54, mobile: false },
-  // Accents — sweep in from far off-frame.
-  { shape: 'squiggle', x: 40, y: 7, size: '9vw', rot: 6, pull: 56, mobile: false },
-  { shape: 'star', x: 73, y: 15, size: '6vw', rot: 18, pull: 54, mobile: false },
-  { shape: 'ring', x: 95, y: 74, size: '6vw', rot: -12, pull: 58, mobile: false },
-  { shape: 's', x: 66, y: 90, size: '6vw', rot: 10, pull: 58, mobile: false },
-  { shape: 'rectangle', x: 45, y: 93, size: '8vw', rot: -5, pull: 56, mobile: false },
-  { shape: 'circle', x: 28, y: 91, size: '6.5vw', rot: 20, pull: 54, mobile: false },
-  { shape: 'ring', x: 8, y: 67, size: '6vw', rot: -16, pull: 60, mobile: false },
-  { shape: 'circle', x: 10, y: 34, size: '6.5vw', rot: 6, pull: 50, mobile: false },
-  { shape: 'heart', x: 32, y: 12, size: '6vw', rot: -15, pull: 52, mobile: false },
-  { shape: 's', x: 52, y: 5, size: '5.5vw', rot: 22, pull: 56, mobile: false },
-  { shape: 'pacman', x: 20, y: 74, size: '6vw', rot: -21, pull: 54, mobile: false },
-  { shape: 'blob2', x: 84, y: 58, size: '7vw', rot: 12, pull: 48, mobile: false },
-  { shape: 'star', x: 16, y: 62, size: '5.5vw', rot: -18, pull: 56, mobile: false },
+/* The composition is generated per load (see buildMotifs): every shape TYPE
+   below appears at least twice, dropped into the margin "slots" with a randomised
+   size and tilt. Fewer, more deliberate motifs than the old dense field.
+   Slots all sit at y ≥ 17% so the sticky header never clips a motif. */
+const DESKTOP_TYPES = [
+  'heart', 'star', 'circle', 'squiggle', 'splat',
+  'ring', 'pacman', 's', 'blob2', 'rectangle',
+];
+const MOBILE_TYPES = ['heart', 'star', 'circle', 'squiggle', 'splat', 'blob2'];
+
+// Margin ring around the centred headline. Center band (x 22–78, y 26–84) is
+// left clear for the text; the top row clears the navbar.
+const DESKTOP_SLOTS = [
+  // left band
+  { x: 8, y: 20 }, { x: 13, y: 35 }, { x: 7, y: 50 }, { x: 14, y: 65 }, { x: 8, y: 80 }, { x: 13, y: 91 },
+  // right band
+  { x: 92, y: 20 }, { x: 87, y: 35 }, { x: 93, y: 50 }, { x: 86, y: 65 }, { x: 92, y: 80 }, { x: 88, y: 91 },
+  // top band (below the header)
+  { x: 28, y: 19 }, { x: 44, y: 18 }, { x: 60, y: 18 }, { x: 74, y: 19 },
+  // bottom band
+  { x: 30, y: 90 }, { x: 46, y: 93 }, { x: 62, y: 91 }, { x: 74, y: 90 },
+];
+
+const MOBILE_SLOTS = [
+  { x: 11, y: 19 }, { x: 88, y: 21 }, { x: 9, y: 41 }, { x: 90, y: 43 },
+  { x: 12, y: 65 }, { x: 87, y: 63 }, { x: 11, y: 85 }, { x: 88, y: 85 },
+  { x: 33, y: 17 }, { x: 66, y: 17 }, { x: 35, y: 90 }, { x: 64, y: 90 },
 ];
 
 // Footprint radius as a fraction of a shape's rendered width — used to keep
@@ -113,18 +106,6 @@ const FOOTPRINT = {
   rectangle: 0.4,
   squiggle: 0.4,
 };
-
-/* Extra squiggles scattered into the margins — count scales with screen size
-   (more room → more squiggles). Slots are pre-placed (margin-safe); a random
-   subset is activated each load. */
-const SQUIGGLE_SLOTS = [
-  { x: 20, y: 28, size: '8vw', rot: -12, pull: 52 },
-  { x: 80, y: 30, size: '8vw', rot: 10, pull: 54 },
-  { x: 84, y: 52, size: '7.5vw', rot: -8, pull: 50 },
-  { x: 26, y: 62, size: '7.5vw', rot: 14, pull: 52 },
-  { x: 54, y: 6, size: '8vw', rot: -6, pull: 56 },
-  { x: 16, y: 44, size: '7vw', rot: 8, pull: 54 },
-];
 
 function shuffle(arr) {
   const out = [...arr];
@@ -165,30 +146,39 @@ function buildMotifs() {
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1280;
   const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
   const isTablet = vw >= 768;
-  // 3–4 extra squiggles on larger screens, 1 on phones.
-  const extraCount = vw >= 1024 ? 4 : isTablet ? 3 : 1;
 
-  const extras = shuffle(SQUIGGLE_SLOTS)
-    .slice(0, extraCount)
-    .map((slot) => ({ shape: 'squiggle', ...slot, mobile: !isTablet }));
+  const types = isTablet ? DESKTOP_TYPES : MOBILE_TYPES;
+  const slots = isTablet ? DESKTOP_SLOTS : MOBILE_SLOTS;
 
-  // Candidates in priority order; on phones only the mobile-visible ones matter.
-  let candidates = [...BASE, ...extras];
-  if (!isTablet) candidates = candidates.filter((c) => c.mobile);
+  // Two of every type (guarantees ≥2 of each), shuffled across shuffled slots.
+  const instances = shuffle(types.flatMap((t) => [t, t]));
+  const chosen = shuffle(slots).slice(0, instances.length);
 
-  // Greedy de-overlap: keep a candidate only if it clears everything kept so
-  // far (earlier = higher priority), so nothing in the final set overlaps.
   const kept = [];
-  candidates.forEach((c) => {
-    if (!kept.some((k) => overlaps(k, c, vw, vh))) kept.push(c);
+  chosen.forEach((slot, i) => {
+    const shape = instances[i];
+    // Randomised size — "play with the sizes". Wider range on desktop.
+    let size = (isTablet ? 5.5 : 7) + Math.random() * (isTablet ? 6.5 : 4);
+    let cand = { shape, x: slot.x, y: slot.y, size: `${size.toFixed(1)}vw` };
+    // Shrink (never drop) until it clears everything already placed, so the
+    // "2 of each" guarantee always holds even if a big size would collide.
+    let guard = 0;
+    while (kept.some((k) => overlaps(k, cand, vw, vh)) && guard < 8) {
+      size *= 0.82;
+      cand = { ...cand, size: `${size.toFixed(1)}vw` };
+      guard += 1;
+    }
+    cand.pull = 44 + Math.random() * 18; // off-frame start distance for the sweep-in
+    cand.rot = Math.round((Math.random() * 2 - 1) * 18);
+    cand.mobile = true;
+    kept.push(cand);
   });
 
   const colors = assignColors(kept.length);
   return kept.map((p, i) => ({
     ...p,
     color: colors[i],
-    // Per-shape hover nudge: ±4–9°, random direction, so each shape tilts a
-    // slightly different way when hovered.
+    // Per-shape hover nudge: ±4–9°, random direction.
     hoverRot: ((Math.random() < 0.5 ? -1 : 1) * (4 + Math.random() * 5)).toFixed(1),
   }));
 }
@@ -258,13 +248,16 @@ function HomeAssemble() {
               trigger: sectionRef.current,
               pin: true,
               start: 'top top',
-              // Shorter runway: the shapes finish assembling in ~0.6 viewport of
-              // scroll, so the hero doesn't hold the page pinned for too long.
-              end: '+=60%',
+              // Pin runs ~1.3 viewports: the shapes finish assembling in the
+              // first half, then the assembled "peak" frame is HELD for the
+              // second half — the user keeps scrolling but stays on this frame
+              // for a beat before the page continues.
+              end: '+=130%',
               scrub: 0.6,
             },
           });
 
+          // Convergence occupies the first timeline unit (0 → 1)…
           els.forEach((el) => {
             tl.fromTo(
               el,
@@ -273,6 +266,9 @@ function HomeAssemble() {
               0
             );
           });
+          // …then an empty hold unit (1 → 2) keeps the assembled frame on screen
+          // while the user scrolls a little further, before unpinning.
+          tl.to({}, { duration: 1 });
         }
       );
 
