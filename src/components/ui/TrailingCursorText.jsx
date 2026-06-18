@@ -17,7 +17,8 @@ function TrailingCursorText({
   letterSpacing = -1,
   textColor = '#FFFFFF',
   showHighlight = true,
-  highlightColor = '#0052C9',
+  // `currentColor` by default → driven by the wrapper's CSS color token.
+  highlightColor = 'currentColor',
   highlightPadding = 8,
   attach = 'end', // 'start' | 'end' — which end of the text rides the cursor
   followSpeed = 0.12, // head lag: lower = longer trail

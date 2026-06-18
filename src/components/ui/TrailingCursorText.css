@@ -7,6 +7,9 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 320ms ease-out;
+  /* Brand blue drives the blob (its stroke is currentColor); glyphs set their
+     own colour inline, so this doesn't touch the text. */
+  color: var(--color-blue);
 }
 
 /* One smooth stroke = one clean blob (round caps/joins), sized to the viewport
