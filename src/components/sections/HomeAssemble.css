@@ -7,7 +7,10 @@
    ========================================================================== */
 .home-assemble {
   position: relative;
-  min-height: 100vh;
+  /* Fill the first screen. min-height (not height) so content never clips on
+     short screens; dvh avoids the mobile address-bar gap. */
+  min-height: 100vh; /* fallback */
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   /* Clip the wide converging motifs on the pinned section ITSELF — never on an
@@ -91,7 +94,9 @@
 
 @media (max-width: 767px) {
   .home-assemble {
-    min-height: auto;
+    /* Still fill the first screen on mobile so "What I Do" starts below the fold */
+    min-height: 100vh; /* fallback */
+    min-height: 100dvh;
     padding-block: var(--space-12);
   }
 

@@ -8,6 +8,10 @@
  *  - image    (optional) client photo — import the asset and reference it,
  *             e.g. `import jaya from '@/assets/images/testimonials/jaya.jpg'`
  */
+// TODO: verify testimonial attribution before launch. This quote names
+// "Channing" and refers to interior "space" — it doesn't match Sha / Shiran
+// Bar's toy & baby-product work and reads like placeholder/wrong-domain copy.
+// Replace with a real client testimonial (don't invent one).
 export const testimonials = [
   {
     id: 'jaya-dixon',

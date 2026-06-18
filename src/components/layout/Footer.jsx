@@ -1,58 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { siteConfig, footerNavigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
-import ContactForm from '@/components/sections/ContactForm';
 import './Footer.css';
-
-const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
 function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="footer">
-      {/* Orange contact panel — #contact anchor target for "Inquire Now" CTAs */}
-      <div className="footer__panel" id="contact">
-        <div className="container footer__grid">
-          {/* Contact intro + details */}
-          <motion.div
-            className="footer__intro"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ ...spring }}
-          >
-            <div>
-              <h4 className="footer__heading">Let's stay connected</h4>
-              <p className="footer__sub">
-                Reach out about a project, collaboration or just to say hello!
-              </p>
-            </div>
-            <ul className="footer__details">
-              <li>
-                <span className="footer__details-label">Email: </span>
-                <a href={`mailto:${siteConfig.email}`} className="footer__details-link">
-                  {siteConfig.email}
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Contact form card */}
-          <motion.div
-            className="footer__form"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ ...spring, delay: 0.15 }}
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Cream footer: brand, navigation, tagline, legal */}
+      {/* Contact moved to its own /inquire route — footer is now brand + nav + bio */}
       <div className="footer__bar">
         <div className="container">
           <motion.div
@@ -84,9 +41,16 @@ function Footer() {
                         {item.label}
                       </a>
                     ) : (
-                      <Link to={item.href} className="footer__link">
+                      // NavLink adds `active` on the current route for the
+                      // highlighted footer state
+                      <NavLink
+                        to={item.href}
+                        className={({ isActive }) =>
+                          `footer__link${isActive ? ' footer__link--active' : ''}`
+                        }
+                      >
                         {item.label}
-                      </Link>
+                      </NavLink>
                     )}
                   </li>
                 ))}
@@ -95,10 +59,12 @@ function Footer() {
 
             <div className="footer__col">
               <h4 className="footer__eyebrow">Who I Am</h4>
+              {/* TODO(shiran): replace with a real one-line bio (who / where /
+                  availability) — this slot previously repeated the hero tagline
+                  verbatim. Placeholder below; confirm wording + location. */}
               <p className="footer__who">
-                Designing playful,
-                <br />
-                thoughtful products
+                {siteConfig.designer} — industrial designer for toys &amp; baby
+                products. Available for new projects.
               </p>
             </div>
           </motion.div>

@@ -46,10 +46,12 @@ function Home() {
             <div className="home-what__copy">
               <h2 className="home-what__title">What I Do</h2>
 
+              {/* Teaser copy — deliberately distinct from the Services-page
+                  intro (which lays out the full process). Home hints; Services
+                  delivers the detail. */}
               <p className="home-what__text">
-                I help brands, startups and entrepreneurs turn ideas into
-                meaningful products — from research and concept development to
-                product design, 3D visualization and development support.
+                I turn early ideas into playful, thoughtful products — for toys,
+                baby gear and the brands behind them. Curious how it works?
               </p>
 
               <Button as={Link} to="/services" variant="outline" size="md">
@@ -75,6 +77,11 @@ function Home() {
           <div className="home-words__panel">
             <h2 className="home-words__title">Kind Words</h2>
 
+            {/* TODO: verify testimonial attribution — the only quote is credited
+                to "Jaya Dixon" but its text refers to "Channing" and to interior
+                "space", which doesn't match Sha / Shiran Bar's product work.
+                Likely placeholder/wrong-domain copy. Don't ship as-is; confirm a
+                real testimonial + attribution before launch. */}
             {testimonials.map((testimonial) => (
               <blockquote key={testimonial.id} className="home-words__quote">
                 <p>"{testimonial.comment}"</p>
@@ -109,9 +116,9 @@ function Home() {
       <ColorWorld className="home-marquee">
         <TextPath
           text="Designing Playful, Thoughtful Products  ·  Simple, Smart & Full of Wonder  ·  "
-          path="M0 80 C 130 30 270 30 400 80 S 670 130 800 80 S 1070 30 1200 80 S 1470 130 1600 80"
-          viewBox="0 0 1600 160"
-          fontSize="52px"
+          path="M0 140 C 130 100 270 100 400 140 S 670 180 800 140 S 1070 100 1200 140 S 1470 180 1600 140"
+          viewBox="0 0 1600 280"
+          fontSize="80px"
           duration={20}
           reversed
         />

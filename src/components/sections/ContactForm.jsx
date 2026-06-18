@@ -1,7 +1,24 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
 import './ContactForm.css';
+
+// Required fields and how to validate them. Keeping this declarative lets the
+// markup, error rendering and submit-time checks share one source of truth.
+const FIELDS = [
+  { name: 'name', validate: (v) => (v.trim() ? null : 'Enter your name.') },
+  { name: 'phone', validate: (v) => (v.trim() ? null : 'Enter a phone number.') },
+  {
+    name: 'email',
+    validate: (v) =>
+      !v.trim()
+        ? 'Enter your email.'
+        : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+          ? null
+          : 'Enter a valid email, e.g. name@example.com.',
+  },
+  { name: 'message', validate: (v) => (v.trim() ? null : 'Add a short message.') },
+];
 
 function ContactForm() {
   const [form, setForm] = useState({
@@ -11,7 +28,9 @@ function ContactForm() {
     message: '',
     newsletter: false,
   });
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle');
+  const formRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -19,10 +38,34 @@ function ContactForm() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+    // Clear a field's error as soon as the user starts correcting it
+    setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+  };
+
+  const validateAll = () => {
+    const next = {};
+    for (const field of FIELDS) {
+      const msg = field.validate(form[field.name]);
+      if (msg) next[field.name] = msg;
+    }
+    return next;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const found = validateAll();
+    if (Object.keys(found).length > 0) {
+      setErrors(found);
+      // Move focus to the first invalid field so keyboard/SR users land on it
+      const firstInvalid = FIELDS.find((f) => found[f.name]);
+      formRef.current
+        ?.querySelector(`[name="${firstInvalid.name}"]`)
+        ?.focus();
+      return;
+    }
+
+    setErrors({});
     setStatus('submitting');
 
     try {
@@ -55,8 +98,34 @@ function ContactForm() {
     }
   };
 
+  // Per-field error message + the aria wiring that ties it to its input
+  const fieldProps = (name) => ({
+    'aria-invalid': errors[name] ? 'true' : undefined,
+    'aria-describedby': errors[name] ? `${name}-error` : undefined,
+  });
+
+  const renderError = (name) =>
+    errors[name] && (
+      <span id={`${name}-error`} className="contact-form__field-error" role="alert">
+        {errors[name]}
+      </span>
+    );
+
   return (
-    <form className="contact-form" onSubmit={handleSubmit} noValidate>
+    <form
+      ref={formRef}
+      className="contact-form"
+      onSubmit={handleSubmit}
+      noValidate
+    >
+      {/* One legend instead of repeating "(required)" on every field */}
+      <p className="contact-form__legend">
+        <span className="contact-form__req-mark" aria-hidden="true">
+          *
+        </span>{' '}
+        Required fields
+      </p>
+
       {/* Honeypot: hidden from humans; Web3Forms drops submissions where it's checked */}
       <input
         type="checkbox"
@@ -70,7 +139,10 @@ function ContactForm() {
       <div className="contact-form__row">
         <div className="contact-form__field">
           <label htmlFor="name" className="contact-form__label">
-            Name <span className="contact-form__required">(required)</span>
+            Name{' '}
+            <span className="contact-form__req-mark" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="name"
@@ -81,12 +153,17 @@ function ContactForm() {
             value={form.name}
             onChange={handleChange}
             className="contact-form__input"
+            {...fieldProps('name')}
           />
+          {renderError('name')}
         </div>
 
         <div className="contact-form__field">
           <label htmlFor="phone" className="contact-form__label">
-            Phone <span className="contact-form__required">(required)</span>
+            Phone{' '}
+            <span className="contact-form__req-mark" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="phone"
@@ -97,13 +174,18 @@ function ContactForm() {
             value={form.phone}
             onChange={handleChange}
             className="contact-form__input"
+            {...fieldProps('phone')}
           />
+          {renderError('phone')}
         </div>
       </div>
 
       <div className="contact-form__field">
         <label htmlFor="email" className="contact-form__label">
-          Email <span className="contact-form__required">(required)</span>
+          Email{' '}
+          <span className="contact-form__req-mark" aria-hidden="true">
+            *
+          </span>
         </label>
         <input
           id="email"
@@ -114,12 +196,17 @@ function ContactForm() {
           value={form.email}
           onChange={handleChange}
           className="contact-form__input"
+          {...fieldProps('email')}
         />
+        {renderError('email')}
       </div>
 
       <div className="contact-form__field">
         <label htmlFor="message" className="contact-form__label">
-          Message <span className="contact-form__required">(required)</span>
+          Message{' '}
+          <span className="contact-form__req-mark" aria-hidden="true">
+            *
+          </span>
         </label>
         <textarea
           id="message"
@@ -129,7 +216,9 @@ function ContactForm() {
           value={form.message}
           onChange={handleChange}
           className="contact-form__textarea"
+          {...fieldProps('message')}
         />
+        {renderError('message')}
       </div>
 
       <label className="contact-form__checkbox">

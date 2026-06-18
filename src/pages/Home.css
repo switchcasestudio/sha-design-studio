@@ -65,10 +65,14 @@
 }
 
 .home-words__panel {
+  /* Brand blue (matches the About page — one blue across the site). The large
+     quote (24px) and the bold attribution (20px) both clear the 3:1 large-text
+     bar that bright blue allows. */
   background-color: var(--color-blue);
-  color: var(--color-cream);
+  color: var(--text-on-blue);
   border-radius: var(--radius-2xl);
   padding: var(--space-16) var(--space-12);
+  --focus-ring: var(--color-cream);
 }
 
 .home-words__title {
@@ -111,19 +115,30 @@
   flex-direction: column;
   font-style: normal;
   font-size: var(--text-base);
-  opacity: 0.9;
+  /* No opacity — solid white keeps 5.49:1 on the deep panel */
+}
+
+.home-words__name {
+  /* 20px bold → "large text", so white on bright blue (3.63:1) clears AA */
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
 }
 
 .home-words__role {
   font-size: var(--text-sm);
-  opacity: 0.75;
+  /* Hierarchy via size/weight, not opacity, to preserve contrast */
 }
 
-/* ---------- Marquee ribbon ---------- */
+/* ---------- Marquee ribbon ----------
+   No band — large orange wavy tagline on the page's cream background. Orange on
+   cream (3.43:1) is legal at this size (large display text). */
 .home-marquee {
-  /* No band — orange text scrolling on the page's cream background */
   color: var(--color-orange);
-  overflow: hidden;
+  /* Clip the horizontal marquee scroll only; let the tall wavy glyphs overflow
+     vertically (into the margin gap) instead of clipping their peaks. clip +
+     visible is a valid pair and never adds a scrollbar. */
+  overflow-x: clip;
+  overflow-y: visible;
   padding-block: var(--space-6);
   margin-block: var(--space-12);
 }

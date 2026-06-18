@@ -92,10 +92,28 @@ function buildCollections(project) {
   return collections.length > 1 ? collections : [];
 }
 
+/**
+ * Short product-TYPE label per project, derived from the (do-not-edit) source
+ * data. Every project shares the client "Tiny Love", so a client-only tag makes
+ * six distinct projects look duplicated. Pairing the client tag with a concise
+ * type tag differentiates the cards at a glance.
+ * TODO(shiran): confirm these product-type labels match how you'd categorise
+ * each piece — derived from project titles/categories as a sensible default.
+ */
+const PROJECT_TYPES = {
+  'here-i-grow-activity-center': 'Activity Center',
+  'treasure-the-ocean-gymini': 'Baby Gym',
+  'wooden-toy-design': 'Wooden Toys',
+  'garden-of-adventures-packaging': 'Packaging',
+  'tiny-rockers-shape-sorter': 'Shape Sorter',
+  'mobile-character-design': 'Mobiles',
+};
+
 export const projects = [...shaProjects]
   .sort((a, b) => a.order - b.order)
   .map((project) => ({
     ...project,
+    type: PROJECT_TYPES[project.id] ?? null,
     heroImage: normalizeImage(project.heroImage),
     images: (project.images ?? []).map(normalizeImage).filter(Boolean),
     collections: buildCollections(project),

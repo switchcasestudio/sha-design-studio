@@ -66,6 +66,38 @@ p {
   margin-top: var(--space-8);
 }
 
+/* ----- Focus visibility (accessibility) -----
+   Single tokenized ring used site-wide. --focus-ring is set per route (see
+   route theme blocks) so it always contrasts the page background. Only shows
+   for keyboard users via :focus-visible. */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Kill the 300ms tap delay + double-tap zoom on anything interactive */
+a,
+button,
+input,
+textarea,
+select,
+label,
+[role='button'],
+[tabindex] {
+  touch-action: manipulation;
+}
+
+/* Route-scoped focus-ring colour. The page wrapper carries the route class so
+   the ring contrasts whatever brand background is behind the focused element. */
+.services-page {
+  --focus-ring: var(--color-ink);
+}
+.projects-page,
+.about-page {
+  --focus-ring: var(--color-cream);
+}
+
 /* ----- Visually hidden (for screen readers) ----- */
 .sr-only {
   position: absolute;

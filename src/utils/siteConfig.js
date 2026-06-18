@@ -17,8 +17,11 @@ export const siteConfig = {
   },
 };
 
+// Nav label unified to "Work" across navbar, footer and the page H1 (was
+// "Projects" here / "Work" in footer / "Portfolio" as the H1 — three names for
+// one destination). Route stays /projects.
 export const navigation = [
-  { label: 'Projects', href: '/projects' },
+  { label: 'Work', href: '/projects' },
   { label: 'Services', href: '/services' },
   { label: 'About', href: '/about' },
 ];
@@ -28,8 +31,8 @@ export const footerNavigation = {
     { label: 'Services', href: '/services' },
     { label: 'Work', href: '/projects' },
     { label: 'About', href: '/about' },
-    // In-page anchor: the contact form lives in the footer, there is no /contact route
-    { label: 'Contact', href: '#contact' },
+    // Contact lives on its own route now (the form was moved out of the footer)
+    { label: 'Inquire', href: '/inquire' },
   ],
   social: [
     { label: 'Instagram', href: siteConfig.social.instagram },

@@ -28,16 +28,29 @@
   }
 }
 
+/* One legend for the whole form (replaces per-field "(required)" noise) */
+.contact-form__legend {
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-1);
+}
+
+.contact-form__req-mark {
+  color: var(--color-error);
+  font-weight: var(--weight-bold);
+}
+
 .contact-form__label {
   font-size: var(--text-base);
   font-weight: var(--weight-semibold);
   color: var(--color-ink);
 }
 
-.contact-form__required {
-  font-weight: var(--weight-regular);
+/* Per-field validation message, rendered next to its input */
+.contact-form__field-error {
   font-size: var(--text-sm);
-  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+  color: var(--color-error);
 }
 
 .contact-form__input,
@@ -46,12 +59,21 @@
   padding: var(--space-3) var(--space-4);
   background-color: var(--color-white);
   color: var(--color-ink);
-  border: 1px solid var(--color-border);
+  /* Clearer 2px boundary so the input edge is visible on any card colour */
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-pill);
   font-family: var(--font-body);
   font-size: var(--text-base);
   min-height: 44px;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+/* Invalid state: red border + ring so it's not colour-only at a glance */
+.contact-form__input[aria-invalid='true'],
+.contact-form__textarea[aria-invalid='true'] {
+  border-color: var(--color-error);
 }
 
 .contact-form__textarea {
@@ -65,10 +87,10 @@
   border-color: var(--color-orange-soft);
 }
 
-.contact-form__input:focus,
-.contact-form__textarea:focus {
-  outline: 2px solid var(--color-orange);
-  outline-offset: 2px;
+.contact-form__input:focus-visible,
+.contact-form__textarea:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-orange);
+  outline-offset: var(--focus-ring-offset);
   border-color: var(--color-orange);
 }
 
@@ -76,6 +98,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  /* Pad the row to a 44px tap target while the visual checkbox stays 18px */
+  min-height: 44px;
   font-size: var(--text-sm);
   color: var(--color-ink);
   cursor: pointer;
@@ -99,11 +123,11 @@
 }
 
 .contact-form__msg--success {
-  color: var(--color-orange);
-  font-weight: var(--weight-medium);
+  color: var(--color-success);
+  font-weight: var(--weight-semibold);
 }
 
 .contact-form__msg--error {
-  color: var(--color-orange-deep);
-  font-weight: var(--weight-medium);
+  color: var(--color-error);
+  font-weight: var(--weight-semibold);
 }

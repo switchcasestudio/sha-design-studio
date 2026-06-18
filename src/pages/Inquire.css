@@ -1,0 +1,76 @@
+/* ==========================================================================
+   Inquire Page — dedicated contact route
+   Cream surface, white form card. Orange used as a large-heading accent only.
+   ========================================================================== */
+
+.inquire-page {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  min-height: calc(100vh - 80px);
+  padding-block: var(--space-16) var(--space-24);
+}
+
+.inquire-page__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: var(--space-16);
+  align-items: start;
+}
+
+/* Intro column */
+.inquire-page__title {
+  /* Large display heading — orange on cream (3.43:1) is legal at this size */
+  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  color: var(--color-orange);
+  margin-bottom: var(--space-4);
+}
+
+.inquire-page__lead {
+  font-size: var(--text-lg);
+  max-width: 36ch;
+  margin-bottom: var(--space-8);
+}
+
+.inquire-page__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+}
+
+.inquire-page__details-label {
+  font-weight: var(--weight-bold);
+}
+
+/* Ink link (15.3:1) with a permanent underline so it isn't colour-only */
+.inquire-page__details-link {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.inquire-page__details-link:hover {
+  opacity: 0.7;
+}
+
+/* White form card — small form text/labels sit on white for clean contrast */
+.inquire-page__form {
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-6), 4vw, var(--space-10));
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .inquire-page {
+    padding-block: var(--space-12) var(--space-16);
+  }
+
+  .inquire-page__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+}

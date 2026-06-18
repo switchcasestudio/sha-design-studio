@@ -1,76 +1,5 @@
-/* ---------- Orange contact panel ---------- */
-.footer__panel {
-  background-color: var(--color-orange);
-  color: var(--text-on-orange);
-  padding-block: var(--space-16) var(--space-20);
-}
-
-/* Two columns: contact intro on the left, form card on the right */
-.footer__grid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: var(--space-16);
-  align-items: start;
-}
-
-/* Intro column: heading at the top, details pinned to the card's bottom edge */
-.footer__intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-8);
-  align-self: stretch;
-}
-
-.footer__heading {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-snug);
-  margin-bottom: var(--space-3);
-}
-
-.footer__sub {
-  font-size: var(--text-base);
-  opacity: 0.9;
-  max-width: 36ch;
-}
-
-.footer__details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  font-size: var(--text-base);
-}
-
-.footer__details-label {
-  font-weight: var(--weight-bold);
-}
-
-.footer__details-link {
-  color: var(--text-on-orange);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.footer__details-link:hover {
-  opacity: 0.85;
-}
-
-/* Cream form card, à la Contact2's bordered card */
-.footer__form {
-  max-width: 560px;
-  justify-self: end;
-  width: 100%;
-  background-color: var(--color-cream);
-  color: var(--color-ink);
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-6), 4vw, var(--space-10));
-  box-shadow: var(--shadow-lg);
-}
-
-/* ---------- Cream footer (brand / nav / tagline / legal) ---------- */
+/* ---------- Cream footer (brand / nav / bio / legal) ----------
+   The contact panel + form moved to the /inquire route. */
 .footer__bar {
   background-color: var(--color-cream);
   color: var(--color-ink);
@@ -113,22 +42,49 @@
   color: var(--text-muted);
 }
 
+/* Horizontal row; wraps to a second row only when it can't fit */
 .footer__list {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  flex-flow: row wrap;
+  gap: var(--space-2) var(--space-6);
 }
 
 .footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px; /* comfortable footer tap target */
   font-size: var(--text-xl);
   font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
   color: var(--color-ink);
-  transition: color var(--duration-fast) var(--ease-out);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
 }
 
 .footer__link:hover {
   color: var(--color-orange);
+}
+
+.footer__link:active {
+  opacity: 0.7;
+}
+
+/* Current route: brand orange + a leading marker so it's not colour-only.
+   Bold at 20px → "large text", so orange on cream (3.43:1) clears the 3:1 bar. */
+.footer__link--active {
+  color: var(--color-orange);
+  font-weight: var(--weight-bold);
+}
+
+.footer__link--active::before {
+  content: '';
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: var(--radius-full);
+  background-color: var(--color-orange);
+  flex-shrink: 0;
 }
 
 .footer__who {
@@ -139,8 +95,14 @@
 
 .footer__legal {
   margin-top: var(--space-12);
-  font-size: var(--text-sm);
   color: var(--text-muted);
+}
+
+/* Target the <p> directly so it beats the global `p { font-size }`. Smaller so
+   the credit sits on a single line on phones; scales back up on wider screens. */
+.footer__legal p {
+  font-size: clamp(0.625rem, 2.4vw, var(--text-sm));
+  line-height: var(--leading-snug);
 }
 
 /* Footer7-style bottom link: muted, warms up on hover */
@@ -157,16 +119,6 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .footer__grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
-  }
-
-  .footer__form {
-    max-width: none;
-    justify-self: stretch;
-  }
-
   .footer__cols {
     grid-template-columns: 1fr;
     gap: var(--space-10);

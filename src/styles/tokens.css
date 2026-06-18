@@ -27,15 +27,36 @@
   --color-white: #ffffff;
   --color-border: rgba(26, 26, 26, 0.12);
 
+  /* Status — tuned to pass AA 4.5:1 on cream/white form surfaces
+     (error 5.74:1, success 5.74:1 on cream) */
+  --color-error: #b3261e;
+  --color-success: #1d6b37;
+
   /* ----- Semantic Colors ----- */
   --bg-page: var(--color-cream);
   --bg-surface: var(--color-white);
   --text-primary: var(--color-ink);
   --text-secondary: var(--color-ink-soft);
   --text-muted: var(--color-ink-muted);
-  --text-on-orange: var(--color-cream);
-  --text-on-blue: var(--color-cream);
+
+  /* Semantic text-on-surface tokens.
+     WCAG note: brand orange (#e54b2a) and blue (#4a7fbf) are mid-tones — they
+     clear the 3:1 LARGE-text bar with cream/white but cannot reach 4.5:1 for
+     normal text against ANY foreground. So small text is placed on the deeper
+     shades instead, where white passes 4.5:1 (orange-deep 5.04, blue-deep 5.49).
+     - on-orange / on-blue → use WHITE and pair with the -deep surface for body text
+     - on-yellow / on-cream → ink (10.97 / 15.28) */
+  --text-on-orange: var(--color-white);
+  --text-on-blue: var(--color-white);
   --text-on-yellow: var(--color-ink);
+  --text-on-cream: var(--color-ink);
+  --text-on-ink: var(--color-cream);
+
+  /* Focus ring — overridden per route so it always contrasts the live bg.
+     Default (cream/yellow pages): ink ring. */
+  --focus-ring: var(--color-ink);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
 
   /* ----- Typography ----- */
   /* Display face for all headings — single-weight (400), never set font-weight on it */
@@ -79,6 +100,7 @@
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.05em;
+  --tracking-widest: 0.18em; /* eyebrow / uppercase micro-labels */
 
   /* ----- Spacing scale (4px base) ----- */
   --space-1: 0.25rem; /* 4px */

@@ -5,6 +5,7 @@ import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import Services from './pages/Services';
 import About from './pages/About';
+import Inquire from './pages/Inquire';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="projects/:projectId" element={<ProjectDetail />} />
         <Route path="services" element={<Services />} />
         <Route path="about" element={<About />} />
+        <Route path="inquire" element={<Inquire />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

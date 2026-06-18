@@ -9,6 +9,8 @@
   --nav-bg: var(--color-cream);
   --nav-fg: var(--color-orange);
   --nav-accent: var(--color-orange);
+  /* Focus ring contrasts the cream bar */
+  --focus-ring: var(--color-ink);
 
   position: sticky;
   top: 0;
@@ -32,22 +34,45 @@
   padding-block: var(--space-3);
 }
 
+/* Overlay theme defaults (Home). Declared BEFORE the route modifiers so that
+   the route classes (.navbar--projects, …), applied to the overlay too, win on
+   source order. The overlay's layout lives further down. */
+.mobile-overlay {
+  --nav-bg: var(--color-cream);
+  --nav-fg: var(--color-orange);
+  --nav-accent: var(--color-orange);
+  --focus-ring: var(--color-ink);
+}
+
 .navbar--projects {
   --nav-bg: var(--color-orange);
   --nav-fg: var(--color-cream);
   --nav-accent: var(--color-white);
+  --focus-ring: var(--color-cream);
 }
 
 .navbar--services {
   --nav-bg: var(--color-yellow);
   --nav-fg: var(--color-ink);
-  --nav-accent: var(--color-orange);
+  /* Accent was orange (2.46:1 on yellow — fails). Ink reads at 10.97:1; the
+     active link stays distinct via the pill + heavier weight below. */
+  --nav-accent: var(--color-ink);
+  --focus-ring: var(--color-ink);
 }
 
 .navbar--about {
   --nav-bg: var(--color-blue);
   --nav-fg: var(--color-cream);
   --nav-accent: var(--color-yellow);
+  --focus-ring: var(--color-cream);
+}
+
+/* Inquire — cream bar like Home (orange logo/links on cream) */
+.navbar--inquire {
+  --nav-bg: var(--color-cream);
+  --nav-fg: var(--color-orange);
+  --nav-accent: var(--color-orange);
+  --focus-ring: var(--color-ink);
 }
 
 /* ── Layout ── */
@@ -98,7 +123,9 @@
   position: relative;
   transition:
     color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
 }
 
 .navbar__link:hover {
@@ -106,8 +133,15 @@
   background-color: color-mix(in srgb, var(--nav-accent) 8%, transparent);
 }
 
+/* Pressed feedback (transform/opacity only; respects reduced-motion globally) */
+.navbar__link:active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
 .navbar__link--active {
   color: var(--nav-accent);
+  font-weight: var(--weight-semibold);
 }
 
 /* Shared-layout pill rendered behind the active link (springs between routes) */
@@ -154,6 +188,15 @@
   box-shadow: 0 6px 16px color-mix(in srgb, var(--nav-accent) 35%, transparent);
 }
 
+/* Active: you're on /inquire. Ink fill + cream text (15.3:1) — legible on any
+   route bar, and distinct from the outline default. */
+.navbar__cta--active,
+.navbar--home .navbar__cta.navbar__cta--active {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
 /* Home gets a filled orange CTA — explicit override of the outline default */
 .navbar--home .navbar__cta {
   background-color: var(--color-orange);
@@ -178,11 +221,7 @@
   border-radius: var(--radius-pill);
 }
 
-.navbar__mobile {
-  display: none;
-}
-
-/* ── Mobile menu ── */
+/* ── Mobile toggle visibility ── */
 @media (max-width: 768px) {
   .navbar__nav,
   .navbar__actions {
@@ -192,33 +231,82 @@
   .navbar__toggle {
     display: inline-flex;
   }
+}
 
-  .navbar__mobile {
-    display: block;
-    max-height: 0;
-    overflow: hidden;
-    background-color: var(--nav-bg);
-    border-top: 1px solid color-mix(in srgb, var(--nav-fg) 25%, transparent);
-    transition: max-height var(--duration-slow) var(--ease-out);
-  }
+/* ── Full-screen overlay menu ──
+   Portaled to <body>, so it covers the viewport and the page underneath does
+   not move. Carries the route theme class (navbar--projects, …) for its colour
+   tokens; the home defaults below cover the /navbar--home case (whose vars
+   otherwise live on .navbar, which this element is not). */
+.mobile-overlay {
+  /* Colour tokens (--nav-bg/-fg/-accent/--focus-ring) come from the defaults +
+     route modifier blocks above; layout only here. */
+  position: fixed;
+  inset: 0;
+  height: 100vh; /* fallback for browsers without dvh */
+  height: 100dvh; /* avoids the mobile address-bar gap */
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--nav-bg);
+  color: var(--nav-fg);
+}
 
-  .navbar__mobile--open {
-    max-height: 400px;
-  }
+/* Top row mirrors the closed bar: logo left, close right, route colour fill */
+.mobile-overlay__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-4);
+}
 
-  .navbar__mobile-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-6) var(--gutter);
-  }
+.mobile-overlay__close {
+  display: inline-flex;
+}
 
-  .navbar__mobile-link {
-    display: block;
-    font-family: var(--font-body);
-    font-weight: var(--weight-semibold);
-    font-size: var(--text-2xl);
-    color: var(--nav-accent);
-    padding: var(--space-3) 0;
-  }
+.mobile-overlay__nav {
+  flex: 1;
+  padding-inline: var(--gutter);
+  padding-top: var(--space-8);
+}
+
+.navbar__mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.navbar__mobile-link {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-2xl);
+  color: var(--nav-fg);
+  padding: var(--space-3) 0;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+
+/* Active route in the open menu: accent colour + a leading marker dot.
+   NavLink adds the `active` class automatically on the matched route. */
+.navbar__mobile-link.active {
+  color: var(--nav-accent);
+  font-weight: var(--weight-bold);
+}
+
+.navbar__mobile-link.active::before {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--nav-accent);
+  flex-shrink: 0;
+}
+
+.navbar__mobile-link:active {
+  opacity: 0.7;
 }

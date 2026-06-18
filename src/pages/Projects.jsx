@@ -16,7 +16,7 @@ function Projects() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...spring, delay: 0.1 }}
           >
-            Portfolio
+            Work
           </motion.h1>
 
           <motion.p
@@ -60,9 +60,18 @@ function Projects() {
                       )}
                     </div>
                     <div className="overview-card__body">
-                      <span className="overview-card__studio">
-                        {project.client}
-                      </span>
+                      <div className="overview-card__tags">
+                        {project.client && (
+                          <span className="overview-card__tag overview-card__tag--client">
+                            {project.client}
+                          </span>
+                        )}
+                        {project.type && (
+                          <span className="overview-card__tag overview-card__tag--type">
+                            {project.type}
+                          </span>
+                        )}
+                      </div>
                       <h2 className="overview-card__title">{project.title}</h2>
                     </div>
                   </Link>
