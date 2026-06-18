@@ -9,6 +9,16 @@ import './ProjectDetail.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
+// Tags reveal in a staggered cascade, then each pops on hover.
+const tagsContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.25 } },
+};
+const tagItem = {
+  hidden: { opacity: 0, y: 8, scale: 0.92 },
+  show: { opacity: 1, y: 0, scale: 1, transition: spring },
+};
+
 // How a project's multiple collections relate to each other. Kept app-side
 // because the source data is generated ("do not edit by hand").
 //   default  — a colorway set (same product, different looks)
@@ -135,13 +145,25 @@ function ProjectDetail() {
               <h1 className="project-detail__title">{project.title}</h1>
               <p className="project-detail__summary">{project.summary}</p>
 
-              <ul className="project-detail__tags">
+              <motion.ul
+                className="project-detail__tags"
+                variants={tagsContainer}
+                initial="hidden"
+                animate="show"
+              >
                 {project.tags.map((tag) => (
-                  <li key={tag} className="project-detail__tag">
+                  <motion.li
+                    key={tag}
+                    className="project-detail__tag"
+                    variants={tagItem}
+                    whileHover={{ scale: 1.07, y: -2 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                  >
                     {tag}
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </div>
 
             <aside className="project-detail__aside">

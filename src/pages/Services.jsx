@@ -167,9 +167,15 @@ function Services() {
                   key={area}
                   className="services-page__expertise-item"
                   initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: { ...spring, delay: 0.1 + i * 0.08 },
+                  }}
                   viewport={{ once: true }}
-                  transition={{ ...spring, delay: 0.1 + i * 0.08 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 >
                   {area}
                 </motion.li>

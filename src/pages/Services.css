@@ -200,17 +200,41 @@
   font-family: var(--font-body);
   font-weight: var(--weight-bold);
   font-size: clamp(var(--text-base), 2vw, var(--text-xl));
+  /* Keep each pill on one line; the row wraps between pills. max-width guards
+     against overflow on the narrowest screens. */
+  white-space: nowrap;
+  max-width: 100%;
   color: var(--color-cream);
   background-color: var(--color-ink);
   border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  cursor: default;
+  /* Framer Motion owns transform (entrance + hover pop); CSS owns colour +
+     shadow so the two never fight. */
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.services-page__expertise-item:hover {
+  background-color: var(--color-ink-soft);
+  box-shadow: var(--shadow-md);
 }
 
 .services-page__expertise-item:nth-child(2) {
   background-color: var(--color-orange);
 }
 
+.services-page__expertise-item:nth-child(2):hover {
+  background-color: var(--color-orange-deep);
+}
+
 .services-page__expertise-item:nth-child(3) {
   background-color: var(--color-blue);
+}
+
+.services-page__expertise-item:nth-child(3):hover {
+  background-color: var(--color-blue-deep);
 }
 
 /* Responsive */
@@ -236,5 +260,15 @@
 
   .service-block__title {
     font-size: clamp(var(--text-2xl), 7vw, var(--text-3xl));
+  }
+
+  /* Tighter pills so the longest one ("Toys & Play Experiences") fits on one
+     line down to the smallest phones; they wrap to stacked rows as needed. */
+  .services-page__expertise-list {
+    gap: var(--space-3);
+  }
+
+  .services-page__expertise-item {
+    padding: var(--space-3) var(--space-6);
   }
 }
