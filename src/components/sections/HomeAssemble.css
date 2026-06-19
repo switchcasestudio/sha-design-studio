@@ -1,9 +1,8 @@
 /* ==========================================================================
-   Home assemble — the signature scroll-pinned (scrub) moment.
-   Base styles render the FINAL layout (headline centred, motifs at rest) so the
-   section is correct with JS off and under reduced motion. On desktop, GSAP
-   pins the section and the scroll position drives the motif convergence both
-   ways (down = converge, up = reverse).
+   Home assemble — the signature 100vh hero.
+   Just the centred wordmark; the playfulness comes from the letters↔shapes
+   morph (HeadlineMorph) and the cursor follower. No scattered motifs, no
+   scroll-driven entrance — the layout is static and correct with JS off.
    ========================================================================== */
 .home-assemble {
   position: relative;
@@ -13,18 +12,15 @@
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  /* Clip the wide converging motifs on the pinned section ITSELF — never on an
-     ancestor (that would silently break the pin). No horizontal scrollbar. */
   overflow: hidden;
   background-color: var(--color-cream);
-  padding-block: var(--space-16);
 }
 
-/* Centred brand headline — the legibility safe zone motifs never enter. */
+/* Centred brand headline. */
 .home-assemble__inner {
   position: relative;
   z-index: 2;
-  width: min(620px, 62vw);
+  width: min(900px, 80vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,54 +36,17 @@
   color: var(--color-orange);
 }
 
-/* Solid wordmark (Bagel display face); letters pop between glyph and motifs. */
+/* Solid wordmark (Bagel display face); letters pop between glyph and motifs.
+   Self-contained clamp so the size scales smoothly with the viewport (min on
+   phones → fluid mid-range → cap on large screens), independent of the
+   breakpoint-stepped --text tokens. */
 .home-assemble__headline {
   font-family: var(--font-hero);
-  font-size: clamp(var(--text-5xl), 7vw, var(--text-7xl));
-  line-height: 1.08;
+  font-size: clamp(3.25rem, 10vw, 10rem);
+  line-height: 1.05;
   letter-spacing: var(--tracking-normal);
   color: var(--color-orange);
   max-width: 12ch;
-}
-
-/* Decorative motifs sit behind the headline (z-index 1), resting in the side
-   margins. Each is an inline SVG whose fill/stroke is `currentColor`, so the
-   wrapper's `color` (a brand token, set inline + randomized) drives the shape's
-   color. Positioned by inline left/top/width; GSAP owns the transform. */
-.home-assemble__motif {
-  position: absolute;
-  z-index: 1;
-  width: var(--motif-size);
-  height: auto;
-  display: block;
-  /* Hoverable so each shape can pop on hover — they sit in the margins, clear
-     of the centred headline. */
-  pointer-events: auto;
-}
-
-/* Inner element carries the hover "pop". GSAP owns the wrapper's transform
-   (scroll translate/rotate/scale), so the hover scale lives here to avoid
-   clobbering it. Playful overshoot ease, echoing the button's spring. */
-.home-assemble__motif-shape {
-  display: block;
-  width: 100%;
-  transform-origin: center;
-  transition: transform var(--duration-base) cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.home-assemble__motif:hover {
-  z-index: 3;
-}
-
-.home-assemble__motif:hover .home-assemble__motif-shape {
-  transform: scale(1.16) rotate(var(--motif-hover-rot, 6deg));
-}
-
-/* The injected SVG fills the wrapper; height comes from its viewBox ratio. */
-.home-assemble__motif svg {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 @media (max-width: 767px) {
@@ -95,16 +54,9 @@
     /* Still fill the first screen on mobile so "What I Do" starts below the fold */
     min-height: 100vh; /* fallback */
     min-height: 100dvh;
-    padding-block: var(--space-12);
   }
 
   .home-assemble__inner {
-    width: min(360px, 82vw);
-  }
-
-  /* Thin the dense set in the non-pinned mobile flow to avoid clutter; the
-     remaining motifs keep their (viewport-relative, naturally small) sizes. */
-  .home-assemble__motif[data-mobile='hide'] {
-    display: none;
+    width: min(420px, 88vw);
   }
 }

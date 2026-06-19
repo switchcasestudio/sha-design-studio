@@ -1,44 +1,111 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import heart from '@/assets/svg/orange-1.svg';
-import flower from '@/assets/svg/blue-2.svg';
-import star from '@/assets/svg/12_star.svg';
-import circle from '@/assets/svg/02_circle.svg';
-import splat from '@/assets/svg/orange-3.svg';
-import blobYellow from '@/assets/svg/yellow-2.svg';
-import ring from '@/assets/svg/13_ring.svg';
+import blob1Raw from '@/assets/svg/blob-blue.svg?raw';
+import blob2Raw from '@/assets/svg/blob-red.svg?raw';
+import blob3Raw from '@/assets/svg/blob-yellow.svg?raw';
+import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
+import coralRaw from '@/assets/svg/coral-red.svg?raw';
+import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
+import flower1Raw from '@/assets/svg/flower-red.svg?raw';
+import flower2Raw from '@/assets/svg/flower-yellow.svg?raw';
+import heartRaw from '@/assets/svg/heart-red.svg?raw';
+import ringRaw from '@/assets/svg/ring-blue.svg?raw';
+import splat1Raw from '@/assets/svg/splat-blue.svg?raw';
+import splat2Raw from '@/assets/svg/splat-red.svg?raw';
+import starRaw from '@/assets/svg/star-blue.svg?raw';
+import tulipRaw from '@/assets/svg/tulip-yellow.svg?raw';
 import './HeadlineMorph.css';
 
-// Real brand motifs (their SVGs carry their own brand colours).
-const SHAPES = [heart, flower, star, circle, splat, blobYellow, ring];
+// These are SVG paths, so colour is ours to choose: strip the file's baked fill
+// and route every path through `currentColor`, then the wrapper's `color` tints
+// it. That decouples a shape's GEOMETRY from its colour — any motif can be blue
+// or yellow (or red elsewhere), and the same path can be reused in any tint.
+function prep(raw) {
+  return raw
+    .replace(/<\?xml[\s\S]*?\?>/g, '')
+    .replace(/<defs>[\s\S]*?<\/defs>/gi, '')
+    .replace(/class="cls-\d+"/g, 'fill="currentColor"')
+    .replace(/#(?:[0-9a-fA-F]{3}){1,2}\b/g, 'currentColor')
+    .trim();
+}
 
-function pickShapes(n) {
-  const pool = [...SHAPES];
-  for (let i = pool.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(0, n);
+// Geometry registry — keyed by shape, colour-agnostic. (blob1/2/3 are three
+// distinct blob paths; splat1/2 and flower1/2 likewise.)
+const GEO = {
+  blob1: prep(blob1Raw),
+  blob2: prep(blob2Raw),
+  blob3: prep(blob3Raw),
+  clover: prep(cloverRaw),
+  coral: prep(coralRaw),
+  daisy: prep(daisyRaw),
+  flower1: prep(flower1Raw),
+  flower2: prep(flower2Raw),
+  heart: prep(heartRaw),
+  ring: prep(ringRaw),
+  splat1: prep(splat1Raw),
+  splat2: prep(splat2Raw),
+  star: prep(starRaw),
+  tulip: prep(tulipRaw),
+};
+
+// Brand tints. `excludeColors` (e.g. ['red'] in the hero) drops a tint so the
+// shapes never blend into the red wordmark.
+const PALETTE = {
+  red: 'var(--color-orange)',
+  blue: 'var(--color-blue)',
+  yellow: 'var(--color-yellow)',
+};
+
+// Each letter morphs only into geometry that loosely echoes its silhouette, so
+// the swap still reads as that letter. Entries are [geoKey] or [geoKey, rotDeg]
+// when a shape needs turning (e.g. the blob flipped 180° for 'h'). Tint is
+// chosen separately at runtime, so colour balance isn't baked in here.
+const LETTER_SHAPES = {
+  s: [['splat1'], ['splat2']],
+  h: [['blob3', 180], ['blob1', 180]],
+  a: [['blob1'], ['blob2'], ['daisy']],
+  d: [['ring'], ['blob1']],
+  e: [['ring'], ['daisy']],
+  i: [['star'], ['tulip']],
+  g: [['ring'], ['blob3']],
+  n: [['blob1'], ['blob2']],
+  t: [['clover'], ['star']],
+  u: [['tulip'], ['blob1']],
+  o: [['ring'], ['tulip'], ['flower2'], ['heart']],
+};
+
+// Any letter without its own mapping falls back to a few round/blobby motifs.
+const FALLBACK = [['blob1'], ['daisy'], ['ring']];
+
+// Never let more than this many letters be a shape at once — keeps the wordmark
+// readable no matter how the per-letter clocks line up.
+const MAX_SHAPES = 5;
+
+// Resolve a char to its candidate geometries ({ geo, html, rot }).
+function candidatesFor(char) {
+  const defs = LETTER_SHAPES[char.toLowerCase()] || FALLBACK;
+  return defs.map(([geo, rot = 0]) => ({ geo, html: GEO[geo], rot }));
+}
+
+// Pick the least-used allowed tint among the currently active shapes (ties
+// broken at random) so blue/yellow stay roughly balanced across the wordmark.
+function pickColor(active, allowed) {
+  const counts = Object.fromEntries(allowed.map((c) => [c, 0]));
+  active.forEach((s) => {
+    if (counts[s.colorKey] != null) counts[s.colorKey] += 1;
+  });
+  const min = Math.min(...allowed.map((c) => counts[c]));
+  const least = allowed.filter((c) => counts[c] === min);
+  return least[Math.floor(Math.random() * least.length)];
 }
 
 const POP = { type: 'spring', stiffness: 380, damping: 18 };
 
-// One letter: mostly shows the glyph; on its own random timer it pops into one
-// of its brand shapes for a beat, then back.
-function MorphLetter({ char, shapes, reduce }) {
-  const [state, setState] = useState(0); // 0 = letter; 1..n = shapes[state-1]
-
-  useEffect(() => {
-    if (reduce) return undefined;
-    const isLetter = state === 0;
-    // Long pause as the letter, short hold as a shape → only ~2 letters are a
-    // shape at any moment, so the wordmark stays legible.
-    const delay = isLetter ? 2800 + Math.random() * 4400 : 600 + Math.random() * 800;
-    const id = setTimeout(() => {
-      setState(isLetter ? 1 + Math.floor(Math.random() * shapes.length) : 0);
-    }, delay);
-    return () => clearTimeout(id);
-  }, [state, reduce, shapes.length]);
+// Presentational only — the parent owns timing/coordination and passes `state`
+// (null = glyph; otherwise { html, geo, rot, color }). The shape bakes in its
+// resting rotation and is tinted via the wrapper's `color`.
+function MorphLetter({ char, state }) {
+  const rot = state ? state.rot : 0;
 
   return (
     <span className="hm__letter">
@@ -46,7 +113,7 @@ function MorphLetter({ char, shapes, reduce }) {
         {char}
       </span>
       <AnimatePresence initial={false}>
-        {state === 0 ? (
+        {!state ? (
           <motion.span
             key="glyph"
             className="hm__face"
@@ -58,16 +125,15 @@ function MorphLetter({ char, shapes, reduce }) {
             {char}
           </motion.span>
         ) : (
-          <motion.img
-            key={`shape-${state}`}
+          <motion.span
+            key={`shape-${state.geo}`}
             className="hm__face hm__shape"
-            src={shapes[state - 1]}
-            alt=""
-            aria-hidden="true"
-            initial={{ scale: 0, rotate: -45, opacity: 0 }}
-            animate={{ scale: 1, rotate: 0, opacity: 1 }}
-            exit={{ scale: 0, rotate: 45, opacity: 0 }}
+            style={{ color: state.color }}
+            initial={{ scale: 0, rotate: rot - 45, opacity: 0 }}
+            animate={{ scale: 1, rotate: rot, opacity: 1 }}
+            exit={{ scale: 0, rotate: rot + 45, opacity: 0 }}
             transition={POP}
+            dangerouslySetInnerHTML={{ __html: state.html }}
           />
         )}
       </AnimatePresence>
@@ -77,15 +143,105 @@ function MorphLetter({ char, shapes, reduce }) {
 
 /**
  * Headline whose letters playfully pop between the glyph and brand motifs, each
- * on its own random clock (no scroll, no particles). Solid letters + the real
- * coloured brand SVGs.
+ * on its own random clock (no scroll, no particles). Solid letters + recoloured
+ * brand SVG paths.
+ *
+ * Each letter only morphs into shapes that resemble it (see LETTER_SHAPES).
+ * Coordination lives here so we can keep it legible: at most MAX_SHAPES shapes
+ * at once, never two reading-order neighbours together, and never the same
+ * geometry twice at the same time. Tints are picked to stay balanced, minus any
+ * `excludeColors` (the hero passes ['red'] to stay off the red wordmark).
  */
-function HeadlineMorph({ text, shapesPerLetter = 2, className = '' }) {
+function HeadlineMorph({ text, className = '', excludeColors = [] }) {
   const reduce = useReducedMotion();
-  const pools = useMemo(
-    () => text.split('').map(() => pickShapes(shapesPerLetter)),
-    [text, shapesPerLetter]
+  const chars = useMemo(() => text.split(''), [text]);
+  const pools = useMemo(() => chars.map((c) => candidatesFor(c)), [chars]);
+
+  const exKey = excludeColors.join('|');
+  const allowed = useMemo(
+    () => Object.keys(PALETTE).filter((k) => !excludeColors.includes(k)),
+    // exKey captures excludeColors' contents; the array ref itself is unstable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [exKey]
   );
+
+  // Char indices that are actual letters (spaces never morph). Adjacency is
+  // measured in this reading order, so a space doesn't count as a neighbour.
+  const letterIndices = useMemo(
+    () => chars.map((c, i) => (c === ' ' ? -1 : i)).filter((i) => i >= 0),
+    [chars]
+  );
+
+  // state[i]: null = glyph, else the active shape descriptor. One per char.
+  const [states, setStates] = useState(() => chars.map(() => null));
+
+  // Keep a live ref so the self-rescheduling timers always read the latest
+  // committed states without re-running the effect on every flip.
+  const statesRef = useRef(states);
+  statesRef.current = states;
+
+  useEffect(() => {
+    if (reduce) return undefined;
+
+    const order = letterIndices;
+    const posOf = new Map(order.map((ci, p) => [ci, p]));
+    const timers = new Map();
+
+    const schedule = (ci) => {
+      const isLetter = !statesRef.current[ci];
+      // Slower cadence: a long stretch as the letter, an unhurried hold as the
+      // shape. Randomised so the letters don't pulse in lockstep.
+      const delay = isLetter
+        ? 6000 + Math.random() * 7000
+        : 1100 + Math.random() * 1000;
+      timers.set(ci, setTimeout(() => tick(ci), delay));
+    };
+
+    const tick = (ci) => {
+      const cur = statesRef.current;
+      if (!cur[ci]) {
+        const p = posOf.get(ci);
+        const prev = order[p - 1];
+        const next = order[p + 1];
+        const active = cur.filter(Boolean);
+        const neighbourShape =
+          (prev != null && cur[prev]) || (next != null && cur[next]);
+
+        // Become a shape only if under the global cap, no neighbour is a shape,
+        // and a geometry not already on screen is available (no dupes at once).
+        if (active.length < MAX_SHAPES && !neighbourShape) {
+          const used = new Set(active.map((s) => s.geo));
+          const choices = pools[ci].filter((c) => !used.has(c.geo));
+          if (choices.length > 0) {
+            const pick = choices[Math.floor(Math.random() * choices.length)];
+            const colorKey = pickColor(active, allowed);
+            setStates((s) => {
+              const n = [...s];
+              n[ci] = {
+                html: pick.html,
+                geo: pick.geo,
+                rot: pick.rot,
+                colorKey,
+                color: PALETTE[colorKey],
+              };
+              return n;
+            });
+          }
+        }
+        // If blocked, leave it as a letter and just try again next cycle.
+      } else {
+        setStates((s) => {
+          const n = [...s];
+          n[ci] = null;
+          return n;
+        });
+      }
+      schedule(ci);
+    };
+
+    order.forEach((ci) => schedule(ci));
+    return () => timers.forEach((id) => clearTimeout(id));
+  }, [reduce, letterIndices, pools, allowed]);
 
   // Group letters into words so a word never breaks across lines — only the
   // spaces between words are wrap opportunities.
@@ -104,7 +260,7 @@ function HeadlineMorph({ text, shapesPerLetter = 2, className = '' }) {
           {wi > 0 && <span className="hm__space"> </span>}
           <span className="hm__word">
             {letters.map(({ ch, idx }) => (
-              <MorphLetter key={idx} char={ch} shapes={pools[idx]} reduce={reduce} />
+              <MorphLetter key={idx} char={ch} state={states[idx]} />
             ))}
           </span>
         </span>

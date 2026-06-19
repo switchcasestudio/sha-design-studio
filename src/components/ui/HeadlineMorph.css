@@ -4,9 +4,11 @@
   display: inline;
 }
 
+/* Wider gap between words than a plain space, so "Sha / Design / Studio" reads
+   as distinct words (and the extra width encourages the wrap). */
 .hm__space {
-  display: inline;
-  white-space: pre;
+  display: inline-block;
+  width: 0.5em;
 }
 
 /* A word never breaks mid-word; wraps only at the spaces between words. */
@@ -34,11 +36,22 @@
   will-change: transform, opacity;
 }
 
-/* Brand motif sized to sit in the letter slot; may spill a little on narrow
-   glyphs, which reads as a playful burst. */
+/* Brand motif. The wrapper inherits .hm__face (absolute, inset:0, flex-centred),
+   so the inline <svg> sits centred in the letter box. Motion owns the wrapper's
+   transform for the pop; tint comes from the wrapper's inline `color`, which the
+   path picks up via `currentColor`. */
 .hm__shape {
-  height: 0.82em;
-  width: auto;
-  max-width: 1.15em;
   transform-origin: center;
+}
+
+/* Inline motif sized to ~the glyph's cap-height (trimmed ~10% so it doesn't
+   tower over the word) and nudged down a hair onto the chunky lowercase optical
+   centre. `top` is layout, not transform, so Motion's pop is left untouched. */
+.hm__shape svg {
+  position: relative;
+  top: 0.05em;
+  display: block;
+  height: 0.74em;
+  width: auto;
+  max-width: 1.04em;
 }

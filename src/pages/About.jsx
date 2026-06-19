@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
-import yellowFlower from '@/assets/svg/yellow-2.svg';
+import yellowFlower from '@/assets/svg/flower-yellow.svg';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 

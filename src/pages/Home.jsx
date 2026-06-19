@@ -38,10 +38,10 @@ function Home() {
 
   return (
     <>
-      {/* ---------- Signature hero: scroll-pinned brand assemble (GSAP) ----------
-          This IS the home headline — it replaces the old static hero so the
-          wording ("Sha Design Studio" / "Designing Thoughtful Products") only
-          appears once, now assembling on scroll. */}
+      {/* ---------- Signature hero: 100vh brand frame ----------
+          This IS the home headline. The wordmark's letters morph between glyphs
+          and brand motifs (HeadlineMorph) and a cursor follower trails inside
+          the section — no scroll-driven entrance. */}
       <HomeAssemble />
 
       {/* ---------- "What I Do" CTA ---------- */}
