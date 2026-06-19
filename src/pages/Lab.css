@@ -56,10 +56,17 @@
   background-color: var(--color-ink);
 }
 
-.particle-morph,
-.letter-shape-morph,
-.rive-stage {
-  display: block;
-  width: 100%;
-  height: 100%;
+.lab-stage--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+
+.lab-headline {
+  font-family: var(--font-hero);
+  font-size: clamp(var(--text-4xl), 7vw, var(--text-6xl));
+  line-height: 1.1;
+  color: var(--color-orange);
+  text-align: center;
 }

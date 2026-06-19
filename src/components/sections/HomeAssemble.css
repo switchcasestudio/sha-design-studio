@@ -24,11 +24,11 @@
 .home-assemble__inner {
   position: relative;
   z-index: 2;
-  width: min(880px, 84vw);
+  width: min(620px, 62vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   text-align: center;
 }
 
@@ -40,16 +40,14 @@
   color: var(--color-orange);
 }
 
-/* The headline is now a canvas (LetterShapeMorph) spelling the wordmark. */
+/* Solid wordmark (Bagel display face); letters pop between glyph and motifs. */
 .home-assemble__headline {
-  width: 100%;
-  margin: 0;
-}
-
-.home-assemble__morph {
-  display: block;
-  width: 100%;
-  height: clamp(130px, 22vh, 260px);
+  font-family: var(--font-hero);
+  font-size: clamp(var(--text-5xl), 7vw, var(--text-7xl));
+  line-height: 1.08;
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-orange);
+  max-width: 12ch;
 }
 
 /* Decorative motifs sit behind the headline (z-index 1), resting in the side

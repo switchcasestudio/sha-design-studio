@@ -1,9 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { siteConfig } from '@/utils/siteConfig';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import LetterShapeMorph from '@/components/lab/LetterShapeMorph';
-import { SHA_MORPHS } from '@/components/lab/brandMorphs';
+import HeadlineMorph from '@/components/ui/HeadlineMorph';
 
 // Shapes are imported as raw SVG source (?raw) so they can be recolored at
 // runtime: every shape is normalized to `currentColor`, and each placed
@@ -181,10 +179,6 @@ function buildMotifs() {
 function HomeAssemble() {
   const sectionRef = useRef(null);
   const headlineRef = useRef(null);
-  // Scroll progress (0..1) of the pin, written by ScrollTrigger and read each
-  // frame by the headline morph so the letters bloom into shapes as you scroll.
-  const morphProgress = useRef(0);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Build once per mount: positions are fixed, colors + extra squiggles are
   // randomized (stable for the session so nothing reshuffles on re-render).
@@ -253,10 +247,6 @@ function HomeAssemble() {
               // for a beat before the page continues.
               end: '+=130%',
               scrub: 0.6,
-              // Feed pin progress to the headline letter↔shape morph.
-              onUpdate: (self) => {
-                morphProgress.current = self.progress;
-              },
             },
           });
 
@@ -345,20 +335,10 @@ function HomeAssemble() {
 
       <div className="home-assemble__inner" ref={headlineRef}>
         <p className="home-assemble__brand">Designing Playful Products</p>
-        {/* The wordmark: dots spell "Sha Design Studio"; on desktop the pin's
-            scroll progress blooms the letters into brand motifs (a→heart,
-            g→flower, o→star) and back. On mobile it auto-loops. */}
+        {/* Solid wordmark whose letters playfully pop between the glyph and brand
+            motifs, each on its own random clock. */}
         <h1 className="home-assemble__headline">
-          <span className="sr-only">{siteConfig.name}</span>
-          <LetterShapeMorph
-            className="home-assemble__morph"
-            text={siteConfig.name}
-            morphs={SHA_MORPHS}
-            progressRef={isDesktop ? morphProgress : null}
-            baseColor={[229, 75, 42]}
-            background="transparent"
-            dotSize={2.2}
-          />
+          <HeadlineMorph text={siteConfig.name} />
         </h1>
       </div>
     </section>

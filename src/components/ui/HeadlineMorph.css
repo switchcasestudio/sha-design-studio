@@ -1,0 +1,44 @@
+/* Letters that pop between the glyph and brand motifs. The ghost reserves each
+   slot's width so swapping a letter for a shape never reflows the line. */
+.hm {
+  display: inline;
+}
+
+.hm__space {
+  display: inline;
+  white-space: pre;
+}
+
+/* A word never breaks mid-word; wraps only at the spaces between words. */
+.hm__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hm__letter {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.hm__ghost {
+  visibility: hidden;
+}
+
+.hm__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+/* Brand motif sized to sit in the letter slot; may spill a little on narrow
+   glyphs, which reads as a playful burst. */
+.hm__shape {
+  height: 0.82em;
+  width: auto;
+  max-width: 1.15em;
+  transform-origin: center;
+}
