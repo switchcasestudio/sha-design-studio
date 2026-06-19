@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { siteConfig } from '@/utils/siteConfig';
 import HeadlineMorph from '@/components/ui/HeadlineMorph';
+import HeroNav from '@/components/ui/HeroNav';
 import './HomeAssemble.css';
 
 // 100vh brand hero: just the centred wordmark. Its letters morph between glyphs
@@ -22,6 +23,11 @@ function HomeAssemble() {
           <HeadlineMorph text={siteConfig.name} excludeColors={['red']} />
         </h1>
       </div>
+
+      {/* The site nav, living in the hero as labelled brand shapes scattered
+          around the section. Fades up into the header nav as the viewer scrolls
+          past the hero. */}
+      <HeroNav />
     </section>
   );
 }

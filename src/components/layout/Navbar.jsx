@@ -4,6 +4,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { navigation } from '@/utils/siteConfig';
+import { useHeroNav } from '@/context/HeroNavContext';
 import Logo from '@/components/ui/Logo';
 import './Navbar.css';
 
@@ -19,6 +20,9 @@ function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const reduce = useReducedMotion();
+  // While in the home hero, the nav lives in the hero as shapes — hide the
+  // header's text nav and hand off (cross-fade) once scrolled past the hero.
+  const { heroActive } = useHeroNav();
   const toggleRef = useRef(null);
   const overlayRef = useRef(null);
   const closeRef = useRef(null);
@@ -136,12 +140,17 @@ function Navbar() {
           </motion.div>
         </Link>
 
-        <nav className="navbar__nav" aria-label="Primary">
+        <nav
+          className={`navbar__nav${heroActive ? ' navbar__nav--ghost' : ''}`}
+          aria-label="Primary"
+          aria-hidden={heroActive}
+        >
           <ul className="navbar__list">
             {navigation.map((item) => (
               <li key={item.href}>
                 <NavLink
                   to={item.href}
+                  tabIndex={heroActive ? -1 : 0}
                   className={({ isActive }) =>
                     `navbar__link${isActive ? ' navbar__link--active' : ''}`
                   }

@@ -187,13 +187,18 @@ function HeadlineMorph({ text, className = '', excludeColors = [] }) {
     const posOf = new Map(order.map((ci, p) => [ci, p]));
     const timers = new Map();
 
-    const schedule = (ci) => {
+    const schedule = (ci, first = false) => {
       const isLetter = !statesRef.current[ci];
-      // Slower cadence: a long stretch as the letter, an unhurried hold as the
-      // shape. Randomised so the letters don't pulse in lockstep.
-      const delay = isLetter
-        ? 6000 + Math.random() * 7000
-        : 1100 + Math.random() * 1000;
+      // `first`: stagger the opening morphs into the first ~1.8s so the effect
+      // announces itself right away (otherwise a visitor may scroll past before
+      // a single letter pops). After that, a lively-but-readable cadence — a
+      // moderate stretch as the letter, a brief hold as the shape, randomised so
+      // the letters don't pulse in lockstep.
+      const delay = first
+        ? 300 + Math.random() * 1500
+        : isLetter
+          ? 2200 + Math.random() * 3500
+          : 900 + Math.random() * 900;
       timers.set(ci, setTimeout(() => tick(ci), delay));
     };
 
@@ -239,7 +244,7 @@ function HeadlineMorph({ text, className = '', excludeColors = [] }) {
       schedule(ci);
     };
 
-    order.forEach((ci) => schedule(ci));
+    order.forEach((ci) => schedule(ci, true));
     return () => timers.forEach((id) => clearTimeout(id));
   }, [reduce, letterIndices, pools, allowed]);
 

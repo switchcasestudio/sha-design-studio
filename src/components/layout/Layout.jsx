@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import TrailingCursorText from '@/components/ui/TrailingCursorText';
+import { HeroNavProvider } from '@/context/HeroNavContext';
 import './Layout.css';
 
 /* Jump to the top when the route changes. Explicitly instant so the
@@ -34,9 +35,10 @@ function Layout() {
   const { pathname } = useLocation();
 
   return (
-    <div className="layout">
-      <ScrollToTop />
-      <Navbar />
+    <HeroNavProvider>
+      <div className="layout">
+        <ScrollToTop />
+        <Navbar />
       <main className="layout__main">
         <AnimatePresence mode="wait">
           <motion.div
@@ -55,12 +57,13 @@ function Layout() {
           </motion.div>
         </AnimatePresence>
       </main>
-      <Footer />
-      {/* Cursor follower — restricted to the hero: only shows while the cursor
-          is over the home hero section (which only exists on the home page).
-          pointer-events:none, so it never blocks UI. */}
-      <TrailingCursorText boundsSelector=".home-assemble" />
-    </div>
+        <Footer />
+        {/* Cursor follower — restricted to the hero: only shows while the cursor
+            is over the home hero section (which only exists on the home page).
+            pointer-events:none, so it never blocks UI. */}
+        <TrailingCursorText boundsSelector=".home-assemble" />
+      </div>
+    </HeroNavProvider>
   );
 }
 
