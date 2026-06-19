@@ -123,7 +123,7 @@ function Home() {
           text="Designing Playful, Thoughtful Products  ·  Simple, Smart & Full of Wonder  ·  "
           path="M0 140 C 130 100 270 100 400 140 S 670 180 800 140 S 1070 100 1200 140 S 1470 180 1600 140"
           viewBox="0 0 1600 280"
-          fontSize={isMobile ? '150px' : '80px'}
+          fontSize={isMobile ? '150px' : '110px'}
           duration={20}
           reversed
         />

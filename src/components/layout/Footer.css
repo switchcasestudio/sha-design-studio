@@ -8,14 +8,14 @@
 
 .footer__cols {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-8);
   align-items: start;
 }
 
 .footer__ident {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-5);
 }
 

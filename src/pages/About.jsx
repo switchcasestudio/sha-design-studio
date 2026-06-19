@@ -4,15 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
 import yellowFlower from '@/assets/svg/yellow-2.svg';
 import shiranBar from '@/assets/images/Shiran-bar.png';
-import { projects } from '@/data';
 import './About.css';
-
-// Real project imagery for the gallery, pulled from the shared data module.
-// Three hero shots plus one secondary image to fill the 2x2 grid.
-const galleryImages = [
-  ...projects.slice(3, 6).map((project) => project.heroImage),
-  projects[3]?.images?.[5] ?? projects[4]?.images?.[1],
-].filter(Boolean);
 
 const offers = [
   {
@@ -129,37 +121,6 @@ function About() {
               </motion.div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* ---------- Photo gallery ---------- */}
-      <section className="about-gallery">
-        <div className="container">
-          <div className="about-gallery__grid">
-            {['small', 'large', 'medium', 'wide']
-              .slice(0, galleryImages.length)
-              .map((size, i) => (
-              <motion.div
-                key={size}
-                className={`about-gallery__item about-gallery__item--${size}`}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ ...spring, delay: i * 0.1 }}
-                whileHover={{
-                  y: -4,
-                  transition: { type: 'spring', stiffness: 300, damping: 20 },
-                }}
-              >
-                <img
-                  className="about-gallery__image"
-                  src={galleryImages[i].src}
-                  alt={galleryImages[i].alt}
-                  loading="lazy"
-                />
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 

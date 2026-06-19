@@ -20,7 +20,7 @@ function Footer() {
             transition={{ duration: 0.5 }}
           >
             <div className="footer__ident">
-              <Logo size={72} variant="orange" />
+              <Logo size={150} variant="orange" />
               <p className="footer__wordmark">
                 Sha
                 <br />
