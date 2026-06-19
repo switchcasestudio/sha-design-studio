@@ -24,32 +24,32 @@
 .home-assemble__inner {
   position: relative;
   z-index: 2;
-  width: min(520px, 54vw);
+  width: min(880px, 84vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-2);
   text-align: center;
 }
 
-/* Display face — single-weight (400), so no font-weight here */
+/* Tagline eyebrow above the morphing wordmark */
 .home-assemble__brand {
   font-family: var(--font-display);
-  font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+  font-size: clamp(var(--text-lg), 2.2vw, var(--text-2xl));
   line-height: 1.05;
   color: var(--color-orange);
 }
 
-/* Accent face (Bagel Fat One) — single-weight; never set font-weight on it.
-   The dominant element on the page — shapes orbit it. */
+/* The headline is now a canvas (LetterShapeMorph) spelling the wordmark. */
 .home-assemble__headline {
-  font-family: var(--font-hero);
-  font-size: clamp(var(--text-5xl), 7.4vw, var(--text-7xl));
-  line-height: 1.04;
-  letter-spacing: var(--tracking-normal);
-  text-wrap: balance;
-  color: var(--color-orange);
-  max-width: 13ch;
+  width: 100%;
+  margin: 0;
+}
+
+.home-assemble__morph {
+  display: block;
+  width: 100%;
+  height: clamp(130px, 22vh, 260px);
 }
 
 /* Decorative motifs sit behind the headline (z-index 1), resting in the side

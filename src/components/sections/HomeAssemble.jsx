@@ -1,15 +1,10 @@
 import { useMemo, useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { siteConfig } from '@/utils/siteConfig';
-import GooeyText from '@/components/ui/GooeyText';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import LetterShapeMorph from '@/components/lab/LetterShapeMorph';
+import { SHA_MORPHS } from '@/components/lab/brandMorphs';
 
-// The hero headline morphs between these (canonical first, so it's the static
-// fallback under reduced motion). Restored from the original gooey hero.
-const HERO_PHRASES = [
-  'Designing Thoughtful Products',
-  'Designing Playful Products',
-  'Simple, Smart, Full of Wonder',
-];
 // Shapes are imported as raw SVG source (?raw) so they can be recolored at
 // runtime: every shape is normalized to `currentColor`, and each placed
 // instance sets its wrapper's CSS `color` to a brand token. That lets ANY shape
@@ -186,6 +181,10 @@ function buildMotifs() {
 function HomeAssemble() {
   const sectionRef = useRef(null);
   const headlineRef = useRef(null);
+  // Scroll progress (0..1) of the pin, written by ScrollTrigger and read each
+  // frame by the headline morph so the letters bloom into shapes as you scroll.
+  const morphProgress = useRef(0);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Build once per mount: positions are fixed, colors + extra squiggles are
   // randomized (stable for the session so nothing reshuffles on re-render).
@@ -254,6 +253,10 @@ function HomeAssemble() {
               // for a beat before the page continues.
               end: '+=130%',
               scrub: 0.6,
+              // Feed pin progress to the headline letter↔shape morph.
+              onUpdate: (self) => {
+                morphProgress.current = self.progress;
+              },
             },
           });
 
@@ -341,13 +344,20 @@ function HomeAssemble() {
       ))}
 
       <div className="home-assemble__inner" ref={headlineRef}>
-        <p className="home-assemble__brand">{siteConfig.name}</p>
+        <p className="home-assemble__brand">Designing Playful Products</p>
+        {/* The wordmark: dots spell "Sha Design Studio"; on desktop the pin's
+            scroll progress blooms the letters into brand motifs (a→heart,
+            g→flower, o→star) and back. On mobile it auto-loops. */}
         <h1 className="home-assemble__headline">
-          <GooeyText
-            texts={HERO_PHRASES}
-            morphTime={1}
-            cooldownTime={2.2}
-            label="Designing Thoughtful Products"
+          <span className="sr-only">{siteConfig.name}</span>
+          <LetterShapeMorph
+            className="home-assemble__morph"
+            text={siteConfig.name}
+            morphs={SHA_MORPHS}
+            progressRef={isDesktop ? morphProgress : null}
+            baseColor={[229, 75, 42]}
+            background="transparent"
+            dotSize={2.2}
           />
         </h1>
       </div>
