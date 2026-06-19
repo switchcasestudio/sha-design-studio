@@ -78,7 +78,9 @@
   width: clamp(130px, 14vw, 200px);
   aspect-ratio: 167.9 / 146.52;
   z-index: 2;
-  pointer-events: none;
+  /* Hoverable so it can pop like the hero motifs */
+  pointer-events: auto;
+  cursor: default;
 }
 
 .about-bio__hello-shape {

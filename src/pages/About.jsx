@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Button from '@/components/ui/Button';
@@ -84,7 +85,13 @@ function About() {
               </p>
             </div>
 
-            <Button variant="yellow" size="md" className="about-bio__cta">
+            <Button
+              as={Link}
+              to="/inquire"
+              variant="yellow"
+              size="md"
+              className="about-bio__cta"
+            >
               Let's Chat
             </Button>
           </motion.div>
@@ -110,6 +117,13 @@ function About() {
                   damping: 12,
                   delay: 0.6,
                 }}
+                /* Playful pop on hover, like the hero motifs */
+                whileHover={{
+                  scale: 1.12,
+                  rotate: 8,
+                  transition: { type: 'spring', stiffness: 300, damping: 14 },
+                }}
+                whileTap={{ scale: 1.04 }}
               >
                 <img
                   src={yellowFlower}
@@ -153,7 +167,7 @@ function About() {
                 development.
               </p>
 
-              <Button variant="primary" size="md">
+              <Button as={Link} to="/services" variant="primary" size="md">
                 Explore My Services
               </Button>
             </motion.div>

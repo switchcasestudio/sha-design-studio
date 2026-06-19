@@ -3,7 +3,7 @@
 .footer__bar {
   background-color: var(--color-cream);
   color: var(--color-ink);
-  padding-block: var(--space-12) var(--space-8);
+  padding-block: var(--space-8) var(--space-6);
 }
 
 .footer__cols {
@@ -42,10 +42,11 @@
   color: var(--text-muted);
 }
 
-/* Horizontal row; wraps to a second row only when it can't fit */
+/* Links spread evenly across the column; wraps to a second row if needed */
 .footer__list {
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
   gap: var(--space-2) var(--space-6);
 }
 
@@ -94,7 +95,7 @@
 }
 
 .footer__legal {
-  margin-top: var(--space-12);
+  margin-top: var(--space-8);
   color: var(--text-muted);
 }
 
