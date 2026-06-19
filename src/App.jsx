@@ -6,6 +6,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import Services from './pages/Services';
 import About from './pages/About';
 import Inquire from './pages/Inquire';
+import Lab from './pages/Lab';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
         <Route path="services" element={<Services />} />
         <Route path="about" element={<About />} />
         <Route path="inquire" element={<Inquire />} />
+        {/* Prototype playground — not linked in nav */}
+        <Route path="lab" element={<Lab />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

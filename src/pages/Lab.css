@@ -1,0 +1,64 @@
+.lab-page {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  min-height: calc(100vh - 80px);
+  padding-block: var(--space-12) var(--space-24);
+}
+
+.lab-page__head {
+  margin-bottom: var(--space-12);
+}
+
+.lab-page__title {
+  font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+  color: var(--color-orange);
+}
+
+.lab-page__sub {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+}
+
+.lab-block {
+  margin-bottom: var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.lab-block__tag {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lab-block__note {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  max-width: 60ch;
+}
+
+.lab-stage {
+  width: 100%;
+  height: clamp(220px, 34vw, 420px);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.lab-stage--cream {
+  background-color: var(--color-cream-soft);
+}
+.lab-stage--ink {
+  background-color: var(--color-ink);
+}
+
+.particle-morph,
+.rive-stage {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
