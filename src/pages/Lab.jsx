@@ -1,4 +1,5 @@
 import ParticleMorph from '@/components/lab/ParticleMorph';
+import LetterShapeMorph from '@/components/lab/LetterShapeMorph';
 import RiveStage from '@/components/lab/RiveStage';
 import sampleRiv from '@/assets/rive/sample.riv?url';
 import './Lab.css';
@@ -18,6 +19,18 @@ function Lab() {
           Two ways to do the Config-style shape ⇄ particle morph.
         </p>
       </header>
+
+      <section className="lab-block container">
+        <span className="lab-block__tag">★ Letters ⇄ shapes (the Config effect)</span>
+        <div className="lab-stage lab-stage--cream">
+          <LetterShapeMorph text="Sha Design Studio" />
+        </div>
+        <p className="lab-block__note">
+          The dots spell the wordmark; the <strong>a</strong> blooms into a heart,
+          the <strong>g</strong> into a flower, the <strong>o</strong> into a star
+          — then flow back, each on its own beat. All code, no Rive/asset.
+        </p>
+      </section>
 
       <section className="lab-block container">
         <span className="lab-block__tag">1 · Canvas-2D particles (ours)</span>
