@@ -17,23 +17,19 @@
 }
 
 .projects-page__title {
-  /* Bigger on desktop and centred (both axes) within its column */
-  font-size: clamp(var(--text-7xl), 13vw, 8rem);
+  /* Same clamp as the Services/About page headings so all page titles match */
+  font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
   text-align: center;
   color: var(--color-cream);
 }
 
-/* Lead paragraph: sized + weighted so it reads as LARGE text — the only bar
-   brand orange can clear with cream (3.43:1 ≥ 3:1). Body-size copy on bright
-   orange would fail AA, so the page surface carries large type only. */
+/* Lead paragraph: matched to the Services/About intro size for a consistent
+   page-header rhythm across the app. */
 .projects-page__intro {
-  /* Held at 24px (no upsizing on desktop, where it read too large). 24px keeps
-     it WCAG "large text" — the only AA bar bright orange can meet with cream
-     (3.43:1 ≥ 3:1). */
-  font-size: var(--text-2xl);
+  font-size: var(--text-lg);
   font-weight: var(--weight-regular);
-  line-height: var(--leading-snug);
-  max-width: 28ch;
+  line-height: var(--leading-relaxed);
+  max-width: 46ch;
   justify-self: end;
 }
 
@@ -126,14 +122,10 @@
 }
 
 .overview-card__title {
-  /* Reading face, not the display face — long product titles stay legible.
-     Lighter (medium) per design; floor 24px keeps it WCAG "large text" (≥24px),
-     so cream on bright orange clears the 3:1 large-text bar at this weight. */
+  /* Reading face, not the display face — long product titles stay legible. */
   font-family: var(--font-body);
   font-weight: var(--weight-medium);
-  /* Held at 24px (no desktop upsizing — read too large there). Still WCAG
-     "large text" so cream on bright orange clears the 3:1 bar at medium. */
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-normal);
   color: var(--color-cream);
@@ -154,10 +146,9 @@
     align-items: start;
   }
 
-  /* Mobile keeps the heading left-aligned at the approved (smaller) size */
+  /* Mobile keeps the heading left-aligned */
   .projects-page__title {
     text-align: left;
-    font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
   }
 
   .projects-page__intro {
