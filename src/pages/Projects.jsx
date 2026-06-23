@@ -5,6 +5,14 @@ import './Projects.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
+// Tiles that span the full row in the overview grid — each carries a long
+// landscape cover photo instead of pairing up 2-up. Order is driven by each
+// project's `order` field so these land on their own rows (positions 3 & 6).
+const WIDE_PROJECT_IDS = new Set([
+  'wooden-toy-design',
+  'garden-of-adventures-packaging',
+]);
+
 function Projects() {
   return (
     <div className="projects-page">
@@ -37,10 +45,11 @@ function Projects() {
           <ul className="projects-overview">
             {projects.map((project, idx) => {
               const image = project.heroImage ?? project.images[0];
+              const isWide = WIDE_PROJECT_IDS.has(project.id);
               return (
                 <motion.li
                   key={project.id}
-                  className="overview-card"
+                  className={`overview-card${isWide ? ' overview-card--wide' : ''}`}
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...spring, delay: 0.35 + idx * 0.06 }}

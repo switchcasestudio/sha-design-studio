@@ -4947,7 +4947,7 @@ export const shaProjects = [
   },
   {
     "id": "garden-of-adventures-packaging",
-    "order": 4,
+    "order": 6,
     "title": "Garden of Adventures",
     "client": "Tiny Love",
     "studio": "Sha Design Studio",
@@ -5399,7 +5399,7 @@ export const shaProjects = [
   },
   {
     "id": "tiny-rockers-shape-sorter",
-    "order": 5,
+    "order": 4,
     "title": "Shape Sorter",
     "client": "Tiny Love",
     "studio": "Sha Design Studio",
@@ -5885,7 +5885,7 @@ export const shaProjects = [
   },
   {
     "id": "mobile-character-design",
-    "order": 6,
+    "order": 5,
     "title": "Mobiles",
     "client": "Tiny Love",
     "studio": "Sha Design Studio",

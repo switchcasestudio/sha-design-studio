@@ -39,12 +39,25 @@
   margin: var(--space-16) 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr) — not a bare 1fr — so long titles can't widen one column
+     past its neighbor (which would also make its image taller). Keeps columns,
+     and therefore every image, exactly equal. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-8) var(--space-6);
 }
 
 .overview-card {
   margin: 0;
+}
+
+/* Feature tiles span the full row and carry a long landscape cover photo,
+   breaking up the 2-up rhythm. */
+.overview-card--wide {
+  grid-column: 1 / -1;
+}
+
+.overview-card--wide .overview-card__media {
+  aspect-ratio: 3 / 1;
 }
 
 .overview-card__link {
@@ -62,7 +75,7 @@
 
 .overview-card__media {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background-color: var(--color-white);
@@ -133,12 +146,6 @@
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 900px) {
-  .projects-overview {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
   .projects-page__hero-inner {
     grid-template-columns: 1fr;
@@ -164,5 +171,11 @@
   .projects-overview {
     grid-template-columns: 1fr;
     gap: var(--space-8);
+  }
+
+  /* Once stacked single-column, the wide cover would be a thin band — give it
+     a taller crop so it reads like the other tiles. */
+  .overview-card--wide .overview-card__media {
+    aspect-ratio: 4 / 3;
   }
 }
