@@ -33,7 +33,7 @@
    wordmark rather than competing with it. */
 .home-assemble__brand {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: clamp(var(--text-lg), 2.2vw, var(--text-2xl));
   line-height: 1.05;
   letter-spacing: var(--tracking-tight);
@@ -59,14 +59,13 @@
     min-height: 100vh; /* fallback */
     min-height: 100dvh;
     /* On mobile the scattered nav becomes a static row (see HeroNav.css), so the
-       hero now has TWO grid rows (wordmark + nav). The grid's default
-       align-content would stretch them apart — wordmark stranded in the top
-       half, badges in the bottom — leaving a dead gap between them and pinning
-       the badges so low they're still mid-screen when the scroll hand-off fades
-       them out (the "weird empty space" on exit). Pack both rows in the vertical
-       centre instead: the content reads as one group and the badges sit high
-       enough that they scroll off naturally as the fade fires. */
-    align-content: center;
+       hero has TWO grid rows (wordmark + nav). Pack them as one group and anchor
+       it to the BOTTOM of the hero rather than the centre: this drops the badges
+       lower (where they read best) and — crucially — leaves only a small gap
+       below them before "What I Do", killing the dead cream void that used to
+       sit between the hero content and the next section on scroll. */
+    align-content: end;
+    padding-bottom: var(--space-16);
   }
 
   .home-assemble__inner {
@@ -74,10 +73,10 @@
     gap: var(--space-4);
   }
 
-  /* Bigger wordmark on phones — the desktop clamp bottoms out at 3.25rem, which
-     left the hero feeling empty. Fill the width; the morph SVGs are sized in em
+  /* Big, space-filling wordmark on phones — the desktop clamp bottoms out at
+     3.25rem, which left the hero feeling empty. The morph SVGs are sized in em
      so they scale up with it automatically. */
   .home-assemble__headline {
-    font-size: clamp(4rem, 15vw, 5.5rem);
+    font-size: clamp(4.75rem, 17vw, 6rem);
   }
 }
