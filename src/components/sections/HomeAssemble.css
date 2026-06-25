@@ -59,24 +59,23 @@
     min-height: 100vh; /* fallback */
     min-height: 100dvh;
     /* On mobile the scattered nav becomes a static row (see HeroNav.css), so the
-       hero has TWO grid rows (wordmark + nav). Pack them as one group and anchor
-       it to the BOTTOM of the hero rather than the centre: this drops the badges
-       lower (where they read best) and — crucially — leaves only a small gap
-       below them before "What I Do", killing the dead cream void that used to
-       sit between the hero content and the next section on scroll. */
-    align-content: end;
-    padding-bottom: var(--space-16);
+       hero has TWO grid rows (wordmark + nav). Pack them as one group dead-centre
+       (vertically + horizontally). The big wordmark fills the space, and the
+       badges no longer fade out — they just scroll away with the section (see
+       HeroNav), so there's no abrupt disappearance / empty-space glitch. */
+    align-content: center;
   }
 
   .home-assemble__inner {
-    width: min(440px, 90vw);
+    width: min(480px, 92vw);
     gap: var(--space-4);
   }
 
-  /* Big, space-filling wordmark on phones — the desktop clamp bottoms out at
-     3.25rem, which left the hero feeling empty. The morph SVGs are sized in em
-     so they scale up with it automatically. */
+  /* Much bigger wordmark on phones. Bagel's longest word here ("Design") is
+     ~3.05em wide, so ~24vw lets it fill ~80% of the line with margin to spare
+     for the morph shapes that bulge a little past their letter slot. The morph
+     SVGs are sized in em, so they scale up with it automatically. */
   .home-assemble__headline {
-    font-size: clamp(4.75rem, 17vw, 6rem);
+    font-size: clamp(4.5rem, 24vw, 8rem);
   }
 }

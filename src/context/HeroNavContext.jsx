@@ -22,11 +22,10 @@ export function HeroNavProvider({ children }) {
       setPastHero(true);
       return undefined;
     }
-    // Hand off once the hero is well on its way out (hero is 100vh). The hero
-    // content sits low on mobile, so wait until ~two-thirds scrolled — by then
-    // the shape-nav is near the top edge and fades as it actually leaves, rather
-    // than vanishing while still mid-screen.
-    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.65);
+    // Hand off a little past the hero's midpoint (hero is 100vh). Only affects
+    // desktop now — on mobile the shape-nav stays put (the hamburger is the nav
+    // once scrolled), so this no longer needs to account for the mobile layout.
+    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.55);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);

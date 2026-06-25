@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { navigation } from '@/utils/siteConfig';
 import { useHeroNav } from '@/context/HeroNavContext';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { inlineSvg } from '@/utils/svg';
 import blobBlueRaw from '@/assets/svg/blob-blue.svg?raw';
 import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
@@ -48,14 +49,23 @@ const BADGE_HOVER = { type: 'spring', stiffness: 380, damping: 14 };
 function HeroNav() {
   const { heroActive } = useHeroNav();
   const reduce = useReducedMotion();
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
+  // The cross-fade to the header's text nav is a desktop affordance. On mobile
+  // the header is a hamburger that's always available, so the playful shape-nav
+  // never needs to hand off — keep it present and let it simply scroll away with
+  // the hero (no fade-out, which is what created the "disappearing / empty
+  // space" glitch). Below the breakpoint the nav is a static in-flow row, so it
+  // scrolls naturally with the section.
+  const visible = isMobile || heroActive;
 
   return (
     <motion.nav
       className="hero-nav"
       aria-label="Primary"
-      aria-hidden={!heroActive}
+      aria-hidden={!visible}
       initial={false}
-      animate={heroActive ? { opacity: 1, y: 0 } : { opacity: 0, y: -18 }}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: -18 }}
       transition={reduce ? { duration: 0 } : { duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
       {navigation.map((item, i) => {
@@ -65,8 +75,8 @@ function HeroNav() {
             key={item.href}
             to={item.href}
             className="hero-nav__link"
-            tabIndex={heroActive ? 0 : -1}
-            style={{ '--x': pos.x, '--y': pos.y, pointerEvents: heroActive ? 'auto' : 'none' }}
+            tabIndex={visible ? 0 : -1}
+            style={{ '--x': pos.x, '--y': pos.y, pointerEvents: visible ? 'auto' : 'none' }}
           >
             <motion.span
               className="hero-nav__badge"
