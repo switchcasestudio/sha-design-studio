@@ -28,11 +28,15 @@
   text-align: center;
 }
 
-/* Tagline eyebrow above the morphing wordmark */
+/* Tagline eyebrow above the morphing wordmark. Set in the body (running-text)
+   face — not the display face — so it reads as a calm label against the chunky
+   wordmark rather than competing with it. */
 .home-assemble__brand {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: clamp(var(--text-lg), 2.2vw, var(--text-2xl));
   line-height: 1.05;
+  letter-spacing: var(--tracking-tight);
   color: var(--color-orange);
 }
 
@@ -54,9 +58,26 @@
     /* Still fill the first screen on mobile so "What I Do" starts below the fold */
     min-height: 100vh; /* fallback */
     min-height: 100dvh;
+    /* On mobile the scattered nav becomes a static row (see HeroNav.css), so the
+       hero now has TWO grid rows (wordmark + nav). The grid's default
+       align-content would stretch them apart — wordmark stranded in the top
+       half, badges in the bottom — leaving a dead gap between them and pinning
+       the badges so low they're still mid-screen when the scroll hand-off fades
+       them out (the "weird empty space" on exit). Pack both rows in the vertical
+       centre instead: the content reads as one group and the badges sit high
+       enough that they scroll off naturally as the fade fires. */
+    align-content: center;
   }
 
   .home-assemble__inner {
-    width: min(420px, 88vw);
+    width: min(440px, 90vw);
+    gap: var(--space-4);
+  }
+
+  /* Bigger wordmark on phones — the desktop clamp bottoms out at 3.25rem, which
+     left the hero feeling empty. Fill the width; the morph SVGs are sized in em
+     so they scale up with it automatically. */
+  .home-assemble__headline {
+    font-size: clamp(4rem, 15vw, 5.5rem);
   }
 }

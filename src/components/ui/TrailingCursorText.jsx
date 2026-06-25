@@ -68,6 +68,11 @@ function TrailingCursorText({
     };
 
     const onMove = (e) => {
+      // Mouse-only: ignore touch (and pen) pointers so the trail never appears
+      // on phones/tablets that have no cursor. This keys off the input device,
+      // not the screen size — so a small window driven by an actual mouse still
+      // gets the trail, while a large touchscreen does not.
+      if (e.pointerType && e.pointerType !== 'mouse') return;
       mouseRef.current = { x: e.clientX, y: e.clientY };
       lastMove = performance.now();
     };
