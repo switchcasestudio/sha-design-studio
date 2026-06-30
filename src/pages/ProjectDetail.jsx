@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import { Target, Ruler, Users } from 'lucide-react';
 import { projects, getProjectById } from '@/data';
+import { getCaseStudy } from '@/data/caseStudies';
+import { getContentForProject } from '@/data/projectContent';
 import { siteConfig } from '@/utils/siteConfig';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import Lightbox from '@/components/ui/Lightbox';
@@ -59,9 +62,140 @@ function distinctiveLabels(titles) {
   });
 }
 
+// Hook: scroll-reveal props for a section, gated on the reduced-motion pref.
+function useReveal() {
+  const reduce = useReducedMotion();
+  if (reduce) return {};
+  return {
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-80px' },
+    transition: { ...spring, delay: 0.05 },
+  };
+}
+
+// ---------- Overview: Shiran's authored project narrative ----------
+// `entries` comes from getContentForProject — usually one, but a site project
+// can combine several deck entries (Garden of Adventures = rattle + packaging),
+// in which case each entry's title leads its own block.
+function ProjectOverview({ entries }) {
+  const reveal = useReveal();
+  const multi = entries.length > 1;
+  return (
+    <motion.section className="pd-overview" aria-label="Overview" {...reveal}>
+      <span className="pd-eyebrow">Overview</span>
+      <div className="pd-overview__body">
+        {entries.map((entry) => (
+          <div key={entry.id} className="pd-overview__entry">
+            {multi && (
+              <h3 className="pd-overview__entry-title">{entry.title}</h3>
+            )}
+            {entry.overview.map((paragraph, i) => (
+              <p key={i} className="pd-overview__para">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
+// ---------- The brief: Goals / Constraints / Users (cream panel) ----------
+function ProjectBrief({ brief }) {
+  const reveal = useReveal();
+  return (
+    <motion.section className="pd-brief" aria-label="Project brief" {...reveal}>
+      <span className="pd-eyebrow pd-eyebrow--ink">The brief</span>
+      <div className="pd-brief__panel">
+        <div className="pd-brief__col">
+          <Target className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
+          <h3 className="pd-brief__heading">Goals</h3>
+          <ul className="pd-brief__list">
+            {brief.goals.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="pd-brief__col">
+          <Ruler className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
+          <h3 className="pd-brief__heading">Constraints</h3>
+          <ul className="pd-brief__list">
+            {brief.constraints.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="pd-brief__col">
+          <Users className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
+          <h3 className="pd-brief__heading">Users</h3>
+          <p className="pd-brief__text">{brief.users}</p>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+// ---------- Process: numbered steps laid out horizontally ----------
+function ProjectTimeline({ steps }) {
+  const reveal = useReveal();
+  return (
+    <motion.section className="pd-process" aria-label="Design process" {...reveal}>
+      <span className="pd-eyebrow">Process</span>
+      <ol className="pd-process__track">
+        {steps.map((step) => (
+          <li key={step.n} className="pd-process__step">
+            <span className="pd-process__num">{step.n}</span>
+            <h3 className="pd-process__step-title">{step.title}</h3>
+            <p className="pd-process__step-text">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </motion.section>
+  );
+}
+
+// ---------- Sketches: two images, 50% of the container each ----------
+function ProjectSketches({ sketches }) {
+  const reveal = useReveal();
+  return (
+    <motion.section className="pd-sketches" aria-label="Sketches" {...reveal}>
+      <span className="pd-eyebrow">Sketches</span>
+      <div className="pd-sketches__grid">
+        {sketches.map((sketch, i) => (
+          <figure key={sketch.assetPath ?? i} className="pd-sketches__item">
+            {sketch.src ? (
+              <img
+                className="pd-sketches__image"
+                src={sketch.src}
+                alt={sketch.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div className="pd-sketches__placeholder" aria-hidden="true">
+                <span>Sketch</span>
+              </div>
+            )}
+            {sketch.caption && (
+              <figcaption className="pd-sketches__caption">
+                {sketch.caption}
+              </figcaption>
+            )}
+          </figure>
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
 function ProjectDetail() {
   const { projectId } = useParams();
   const project = getProjectById(projectId);
+  const caseStudy = getCaseStudy(projectId);
   // Index into the active image set currently open in the lightbox (null = closed)
   const [lightboxIndex, setLightboxIndex] = useState(null);
   // Which product collection (color world) is shown, for multi-collection projects
@@ -90,6 +224,17 @@ function ProjectDetail() {
 
   const index = projects.findIndex((p) => p.id === project.id);
   const nextProject = projects[(index + 1) % projects.length];
+
+  // Overview replaces the old header summary. Prefer Shiran's authored copy
+  // from the portfolio deck; fall back to the project's own summary for any
+  // project that has no deck entry yet, so every project still shows an Overview.
+  const authoredOverview = getContentForProject(projectId);
+  const overviewEntries =
+    authoredOverview.length > 0
+      ? authoredOverview
+      : project.summary
+        ? [{ id: project.id, title: project.title, overview: [project.summary] }]
+        : [];
 
   // Multi-collection projects show a switcher; selecting one swaps every
   // displayed image set to that collection. Single-collection projects fall
@@ -143,7 +288,10 @@ function ProjectDetail() {
                 {project.category}
               </span>
               <h1 className="project-detail__title">{project.title}</h1>
-              <p className="project-detail__summary">{project.summary}</p>
+
+              {overviewEntries.length > 0 && (
+                <ProjectOverview entries={overviewEntries} />
+              )}
 
               <motion.ul
                 className="project-detail__tags"
@@ -248,6 +396,15 @@ function ProjectDetail() {
           onClose={() => setLightboxIndex(null)}
           onNavigate={setLightboxIndex}
         />
+
+        {/* ---------- Case study: brief · sketches · process ---------- */}
+        {caseStudy?.brief && <ProjectBrief brief={caseStudy.brief} />}
+        {caseStudy?.sketches?.length > 0 && (
+          <ProjectSketches sketches={caseStudy.sketches} />
+        )}
+        {caseStudy?.process?.length > 0 && (
+          <ProjectTimeline steps={caseStudy.process} />
+        )}
 
         {/* ---------- Footer nav ---------- */}
         <nav className="project-detail__nav" aria-label="Project navigation">

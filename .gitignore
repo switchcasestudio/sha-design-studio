@@ -45,3 +45,7 @@ lerna-debug.log*
 # OS
 Thumbs.db
 .claude/
+
+# Large source/reference docs (kept local, not in git — too big / not site code)
+Portfolio_Shiran-Bar.pdf
+Design-SEO-Audit.pdf

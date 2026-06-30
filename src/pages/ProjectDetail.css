@@ -55,13 +55,6 @@
   margin-bottom: var(--space-6);
 }
 
-.project-detail__summary {
-  font-size: var(--text-xl);
-  line-height: var(--leading-relaxed);
-  max-width: 48ch;
-  margin-bottom: var(--space-8);
-}
-
 /* ---------- Meta sidebar ---------- */
 .project-detail__aside {
   border-left: 1px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
@@ -251,6 +244,241 @@
   line-height: var(--leading-snug);
 }
 
+/* ==========================================================================
+   Case study: brief · process · sketches
+   These sections sit on the orange page; the brief is a cream panel (magazine
+   rhythm), process + sketches stay open on orange with cream text.
+   ========================================================================== */
+
+/* Shared eyebrow label — mirrors the header category style */
+.pd-eyebrow {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-cream);
+  opacity: 0.85;
+  margin-bottom: var(--space-6);
+}
+
+.pd-eyebrow--ink {
+  color: var(--color-ink);
+  opacity: 0.55;
+}
+
+/* ---------- Overview (authored narrative — sits between title and tags) ---------- */
+.pd-overview {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.pd-overview__body {
+  /* Comfortable reading measure for long-form copy on the orange panel */
+  max-width: 68ch;
+}
+
+.pd-overview__entry + .pd-overview__entry {
+  margin-top: var(--space-10);
+}
+
+.pd-overview__entry-title {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-cream);
+  margin-bottom: var(--space-4);
+}
+
+.pd-overview__para {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-cream);
+}
+
+.pd-overview__para + .pd-overview__para {
+  margin-top: var(--space-5);
+}
+
+/* ---------- The brief (Goals / Constraints / Users) ---------- */
+.pd-brief {
+  margin-top: var(--space-20);
+}
+
+.pd-brief__panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-10);
+  background-color: var(--color-cream-soft);
+  color: var(--color-ink);
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-8), 4vw, var(--space-12));
+  box-shadow: var(--shadow-card);
+}
+
+.pd-brief__col + .pd-brief__col {
+  border-left: 1px solid var(--color-border);
+  padding-left: var(--space-10);
+}
+
+.pd-brief__icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-orange);
+  margin-bottom: var(--space-4);
+}
+
+.pd-brief__heading {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-orange);
+  margin-bottom: var(--space-4);
+}
+
+.pd-brief__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pd-brief__list li {
+  position: relative;
+  padding-left: var(--space-5);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-ink-soft);
+}
+
+.pd-brief__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-orange);
+}
+
+.pd-brief__text {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-ink-soft);
+}
+
+/* ---------- Process (horizontal timeline) ---------- */
+.pd-process {
+  margin-top: var(--space-20);
+}
+
+.pd-process__track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  /* Three shared rows (number · title · text). Each step is a subgrid spanning
+     them, so titles AND the text below them line up across every column no
+     matter how many lines a title wraps to. */
+  grid-template-rows: auto auto auto;
+  column-gap: var(--space-6);
+  row-gap: 0;
+}
+
+.pd-process__step {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  /* Adjacent borders form one continuous timeline rail across the row */
+  border-top: 2px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
+}
+
+.pd-process__num {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  line-height: 1;
+  color: var(--color-cream);
+  /* margins live inside the grid row → they don't break cross-column alignment */
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.pd-process__step-title {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  color: var(--color-cream);
+  margin-bottom: var(--space-3);
+}
+
+.pd-process__step-text {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: color-mix(in srgb, var(--color-cream) 85%, transparent);
+}
+
+/* ---------- Sketches (two images, 50% each) ---------- */
+.pd-sketches {
+  margin-top: var(--space-20);
+}
+
+/* One sketch spanning the full container width (the container itself caps at
+   --max-width-content, 1280px). */
+.pd-sketches__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+.pd-sketches__item {
+  margin: 0;
+}
+
+.pd-sketches__image,
+.pd-sketches__placeholder {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  border-radius: var(--radius-xl);
+  background-color: var(--color-cream-soft);
+  box-shadow: var(--shadow-md);
+  display: block;
+  object-fit: cover;
+}
+
+/* Brand-sanctioned placeholder for missing imagery (diagonal stripes) */
+.pd-sketches__placeholder {
+  display: grid;
+  place-items: center;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-cream-soft) 0,
+    var(--color-cream-soft) 14px,
+    var(--color-cream) 14px,
+    var(--color-cream) 28px
+  );
+}
+
+.pd-sketches__placeholder span {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.pd-sketches__caption {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: color-mix(in srgb, var(--color-cream) 85%, transparent);
+}
+
 /* ---------- Footer nav ---------- */
 .project-detail__nav {
   display: flex;
@@ -312,5 +540,47 @@
 
   .project-detail__next {
     text-align: left;
+  }
+}
+
+/* ---------- Case study responsive ---------- */
+
+/* Process keeps reading horizontally on smaller screens via a scroll track
+   that bleeds to the viewport edges (clear "more to scroll" affordance). */
+@media (max-width: 1024px) {
+  .pd-process__track {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(210px, 1fr);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-bottom: var(--space-4);
+  }
+
+  .pd-process__step {
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Brief stacks into a single column; dividers move from left to top */
+  .pd-brief__panel {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .pd-brief__col + .pd-brief__col {
+    border-left: 0;
+    border-top: 1px solid var(--color-border);
+    padding-left: 0;
+    padding-top: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  /* Sketches stack one above the other */
+  .pd-sketches__grid {
+    grid-template-columns: 1fr;
   }
 }
