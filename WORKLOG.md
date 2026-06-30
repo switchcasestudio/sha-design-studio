@@ -4,6 +4,29 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-06-30 — Project detail: layout polish + responsive
+
+Refinements to the project-detail template (`ProjectDetail.jsx` / `.css`) and the
+shared `PhotoGallery` — all apply across every project.
+
+- **Bigger gallery previews.** Fanned photos 220 → 280px, step 175 → 205px, so the
+  stack fills the container (~1100px) instead of leaving side gaps. The responsive
+  scale now lives on a non-motion wrapper (`.photo-fan__scaler`) — Framer Motion
+  owns the stage's `transform`, so a CSS scale there was being overridden. Scale is
+  set at breakpoints (unitless values; a `calc(100vw/…)` ratio is invalid CSS and
+  was silently dropped). Verified no horizontal overflow at any width.
+- **Meta column flush-right.** `CLIENT / ROLE / GOALS` aligns to the container's
+  right edge — same right edge as the gallery, process, and sketches.
+- **Process responsive.** 6 columns → 3 (tablet) → 2 (phone); subgrid dropped below
+  desktop so wrapped rows lay out cleanly.
+- **Sketches responsive.** Banner aspect 21:9 → 16:9 → 4:3 as the screen narrows.
+
+Earlier same-day work (committed in `cd1a252`): Overview moved between title and
+tags, Brief panel removed (Goals moved into the aside; Constraints/Users dropped),
+Process now before Sketches, header meta rebalanced, footer active-link dot removed.
+
+---
+
 ## 2026-06-30 — Project detail: authored Overview + case-study sections
 
 **What shipped**

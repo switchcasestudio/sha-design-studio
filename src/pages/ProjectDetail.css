@@ -10,11 +10,13 @@
   margin-bottom: var(--space-12);
 }
 
-/* Identity (category/title/summary/tags) left, reference meta right */
+/* Identity (category/title/tags) left, reference meta flush to the right edge
+   so it lines up with the gallery / process / sketches that follow. The meta is
+   a snug fixed-ish column (not a stretchy 1fr); the intro fills the rest. */
 .project-detail__header-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
-  gap: var(--space-12);
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  gap: clamp(var(--space-10), 6vw, var(--space-20));
   align-items: start;
 }
 
@@ -470,28 +472,43 @@
 
 /* ---------- Case study responsive ---------- */
 
-/* Process keeps reading horizontally on smaller screens via a scroll track
-   that bleeds to the viewport edges (clear "more to scroll" affordance). */
+/* Process: 6 across on desktop → 3 → 2 as the screen narrows. Below desktop we
+   drop the subgrid (each step becomes a self-contained block under its rail) so
+   wrapped rows lay out cleanly. */
 @media (max-width: 1024px) {
   .pd-process__track {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(210px, 1fr);
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    margin-inline: calc(-1 * var(--gutter));
-    padding-inline: var(--gutter);
-    padding-bottom: var(--space-4);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: none;
+    column-gap: var(--space-8);
+    row-gap: var(--space-12);
   }
 
   .pd-process__step {
-    scroll-snap-align: start;
+    display: block;
+    grid-row: auto;
   }
 }
 
-@media (max-width: 768px) {
-  /* Sketches stack one above the other */
-  .pd-sketches__grid {
-    grid-template-columns: 1fr;
+@media (max-width: 620px) {
+  .pd-process__track {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-5);
+    row-gap: var(--space-10);
+  }
+}
+
+/* Sketches: the 21:9 banner gets too short on small screens — let it grow
+   taller as the viewport narrows so it keeps real presence. */
+@media (max-width: 1024px) {
+  .pd-sketches__image,
+  .pd-sketches__placeholder {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 640px) {
+  .pd-sketches__image,
+  .pd-sketches__placeholder {
+    aspect-ratio: 4 / 3;
   }
 }

@@ -1,9 +1,20 @@
 .photo-fan {
+  /* The fan footprint is ~1100px (fixed motion offsets), so it's scaled down at
+     breakpoints to fit narrower screens. Height tracks the same scale so the
+     empty band above PROCESS shrinks with the fan. */
+  --fan-scale: 1;
   position: relative;
-  height: 320px;
-  margin-block: var(--space-4) var(--space-10);
+  height: calc(380px * var(--fan-scale));
+  margin-block: var(--space-6) var(--space-12);
   /* Photos fan beyond the container — don't clip the drag/hover play */
   overflow: visible;
+}
+
+/* Non-motion wrapper carries the scale (Framer Motion owns the stage's transform) */
+.photo-fan__scaler {
+  height: 380px;
+  transform: scale(var(--fan-scale));
+  transform-origin: top center;
 }
 
 .photo-fan__stage {
@@ -22,8 +33,8 @@
 
 .photo-fan__anchor {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 280px;
+  height: 280px;
 }
 
 .photo-fan__item {
@@ -33,8 +44,8 @@
 }
 
 .photo-fan__photo {
-  width: 220px;
-  height: 220px;
+  width: 280px;
+  height: 280px;
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
@@ -56,23 +67,44 @@
   pointer-events: none;
 }
 
-/* Scale the whole fan down on narrower screens (motion offsets are fixed px) */
-@media (max-width: 1100px) {
+/* Scale the fan to fit each width (set on .photo-fan; inherited by the scaler
+   for the transform and used by the height calc). */
+@media (max-width: 1180px) {
   .photo-fan {
-    height: 260px;
+    --fan-scale: 0.82;
   }
+}
 
-  .photo-fan__stage {
-    transform: scale(0.75);
+@media (max-width: 1000px) {
+  .photo-fan {
+    --fan-scale: 0.7;
+  }
+}
+
+@media (max-width: 860px) {
+  .photo-fan {
+    --fan-scale: 0.58;
   }
 }
 
 @media (max-width: 720px) {
   .photo-fan {
-    height: 190px;
+    --fan-scale: 0.5;
+    margin-block: var(--space-4) var(--space-8);
   }
+}
 
-  .photo-fan__stage {
-    transform: scale(0.5);
+@media (max-width: 600px) {
+  .photo-fan {
+    --fan-scale: 0.42;
+    /* Safety net on the smallest phones: keep any residual fan bleed from
+       pushing a horizontal page scrollbar. */
+    overflow: clip;
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-fan {
+    --fan-scale: 0.36;
   }
 }

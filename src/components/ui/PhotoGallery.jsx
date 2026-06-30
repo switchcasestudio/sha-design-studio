@@ -12,8 +12,8 @@ import './PhotoGallery.css';
  * snapping back when released.
  */
 
-const Y_OFFSETS = [15, 32, 8, 22, 44];
-const STEP = 175; // horizontal distance between photo centers, px
+const Y_OFFSETS = [16, 36, 8, 24, 48];
+const STEP = 205; // horizontal distance between photo centers, px
 
 function randomRotation(direction) {
   return (Math.random() * 3 + 1) * (direction === 'left' ? -1 : 1);
@@ -110,12 +110,15 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
 
   return (
     <div className="photo-fan">
-      <motion.div
-        className="photo-fan__stage"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-      >
+      {/* Plain (non-motion) wrapper owns the responsive scale — Framer Motion
+          manages `transform` on the stage, so the scale can't live there. */}
+      <div className="photo-fan__scaler">
+        <motion.div
+          className="photo-fan__stage"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isVisible ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
         <motion.div
           className="photo-fan__stack"
           variants={containerVariants}
@@ -144,7 +147,8 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
             ))}
           </div>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
