@@ -1,0 +1,58 @@
+.social-proof {
+  background-color: var(--color-cream);
+  padding-block: clamp(var(--space-12), 7vw, var(--space-20));
+}
+
+.social-proof__label {
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-bottom: clamp(var(--space-6), 3vw, var(--space-10));
+}
+
+/* Full-bleed track so the logos can run edge to edge under the soft fades */
+.social-proof__viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.social-proof__logo {
+  /* Normalize by height so mixed logo shapes share a baseline */
+  height: clamp(28px, 3.4vw, 42px);
+  width: auto;
+  object-fit: contain;
+  user-select: none;
+}
+
+/* Soft edges: a cream gradient guarantees the logos dissolve into the canvas,
+   with the progressive-blur layers (inside) adding the frosted falloff. */
+.social-proof__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(56px, 12vw, 180px);
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
+.social-proof__fade--left {
+  left: 0;
+  background: linear-gradient(
+    to left,
+    rgba(245, 240, 225, 0) 0%,
+    var(--color-cream) 78%
+  );
+}
+
+.social-proof__fade--right {
+  right: 0;
+  background: linear-gradient(
+    to right,
+    rgba(245, 240, 225, 0) 0%,
+    var(--color-cream) 78%
+  );
+}

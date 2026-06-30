@@ -3,6 +3,7 @@ import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
 import HomeAssemble from '@/components/sections/HomeAssemble';
+import SocialProof from '@/components/sections/SocialProof';
 import TextPath from '@/components/ui/TextPath';
 import { reducedReveal, slideUp } from '@/lib/motion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -43,6 +44,9 @@ function Home() {
           and brand motifs (HeadlineMorph) and a cursor follower trails inside
           the section — no scroll-driven entrance. */}
       <HomeAssemble />
+
+      {/* ---------- Social proof: partner / client logo marquee ---------- */}
+      <SocialProof />
 
       {/* ---------- "What I Do" CTA ---------- */}
       <ColorWorld className="home-what">

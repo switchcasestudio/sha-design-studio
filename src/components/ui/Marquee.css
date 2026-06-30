@@ -1,0 +1,53 @@
+.marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  /* Right-to-left: the track slides left by exactly one group, then loops */
+  animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--marquee-gap, var(--space-16));
+  /* Trailing gap so the two groups join with even spacing (seamless loop) */
+  padding-right: var(--marquee-gap, var(--space-16));
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Let visitors pause the strip to read it */
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-8);
+  }
+
+  /* Show a single static set, centered */
+  .marquee__group {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-8);
+    padding-right: 0;
+  }
+
+  .marquee__group[aria-hidden='true'] {
+    display: none;
+  }
+}
