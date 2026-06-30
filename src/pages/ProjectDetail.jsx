@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
-import { Target, Ruler, Users } from 'lucide-react';
 import { projects, getProjectById } from '@/data';
 import { getCaseStudy } from '@/data/caseStudies';
 import { getContentForProject } from '@/data/projectContent';
@@ -97,43 +96,6 @@ function ProjectOverview({ entries }) {
             ))}
           </div>
         ))}
-      </div>
-    </motion.section>
-  );
-}
-
-// ---------- The brief: Goals / Constraints / Users (cream panel) ----------
-function ProjectBrief({ brief }) {
-  const reveal = useReveal();
-  return (
-    <motion.section className="pd-brief" aria-label="Project brief" {...reveal}>
-      <span className="pd-eyebrow pd-eyebrow--ink">The brief</span>
-      <div className="pd-brief__panel">
-        <div className="pd-brief__col">
-          <Target className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
-          <h3 className="pd-brief__heading">Goals</h3>
-          <ul className="pd-brief__list">
-            {brief.goals.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="pd-brief__col">
-          <Ruler className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
-          <h3 className="pd-brief__heading">Constraints</h3>
-          <ul className="pd-brief__list">
-            {brief.constraints.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="pd-brief__col">
-          <Users className="pd-brief__icon" strokeWidth={1.75} aria-hidden="true" />
-          <h3 className="pd-brief__heading">Users</h3>
-          <p className="pd-brief__text">{brief.users}</p>
-        </div>
       </div>
     </motion.section>
   );
@@ -332,6 +294,18 @@ function ProjectDetail() {
                   </dd>
                 </div>
 
+                {caseStudy?.brief?.goals?.length > 0 && (
+                  <div className="project-detail__meta-item">
+                    <dt>Goals</dt>
+                    <dd>
+                      <ul className="project-detail__roles">
+                        {caseStudy.brief.goals.map((goal) => (
+                          <li key={goal}>{goal}</li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                )}
               </dl>
             </aside>
           </div>
@@ -397,13 +371,12 @@ function ProjectDetail() {
           onNavigate={setLightboxIndex}
         />
 
-        {/* ---------- Case study: brief · sketches · process ---------- */}
-        {caseStudy?.brief && <ProjectBrief brief={caseStudy.brief} />}
-        {caseStudy?.sketches?.length > 0 && (
-          <ProjectSketches sketches={caseStudy.sketches} />
-        )}
+        {/* ---------- Case study: process · sketches ---------- */}
         {caseStudy?.process?.length > 0 && (
           <ProjectTimeline steps={caseStudy.process} />
+        )}
+        {caseStudy?.sketches?.length > 0 && (
+          <ProjectSketches sketches={caseStudy.sketches} />
         )}
 
         {/* ---------- Footer nav ---------- */}

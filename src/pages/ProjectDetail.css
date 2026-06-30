@@ -262,11 +262,6 @@
   margin-bottom: var(--space-6);
 }
 
-.pd-eyebrow--ink {
-  color: var(--color-ink);
-  opacity: 0.55;
-}
-
 /* ---------- Overview (authored narrative — sits between title and tags) ---------- */
 .pd-overview {
   margin-top: var(--space-6);
@@ -299,76 +294,6 @@
 
 .pd-overview__para + .pd-overview__para {
   margin-top: var(--space-5);
-}
-
-/* ---------- The brief (Goals / Constraints / Users) ---------- */
-.pd-brief {
-  margin-top: var(--space-20);
-}
-
-.pd-brief__panel {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-10);
-  background-color: var(--color-cream-soft);
-  color: var(--color-ink);
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-8), 4vw, var(--space-12));
-  box-shadow: var(--shadow-card);
-}
-
-.pd-brief__col + .pd-brief__col {
-  border-left: 1px solid var(--color-border);
-  padding-left: var(--space-10);
-}
-
-.pd-brief__icon {
-  width: 40px;
-  height: 40px;
-  color: var(--color-orange);
-  margin-bottom: var(--space-4);
-}
-
-.pd-brief__heading {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: var(--leading-snug);
-  color: var(--color-orange);
-  margin-bottom: var(--space-4);
-}
-
-.pd-brief__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.pd-brief__list li {
-  position: relative;
-  padding-left: var(--space-5);
-  font-size: var(--text-base);
-  line-height: var(--leading-normal);
-  color: var(--color-ink-soft);
-}
-
-.pd-brief__list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.6em;
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-orange);
-}
-
-.pd-brief__text {
-  font-size: var(--text-base);
-  line-height: var(--leading-relaxed);
-  color: var(--color-ink-soft);
 }
 
 /* ---------- Process (horizontal timeline) ---------- */
@@ -565,20 +490,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Brief stacks into a single column; dividers move from left to top */
-  .pd-brief__panel {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .pd-brief__col + .pd-brief__col {
-    border-left: 0;
-    border-top: 1px solid var(--color-border);
-    padding-left: 0;
-    padding-top: var(--space-8);
-    margin-top: var(--space-8);
-  }
-
   /* Sketches stack one above the other */
   .pd-sketches__grid {
     grid-template-columns: 1fr;

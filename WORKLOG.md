@@ -23,17 +23,21 @@ A running record of notable work and follow-ups. Newest entries on top.
   content fills any project that hasn't been customized, so the layout applies
   app-wide. Treasure the Ocean Gymini has real, specific content.
 
+**Update:** the standalone "Brief" panel was later removed. **Goals** now live in
+the header aside (under Client / Role); Constraints / Users are no longer shown.
+Section order below the gallery is now **Process → Sketches**.
+
 ### ⚠️ Follow-up — replace placeholder case-study content (per project)
 
-The **Brief** and **Process** sections currently fall back to **shared default
-content that is identical across every project except Treasure the Ocean**. This
-was intentional — it makes the new layout appear on all projects now — but it
-reads as templated and **must be replaced with real per-project content before
-launch.**
+The aside **Goals** and the **Process** steps currently fall back to **shared
+default content that is identical across every project except Treasure the
+Ocean**. This was intentional — it makes the layout appear on all projects now —
+but it reads as templated and **must be replaced with real per-project content
+before launch.**
 
 For each project, supply and drop into its entry in `src/data/caseStudies.js`:
 
-- **Brief** — real Goals / Constraints / Users
+- **Goals** — real `brief.goals` (Constraints / Users in the data are unused now)
 - **Process** — real steps (or confirm the generic process is fine to keep)
 - **Sketches** — the actual sketch image(s), at
   `src/assets/images/case-studies/<project-id>/sketch-1.webp`
