@@ -267,12 +267,15 @@
   font-size: var(--text-sm);
 }
 
-/* Colorway swatches are just color options, so keep them small (3-up, tiny
-   labels). The family/mixed "product cards" stay at the 2-up size above. */
+/* Colorway swatches are just color options: two per row (five reads as a tidy
+   2-column, 3-row block), left-aligned and sized so the grid spans about the
+   width of the meta text above (rather than the full, wider column). Small
+   labels. The family/mixed "product cards" keep the 2-up size above. */
 .project-detail__collections--aside:not(.project-detail__collections--cards)
   .project-detail__swatches {
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
+  grid-template-columns: repeat(2, minmax(0, 88px));
+  gap: var(--space-4);
+  justify-content: start;
 }
 
 .project-detail__collections--aside:not(.project-detail__collections--cards)
@@ -367,19 +370,32 @@
 }
 
 .pd-process__step {
+  position: relative;
   display: grid;
   grid-template-rows: subgrid;
   grid-row: span 3;
   /* Adjacent borders form one continuous timeline rail across the row */
   border-top: 2px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
-  /* Motion owns the hover lift (transform); CSS owns the rail colour so the two
-     never fight. */
-  transition: border-top-color var(--duration-base) var(--ease-out);
 }
 
-/* Hover: the rail above the step lights up to full cream and its number pops */
-.pd-process__step:hover {
-  border-top-color: var(--color-cream);
+/* Hover cue: a bright cream bar fills the rail left→right (over the dim base
+   rail), so together with the lift + number pop the active step reads clearly.
+   Motion owns the lift transform; CSS owns everything else so they don't fight. */
+.pd-process__step::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-cream);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.pd-process__step:hover::before {
+  transform: scaleX(1);
 }
 
 .pd-process__num {
@@ -395,7 +411,7 @@
 }
 
 .pd-process__step:hover .pd-process__num {
-  transform: scale(1.08);
+  transform: scale(1.15);
 }
 
 .pd-process__step-title {
@@ -411,6 +427,11 @@
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: color-mix(in srgb, var(--color-cream) 85%, transparent);
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.pd-process__step:hover .pd-process__step-text {
+  color: var(--color-cream);
 }
 
 /* ---------- Sketches (two images, 50% each) ---------- */

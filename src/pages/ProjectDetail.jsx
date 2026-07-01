@@ -130,7 +130,7 @@ function ProjectTimeline({ steps }) {
             key={step.n}
             className="pd-process__step"
             variants={reduce ? undefined : processStep}
-            whileHover={reduce ? undefined : { y: -6 }}
+            whileHover={reduce ? undefined : { y: -8 }}
             transition={{ type: 'spring', stiffness: 320, damping: 22 }}
           >
             <span className="pd-process__num">{step.n}</span>

@@ -19,6 +19,13 @@
   gap: var(--space-5);
 }
 
+/* Optical nudge: the display font's top overshoot lifts the line box above the
+   visible cap, so centring alone floats the mark's dot above "SHA". A hair of
+   translate drops the dot onto the cap line. */
+.footer__logo {
+  transform: translateY(3px);
+}
+
 .footer__wordmark {
   font-family: var(--font-display);
   font-size: clamp(var(--text-xl), 2.5vw, var(--text-3xl));
@@ -42,6 +49,12 @@
   color: var(--text-muted);
 }
 
+/* Optical nudge: the wide "W" in WHO makes the label read as sitting a hair left
+   of the bio text below it; 1px of left padding lines them up. */
+.footer__eyebrow--who {
+  padding-left: 1px;
+}
+
 /* Links spread evenly across the column; wraps to a second row if needed */
 .footer__list {
   display: flex;
@@ -52,7 +65,9 @@
 
 .footer__link {
   display: inline-flex;
-  align-items: center;
+  /* Top-align the label so the links' first line matches the "Who I Am" text,
+     while the 44px min-height still gives a comfortable tap target below. */
+  align-items: flex-start;
   gap: var(--space-2);
   min-height: 44px; /* comfortable footer tap target */
   font-size: var(--text-xl);

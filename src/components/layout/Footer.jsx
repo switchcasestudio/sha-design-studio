@@ -20,7 +20,10 @@ function Footer() {
             transition={{ duration: 0.5 }}
           >
             <div className="footer__ident">
-              <Logo size={150} variant="orange" />
+              {/* Sized to the wordmark's visible cap-to-baseline height (SHA cap
+                  → STUDIO baseline), with a tiny nudge down so the mark's dot
+                  meets the cap line instead of poking above the font's overshoot. */}
+              <Logo size={138} variant="orange" className="footer__logo" />
               <p className="footer__wordmark">
                 Sha
                 <br />
@@ -58,7 +61,7 @@ function Footer() {
             </nav>
 
             <div className="footer__col">
-              <h4 className="footer__eyebrow">Who I Am</h4>
+              <h4 className="footer__eyebrow footer__eyebrow--who">Who I Am</h4>
               {/* TODO(shiran): replace with a real one-line bio (who / where /
                   availability) — this slot previously repeated the hero tagline
                   verbatim. Placeholder below; confirm wording + location. */}
