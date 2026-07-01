@@ -67,16 +67,17 @@ function Projects() {
                           loading={idx < 3 ? 'eager' : 'lazy'}
                         />
                       )}
-                    </div>
-                    <div className="overview-card__body">
-                      <div className="overview-card__tags">
+                      {/* Tag + title overlaid on a scrim at the bottom of the
+                          image, so every card is a single fixed-ratio tile and
+                          the grid rows stay evenly spaced. */}
+                      <div className="overview-card__body">
                         {project.client && (
                           <span className="overview-card__tag overview-card__tag--client">
                             {project.client}
                           </span>
                         )}
+                        <h2 className="overview-card__title">{project.title}</h2>
                       </div>
-                      <h2 className="overview-card__title">{project.title}</h2>
                     </div>
                   </Link>
                 </motion.li>

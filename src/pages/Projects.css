@@ -106,18 +106,34 @@
   transform: scale(1.05);
 }
 
+/* Scrim: clear at the top, deepening to near-opaque ink at the bottom so the
+   tag + title stay readable over any product shot. Sits above the image, below
+   the text. */
+.overview-card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26, 26, 26, 0.82) 0%,
+    rgba(26, 26, 26, 0.55) 12%,
+    rgba(26, 26, 26, 0) 38%
+  );
+  pointer-events: none;
+}
+
+/* Tag + title overlaid at the bottom of the image, on top of the scrim */
 .overview-card__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
-}
-
-/* Single client pill — cream fill, ink text (15.3:1) */
-.overview-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  padding: var(--space-5);
 }
 
 .overview-card__tag {
