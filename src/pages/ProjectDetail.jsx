@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
+import { ZoomIn } from 'lucide-react';
 import { projects, getProjectById } from '@/data';
 import { getCaseStudy } from '@/data/caseStudies';
 import { getContentForProject } from '@/data/projectContent';
@@ -19,6 +20,16 @@ const tagsContainer = {
 const tagItem = {
   hidden: { opacity: 0, y: 8, scale: 0.92 },
   show: { opacity: 1, y: 0, scale: 1, transition: spring },
+};
+
+// Process steps cascade in one after another as the section scrolls into view.
+const processTrack = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+};
+const processStep = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: spring },
 };
 
 // How a project's multiple collections relate to each other. Kept app-side
@@ -103,52 +114,90 @@ function ProjectOverview({ entries }) {
 
 // ---------- Process: numbered steps laid out horizontally ----------
 function ProjectTimeline({ steps }) {
-  const reveal = useReveal();
+  const reduce = useReducedMotion();
   return (
-    <motion.section className="pd-process" aria-label="Design process" {...reveal}>
+    <section className="pd-process" aria-label="Design process">
       <span className="pd-eyebrow">Process</span>
-      <ol className="pd-process__track">
+      <motion.ol
+        className="pd-process__track"
+        variants={reduce ? undefined : processTrack}
+        initial={reduce ? false : 'hidden'}
+        whileInView={reduce ? undefined : 'show'}
+        viewport={{ once: true, margin: '-80px' }}
+      >
         {steps.map((step) => (
-          <li key={step.n} className="pd-process__step">
+          <motion.li
+            key={step.n}
+            className="pd-process__step"
+            variants={reduce ? undefined : processStep}
+            whileHover={reduce ? undefined : { y: -6 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+          >
             <span className="pd-process__num">{step.n}</span>
             <h3 className="pd-process__step-title">{step.title}</h3>
             <p className="pd-process__step-text">{step.text}</p>
-          </li>
+          </motion.li>
         ))}
-      </ol>
-    </motion.section>
+      </motion.ol>
+    </section>
   );
 }
 
-// ---------- Sketches: two images, 50% of the container each ----------
-function ProjectSketches({ sketches }) {
+// ---------- Sketches: full-width image(s), click to open in the lightbox ----------
+function ProjectSketches({ sketches, onOpen }) {
   const reveal = useReveal();
+  // Track each real image's position in the (placeholder-free) lightbox set.
+  let lightboxIndex = -1;
+
   return (
     <motion.section className="pd-sketches" aria-label="Sketches" {...reveal}>
       <span className="pd-eyebrow">Sketches</span>
       <div className="pd-sketches__grid">
-        {sketches.map((sketch, i) => (
-          <figure key={sketch.assetPath ?? i} className="pd-sketches__item">
-            {sketch.src ? (
-              <img
-                className="pd-sketches__image"
-                src={sketch.src}
-                alt={sketch.alt}
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <div className="pd-sketches__placeholder" aria-hidden="true">
-                <span>Sketch</span>
-              </div>
-            )}
-            {sketch.caption && (
-              <figcaption className="pd-sketches__caption">
-                {sketch.caption}
-              </figcaption>
-            )}
-          </figure>
-        ))}
+        {sketches.map((sketch, i) => {
+          const interactive = Boolean(sketch.src && onOpen);
+          if (sketch.src) lightboxIndex += 1;
+          const at = lightboxIndex;
+
+          const media = sketch.src ? (
+            <img
+              className="pd-sketches__image"
+              src={sketch.src}
+              alt={sketch.alt}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div className="pd-sketches__placeholder" aria-hidden="true">
+              <span>Sketch</span>
+            </div>
+          );
+
+          return (
+            <figure key={sketch.assetPath ?? i} className="pd-sketches__item">
+              {interactive ? (
+                <button
+                  type="button"
+                  className="pd-sketches__frame pd-sketches__frame--button"
+                  onClick={() => onOpen(at)}
+                  aria-label={`Open sketch: ${sketch.alt}`}
+                >
+                  {media}
+                  <span className="pd-sketches__zoom" aria-hidden="true">
+                    <ZoomIn size={20} />
+                  </span>
+                </button>
+              ) : (
+                <div className="pd-sketches__frame">{media}</div>
+              )}
+
+              {sketch.caption && (
+                <figcaption className="pd-sketches__caption">
+                  {sketch.caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        })}
       </div>
     </motion.section>
   );
@@ -160,6 +209,8 @@ function ProjectDetail() {
   const caseStudy = getCaseStudy(projectId);
   // Index into the active image set currently open in the lightbox (null = closed)
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  // Separate lightbox for the sketch image(s)
+  const [sketchIndex, setSketchIndex] = useState(null);
   // Which product collection (color world) is shown, for multi-collection projects
   const [collectionIndex, setCollectionIndex] = useState(0);
 
@@ -174,10 +225,11 @@ function ProjectDetail() {
     };
   }, [project]);
 
-  // Reset the collection + lightbox when navigating to a different project
+  // Reset the collection + lightboxes when navigating to a different project
   useEffect(() => {
     setCollectionIndex(0);
     setLightboxIndex(null);
+    setSketchIndex(null);
   }, [projectId]);
 
   if (!project) {
@@ -224,6 +276,9 @@ function ProjectDetail() {
   // photos was removed and will be replaced by creation/process imagery later.
   const FAN_COUNT = 5;
   const fanImages = activeImages.slice(0, FAN_COUNT);
+
+  // Real (non-placeholder) sketches, for the sketch lightbox
+  const sketchImages = (caseStudy?.sketches ?? []).filter((s) => s.src);
 
   const selectCollection = (i) => {
     setCollectionIndex(i);
@@ -376,8 +431,18 @@ function ProjectDetail() {
           <ProjectTimeline steps={caseStudy.process} />
         )}
         {caseStudy?.sketches?.length > 0 && (
-          <ProjectSketches sketches={caseStudy.sketches} />
+          <ProjectSketches
+            sketches={caseStudy.sketches}
+            onOpen={sketchImages.length > 0 ? setSketchIndex : undefined}
+          />
         )}
+
+        <Lightbox
+          images={sketchImages}
+          index={sketchIndex}
+          onClose={() => setSketchIndex(null)}
+          onNavigate={setSketchIndex}
+        />
 
         {/* ---------- Footer nav ---------- */}
         <nav className="project-detail__nav" aria-label="Project navigation">

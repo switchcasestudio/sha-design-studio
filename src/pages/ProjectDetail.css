@@ -323,6 +323,14 @@
   grid-row: span 3;
   /* Adjacent borders form one continuous timeline rail across the row */
   border-top: 2px solid color-mix(in srgb, var(--color-cream) 35%, transparent);
+  /* Motion owns the hover lift (transform); CSS owns the rail colour so the two
+     never fight. */
+  transition: border-top-color var(--duration-base) var(--ease-out);
+}
+
+/* Hover: the rail above the step lights up to full cream and its number pops */
+.pd-process__step:hover {
+  border-top-color: var(--color-cream);
 }
 
 .pd-process__num {
@@ -333,6 +341,12 @@
   /* margins live inside the grid row → they don't break cross-column alignment */
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.pd-process__step:hover .pd-process__num {
+  transform: scale(1.08);
 }
 
 .pd-process__step-title {
@@ -367,19 +381,87 @@
   margin: 0;
 }
 
-.pd-sketches__image,
-.pd-sketches__placeholder {
+/* The frame holds the rounded corners + shadow and clips the image so it can
+   zoom on hover without spilling. */
+.pd-sketches__frame {
+  position: relative;
+  display: block;
   width: 100%;
   aspect-ratio: 21 / 9;
   border-radius: var(--radius-xl);
+  overflow: hidden;
   background-color: var(--color-cream-soft);
   box-shadow: var(--shadow-md);
+  transition:
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.pd-sketches__frame:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Interactive (real image) variant: a button that opens the lightbox */
+.pd-sketches__frame--button {
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  appearance: none;
+  text-align: inherit;
+}
+
+.pd-sketches__frame--button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pd-sketches__frame--button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cream);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.pd-sketches__image {
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.pd-sketches__frame--button:hover .pd-sketches__image,
+.pd-sketches__frame--button:focus-visible .pd-sketches__image {
+  transform: scale(1.04);
+}
+
+/* Zoom affordance, revealed on hover/focus of the clickable frame */
+.pd-sketches__zoom {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  color: var(--color-cream);
+  background-color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.pd-sketches__frame--button:hover .pd-sketches__zoom,
+.pd-sketches__frame--button:focus-visible .pd-sketches__zoom {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Brand-sanctioned placeholder for missing imagery (diagonal stripes) */
 .pd-sketches__placeholder {
+  position: absolute;
+  inset: 0;
   display: grid;
   place-items: center;
   background-image: repeating-linear-gradient(
@@ -500,15 +582,13 @@
 /* Sketches: the 21:9 banner gets too short on small screens — let it grow
    taller as the viewport narrows so it keeps real presence. */
 @media (max-width: 1024px) {
-  .pd-sketches__image,
-  .pd-sketches__placeholder {
+  .pd-sketches__frame {
     aspect-ratio: 16 / 9;
   }
 }
 
 @media (max-width: 640px) {
-  .pd-sketches__image,
-  .pd-sketches__placeholder {
+  .pd-sketches__frame {
     aspect-ratio: 4 / 3;
   }
 }
