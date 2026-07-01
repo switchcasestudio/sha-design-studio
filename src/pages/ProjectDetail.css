@@ -246,6 +246,55 @@
   line-height: var(--leading-snug);
 }
 
+/* ---------- Collections in the aside (fills the right column) ---------- */
+.project-detail__collections--aside {
+  margin-top: var(--space-8);
+  margin-bottom: 0;
+}
+
+/* A compact 2-up grid that fits the narrow sidebar */
+.project-detail__collections--aside .project-detail__swatches {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+.project-detail__collections--aside .project-detail__swatch {
+  width: 100%;
+}
+
+.project-detail__collections--aside .project-detail__swatch-name {
+  font-size: var(--text-sm);
+}
+
+/* Colorway swatches are just color options, so keep them small (3-up, tiny
+   labels). The family/mixed "product cards" stay at the 2-up size above. */
+.project-detail__collections--aside:not(.project-detail__collections--cards)
+  .project-detail__swatches {
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.project-detail__collections--aside:not(.project-detail__collections--cards)
+  .project-detail__swatch-name {
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+}
+
+/* When the header stacks (aside goes full-width), let the swatches flow in a
+   left-aligned row like the original layout instead of two giant columns. */
+@media (max-width: 900px) {
+  .project-detail__collections--aside .project-detail__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+  }
+
+  .project-detail__collections--aside .project-detail__swatch {
+    width: clamp(76px, 20vw, 104px);
+  }
+}
+
 /* ==========================================================================
    Case study: brief · process · sketches
    These sections sit on the orange page; the brief is a cream panel (magazine
@@ -300,7 +349,7 @@
 
 /* ---------- Process (horizontal timeline) ---------- */
 .pd-process {
-  margin-top: var(--space-20);
+  margin-top: var(--space-12);
 }
 
 .pd-process__track {

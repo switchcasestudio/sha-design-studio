@@ -362,54 +362,55 @@ function ProjectDetail() {
                   </div>
                 )}
               </dl>
+
+              {/* Collection switcher lives in the aside so it fills the right
+                  column beside the overview; selecting one swaps the gallery. */}
+              {hasCollections && (
+                <div
+                  className={`project-detail__collections project-detail__collections--aside${
+                    useCards ? ' project-detail__collections--cards' : ''
+                  }`}
+                  role="group"
+                  aria-label={collectionsHeading}
+                >
+                  <span className="project-detail__collections-label">
+                    {collectionsHeading}
+                    {isFamily && (
+                      <span className="project-detail__collections-count">
+                        {' · '}
+                        {collections.length}
+                      </span>
+                    )}
+                  </span>
+                  <ul className="project-detail__swatches">
+                    {collections.map((collection, i) => (
+                      <li key={collection.slug}>
+                        <button
+                          type="button"
+                          className="project-detail__swatch"
+                          aria-pressed={i === collectionIndex}
+                          onClick={() => selectCollection(i)}
+                        >
+                          <span className="project-detail__swatch-thumb">
+                            <img
+                              src={collection.images[0].src}
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </span>
+                          <span className="project-detail__swatch-name">
+                            {collectionLabels[i]}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </aside>
           </div>
         </motion.header>
-
-        {/* ---------- Collection switcher (colorways or product family) ---------- */}
-        {hasCollections && (
-          <div
-            className={`project-detail__collections${
-              useCards ? ' project-detail__collections--cards' : ''
-            }`}
-            role="group"
-            aria-label={collectionsHeading}
-          >
-            <span className="project-detail__collections-label">
-              {collectionsHeading}
-              {isFamily && (
-                <span className="project-detail__collections-count">
-                  {' · '}
-                  {collections.length}
-                </span>
-              )}
-            </span>
-            <ul className="project-detail__swatches">
-              {collections.map((collection, i) => (
-                <li key={collection.slug}>
-                  <button
-                    type="button"
-                    className="project-detail__swatch"
-                    aria-pressed={i === collectionIndex}
-                    onClick={() => selectCollection(i)}
-                  >
-                    <span className="project-detail__swatch-thumb">
-                      <img
-                        src={collection.images[0].src}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </span>
-                    <span className="project-detail__swatch-name">
-                      {collectionLabels[i]}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {/* ---------- Fanned photo stack ---------- */}
         <PhotoGallery

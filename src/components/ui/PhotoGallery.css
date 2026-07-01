@@ -4,15 +4,17 @@
      empty band above PROCESS shrinks with the fan. */
   --fan-scale: 1;
   position: relative;
-  height: calc(380px * var(--fan-scale));
-  margin-block: var(--space-6) var(--space-12);
+  /* Reserve only what the fan actually occupies (~328px of photos) so it
+     doesn't leave a dead band before the next section. */
+  height: calc(340px * var(--fan-scale));
+  margin-block: var(--space-6) var(--space-10);
   /* Photos fan beyond the container — don't clip the drag/hover play */
   overflow: visible;
 }
 
 /* Non-motion wrapper carries the scale (Framer Motion owns the stage's transform) */
 .photo-fan__scaler {
-  height: 380px;
+  height: 340px;
   transform: scale(var(--fan-scale));
   transform-origin: top center;
 }

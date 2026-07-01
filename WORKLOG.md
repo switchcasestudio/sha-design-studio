@@ -4,6 +4,36 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-01 — Project detail: gallery gap + header balance
+
+- **Reduced the gallery → Process gap.** The fan box over-reserved height (380px
+  for ~328px of photos) and Process used a large top margin — ~134px of dead band.
+  Trimmed the fan/scaler height to 340px and Process margin to `space-12`; gap is
+  now ~60px.
+- **Balanced the header.** A readable overview next to a flush-right meta left a
+  dead middle + an empty right column. Moved the **collection switcher into the
+  aside** (under Client/Role/Goals) as a compact 2-up grid, so the right column
+  fills beside the overview. Works for both colorway swatches and the family/mixed
+  "cards" variant; on mobile the aside stacks full-width and the swatches flow in a
+  row. Projects without collections keep a meta-only sidebar.
+
+---
+
+## 2026-06-30 — Project detail: interactive Process + Sketches
+
+Made the two static case-study sections feel alive (all projects):
+
+- **Process** steps now stagger in as the section scrolls into view, and each
+  step responds to hover — it lifts (motion), its number scales up, and the
+  timeline rail above it brightens to full cream. Gated by `prefers-reduced-motion`.
+- **Sketches** frame clips its image so it zooms on hover, lifts with a deeper
+  shadow, shows a zoom icon, and opens the image full-screen in the lightbox on
+  click (same Lightbox as the gallery; a second lightbox instance wired for the
+  sketch set). Activates once a real image exists at the documented path; until
+  then the placeholder shows a subtle hover shadow.
+
+---
+
 ## 2026-06-30 — Project detail: layout polish + responsive
 
 Refinements to the project-detail template (`ProjectDetail.jsx` / `.css`) and the
