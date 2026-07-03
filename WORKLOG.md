@@ -4,6 +4,29 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Services: oversized motif in every card's header negative space (client feedback)
+
+On the yellow-canvas Services page, each card's motif now swells to fill the
+empty space under its header instead of sitting as a small top-right sticker.
+
+- **All four cards** get it (client: applying it to only some read as a
+  mistake), each shape in a colour paired to its own card (no more all-yellow):
+  orange card → **cream** daisy, ink card → **orange** star, blue card → coral
+  heart, cream card → blue clover. Four distinct pairings down the page.
+- The motif is anchored low (`bottom: -space-32`, `left: -space-8`), sized
+  `clamp(170px, 20vw, 280px)` — a bit smaller than the first pass per the
+  client — and sits **behind** the text (`z-index: 0`; both columns raised to
+  `z-index: 1`). The deep bottom offset keeps its top edge clear of the
+  top-anchored header, including the cream card's 3-line title.
+- Cropping is now `overflow: hidden` on the card (not the earlier
+  yellow-on-yellow bleed trick, which only worked for yellow motifs on dark
+  cards — a blue clover would have shown its bleed on the yellow canvas, and a
+  yellow shape is invisible on the near-white cream card). Trade-off: the left
+  column is no longer `sticky` (overflow:hidden disables it) — an acceptable
+  loss for the consistent look.
+
+---
+
 ## 2026-07-03 — About chips + signoff star, Inquire sticky footer (client feedback)
 
 - **About milestone chips** (`.about-chip`): were small and noticeably tilted.

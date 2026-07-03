@@ -63,18 +63,25 @@
   border-radius: var(--radius-2xl);
   padding: clamp(var(--space-8), 5vw, var(--space-16));
   align-items: start;
+  /* Clips the oversized motif to the card's rounded rect so it crops cleanly at
+     the corner in any tint. (This is what disables the sticky header — see the
+     __left note.) */
+  overflow: hidden;
 }
 
-/* Corner sticker — peeks over the card's top-right corner, tinted per card
-   below. Purely decorative; a gentle pop on card hover. */
+/* Oversized brand motif dropped into the empty space under each header. Anchored
+   low and cropped off the bottom-left corner, sitting BEHIND the text
+   (z-index 0). Every card gets one, each in its own accent tint (below). */
 .service-block__motif {
   position: absolute;
-  top: calc(-1 * var(--space-6));
-  right: var(--space-6);
-  width: clamp(48px, 5.5vw, 68px);
+  /* Anchored low so its top edge always clears the (top-anchored) header,
+     leaving the shape in the empty space below it. */
+  bottom: calc(-1 * var(--space-32));
+  left: calc(-1 * var(--space-8));
+  width: clamp(170px, 20vw, 280px);
   pointer-events: none;
-  z-index: 2;
-  transform: rotate(-6deg);
+  z-index: 0;
+  transform: rotate(-8deg);
   transition: transform var(--duration-base) var(--ease-out);
 }
 
@@ -85,15 +92,29 @@
 }
 
 .service-block:hover .service-block__motif {
-  transform: rotate(8deg) scale(1.1);
+  transform: rotate(-3deg) scale(1.03);
 }
 
-/* Per-card motif tints — accent colours that read against each card bg. */
+/* Text sits above the motif. Each column gets its own stacking context; the
+   left column can no longer be sticky (overflow:hidden on the card breaks it),
+   so it's a normal relative block (see its rule below). */
+.service-block__left,
+.service-block__right {
+  position: relative;
+  z-index: 1;
+}
+
+/* Per-card motif tints — each shape pairs with its own card colour (no more
+   all-yellow), for four distinct pairings down the page:
+     orange card → cream    (soft "orange + white")
+     ink card    → orange   (brand heartbeat pops on black)
+     blue card   → coral     (warm on cool)
+     cream card  → blue      (calm on near-white) */
 .service-block--orange .service-block__motif {
-  color: var(--color-yellow);
+  color: var(--color-cream);
 }
 .service-block--ink .service-block__motif {
-  color: var(--color-yellow);
+  color: var(--color-orange);
 }
 .service-block--blue .service-block__motif {
   color: var(--color-orange-soft);
@@ -167,13 +188,13 @@
   --card-accent-fg: var(--color-ink);
 }
 
-/* Left column — index + title */
+/* Left column — index + title. (No longer sticky: the card's overflow:hidden,
+   needed to crop the motif, would disable sticky anyway. z-index is set with
+   the right column above so both sit over the motif.) */
 .service-block__left {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  position: sticky;
-  top: var(--space-8);
 }
 
 .service-block__index {
@@ -362,15 +383,10 @@
     padding: var(--space-8);
   }
 
-  .service-block__left {
-    position: static;
-  }
-
-  /* Nudge the corner sticker fully off the top edge so it never sits over the
-     stacked content on narrow cards. */
+  /* Smaller motif on the narrower stacked cards (keeps the bottom-left crop
+     from the base rule; mobile polish comes in a later pass). */
   .service-block__motif {
-    top: calc(-1 * var(--space-5));
-    right: var(--space-4);
+    width: clamp(130px, 34vw, 200px);
   }
 
   .service-connector {
