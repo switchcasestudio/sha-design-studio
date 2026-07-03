@@ -31,10 +31,9 @@ function HomeAssemble() {
         </h1>
 
         {/* The statement the wordmark alone never made — who this is for and
-            why they should care. Display face; the closing word flips blue. */}
+            why they should care. Display face, all brand blue. */}
         <p className="home-assemble__statement">
-          Toys babies love&nbsp;&amp;&nbsp;brands{' '}
-          <span className="home-assemble__statement-accent">trust.</span>
+          Toys babies love&nbsp;&amp;&nbsp;brands trust.
         </p>
 
         <div className="home-assemble__actions">
