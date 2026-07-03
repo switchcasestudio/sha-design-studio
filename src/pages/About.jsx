@@ -1,29 +1,41 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import Button from '@/components/ui/Button';
+import BrandShape from '@/components/ui/BrandShape';
+import CtaBand from '@/components/sections/CtaBand';
 import yellowFlower from '@/assets/svg/flower-yellow.svg';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 
+// Each offer carries a brand-shape bullet (the four-shape ramp from the journey
+// stops) and a tint that reads on the yellow panel — never yellow-on-yellow.
 const offers = [
   {
+    shape: 'daisy',
+    tint: 'var(--color-orange)',
     title: 'Research & Concept Development',
     description:
       'Transforming early-stage ideas into clear product directions through research, exploration and concept development.',
   },
   {
+    shape: 'clover',
+    tint: 'var(--color-blue)',
     title: 'Product Design & Development',
     description:
       'Developing concepts into thoughtful, functional and engaging products.',
   },
   {
+    shape: 'heart',
+    tint: 'var(--color-orange-deep)',
     title: '3D Development & Product Visualization',
     description:
       'Bringing concepts to life through 3D modeling and visual communication.',
   },
   {
+    shape: 'star',
+    tint: 'var(--color-blue-deep)',
     title: 'Product Documentation & Development Support',
     description:
       'Preparing products for development and supporting the process through implementation.',
@@ -33,6 +45,7 @@ const offers = [
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
 function About() {
+  const reduce = useReducedMotion();
   const [openIdx, setOpenIdx] = useState(null);
 
   return (
@@ -55,9 +68,13 @@ function About() {
               </p>
 
               <p>
-                I graduated from Shenkar College of Design, interned at HAPE in
-                China, and worked at Tiny Love designing a wide range of baby
-                products, from soft toys to electronic developmental items.
+                I graduated from{' '}
+                <span className="about-chip about-chip--a">Shenkar College</span>,
+                interned at <span className="about-chip about-chip--b">HAPE</span>{' '}
+                in China, and worked at{' '}
+                <span className="about-chip about-chip--c">Tiny Love</span>{' '}
+                designing a wide range of baby products, from soft toys to
+                electronic developmental items.
               </p>
 
               <p>
@@ -81,7 +98,8 @@ function About() {
               </p>
 
               <p className="about-bio__signoff">
-                Simple, smart, and full of wonder.
+                Simple, smart, and full of wonder
+                <BrandShape shape="star" className="about-bio__signoff-star" />
               </p>
             </div>
 
@@ -132,6 +150,28 @@ function About() {
                   aria-hidden="true"
                 />
                 <span className="about-bio__hello-text">Hello!</span>
+              </motion.div>
+
+              {/* A coral heart keeps the "Hello!" flower company — two badges,
+                  no more, so the frame stays a photo not a sticker sheet. */}
+              <motion.div
+                className="about-bio__heart"
+                initial={{ scale: 0, rotate: 24 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 400,
+                  damping: 12,
+                  delay: 0.75,
+                }}
+                whileHover={{
+                  scale: 1.12,
+                  rotate: -8,
+                  transition: { type: 'spring', stiffness: 300, damping: 14 },
+                }}
+                whileTap={{ scale: 1.04 }}
+              >
+                <BrandShape shape="heart" />
               </motion.div>
             </div>
           </motion.div>
@@ -188,9 +228,27 @@ function About() {
                     aria-expanded={openIdx === idx}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <span>{offer.title}</span>
+                    <span className="about-offer__row-label">
+                      {/* Shape bullet — celebratory spin when its row opens */}
+                      <motion.span
+                        className="about-offer__bullet"
+                        style={{ color: offer.tint }}
+                        animate={{
+                          rotate: openIdx === idx && !reduce ? 360 : 0,
+                        }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 200,
+                          damping: 16,
+                        }}
+                      >
+                        <BrandShape shape={offer.shape} />
+                      </motion.span>
+                      <span>{offer.title}</span>
+                    </span>
 
                     <motion.span
+                      className="about-offer__toggle"
                       animate={{ rotate: openIdx === idx ? 180 : 0 }}
                       transition={{
                         type: 'spring',
@@ -229,6 +287,13 @@ function About() {
           </div>
         </div>
       </motion.section>
+
+      {/* Give the page a destination — blue page into the orange closing beat */}
+      <CtaBand
+        title="Let's make something wonder-full"
+        text="If it's playful, tactile and made for small hands, I'd love to hear about it."
+        buttonLabel="Let's Chat"
+      />
     </div>
   );
 }

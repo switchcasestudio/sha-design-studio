@@ -4,6 +4,30 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — About: pull-quote, milestone chips, sticker photo, CTA
+
+- **Bio pull-quote** (A1): "Simple, smart, and full of wonder" promoted from a
+  bold body line to a display-face punchline with a yellow star for a full stop.
+  Note: the plan wanted yellow text, but yellow-on-blue is 2.61:1 (fails even
+  large text) — used cream (3.63:1, clears the 3:1 large-text bar and matches
+  the rest of the About body); the star is decorative so its tint isn't binding.
+- **Milestone chips** (A2): Shenkar / HAPE / Tiny Love in the bio are now cream
+  sticker chips (ink on cream 15.3:1), slight alternating tilt, lift + straighten
+  on hover — the credibility spine made tactile without a new section.
+- **Sticker photo** (A3): the photo frame gets a 1deg resting tilt that
+  straightens on hover, and a coral heart badge joins the "Hello!" flower (two
+  badges, no more).
+- **Accordion bullets** (A4): each offer row gets a brand-shape bullet (the
+  daisy/clover/heart/star ramp) tinted to read on the yellow panel; the bullet
+  does a full celebratory spin when its row opens (reduced-motion: no spin).
+- **Closing CTA** (A5): the page no longer stops after the yellow panel — it
+  closes on the shared orange `CtaBand` → /inquire. Page bottom padding removed
+  so the band sits flush to the footer.
+- **Skipped A6** (floating canvas motifs): the page reads full after A1–A5;
+  restraint over confetti, per the plan.
+
+---
+
 ## 2026-07-03 — Services: process road, sticker cards, closing CTA
 
 The four numbered services rendered as four unrelated boxes on a dead-end page.

@@ -1,7 +1,8 @@
 .about-page {
   background-color: var(--color-blue);
   color: var(--color-cream);
-  padding-bottom: var(--space-16);
+  /* No bottom padding: the CTA band closes the page flush to the footer. */
+  padding-bottom: 0;
 }
 
 /* ---------- Bio ---------- */
@@ -26,12 +27,67 @@
   flex-direction: column;
   gap: var(--space-4);
   font-size: var(--text-base);
+  /* Roomier leading so the inline sticker chips don't crowd the lines */
+  line-height: var(--leading-relaxed);
   max-width: 50ch;
 }
 
+/* The best line on the page, promoted from a bold body line to a display
+   pull-quote. Cream on blue (3.63:1) clears the 3:1 large-text bar at this
+   size; the yellow star is a decorative full stop (contrast not binding). */
 .about-bio__signoff {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.12em;
+  margin-top: var(--space-6);
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  line-height: 1.15;
+  color: var(--color-cream);
+}
+
+.about-bio__signoff-star {
+  width: clamp(24px, 3.4vw, 40px);
+  color: var(--color-yellow);
+}
+
+.about-bio__signoff-star svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Career milestones as cream sticker chips inline in the bio — ink on cream
+   (15.3:1). Slight alternating tilt; lift + straighten on hover. */
+.about-chip {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0.05em 0.55em;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
   font-weight: var(--weight-semibold);
-  margin-top: var(--space-2);
+  border-radius: var(--radius-pill);
+  line-height: 1.35;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.about-chip--a {
+  transform: rotate(-2deg);
+}
+.about-chip--b {
+  transform: rotate(1.5deg);
+}
+.about-chip--c {
+  transform: rotate(-1deg);
+}
+
+.about-chip:hover {
+  transform: rotate(0deg) translateY(-2px) scale(1.04);
+  box-shadow: var(--shadow-md);
 }
 
 .about-bio__cta {
@@ -47,6 +103,13 @@
   position: relative;
   max-width: 760px;
   margin-inline: auto;
+  /* Resting sticker tilt, straightening on hover — like the scrapbook cards */
+  transform: rotate(1deg);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.about-bio__photo-frame:hover {
+  transform: rotate(0deg);
 }
 
 .about-bio__photo-placeholder {
@@ -103,6 +166,23 @@
   transform: translateY(-2px);
 }
 
+/* ---------- Coral heart badge (companion to Hello!) ---------- */
+.about-bio__heart {
+  position: absolute;
+  bottom: -18px;
+  right: -14px;
+  width: clamp(52px, 7vw, 84px);
+  color: var(--color-orange);
+  z-index: 2;
+  cursor: default;
+}
+
+.about-bio__heart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* ---------- What I Offer ---------- */
 .about-offer {
   padding-block: var(--space-12);
@@ -149,12 +229,38 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-4);
   padding: var(--space-5) 0;
   background: transparent;
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   color: inherit;
   text-align: left;
+}
+
+/* Bullet + title group on the left; the +/- toggle stays flush right */
+.about-offer__row-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.about-offer__bullet {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.about-offer__bullet svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.about-offer__toggle {
+  flex: none;
+  display: inline-flex;
 }
 
 .about-offer__row:hover {
