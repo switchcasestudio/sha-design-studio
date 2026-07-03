@@ -4,6 +4,33 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Work grid: lighter scrim, yellow-on-blue tags, motifs to front, Shape Sorter packshot (client feedback)
+
+Desktop-only pass on the Work overview (`Projects.jsx` / `.css`); mobile to
+follow separately.
+
+- **Scrim lightened** (`.overview-card__media::after`): was a deep ink wash
+  reaching ~46% up the tile (0.82 → 0.55 → 0). Now a shallow band at the very
+  bottom (0.70 → 0.34 → 0 by 34%) so the product photo shows through and keeps
+  its beauty; the client kicker + title still sit on enough darkness to read.
+- **Category tag → yellow on blue** (shared `CloudBadge`): was ink on blue-soft
+  (client disliked the black font). Now bold yellow on `--color-blue-deep` (the
+  darkest brand blue). Applies to both the Work grid and the home grid for
+  consistency. AA note: yellow on blue tops out ~3.5:1 — below 4.5 for a label
+  this small, a deliberate brand call (bold weight helps).
+- **Motifs brought to the front** (`.projects-overview__motif` z-index 0 → 3):
+  the daisy/clover/flower/star now float *over* the photo corners like stickers
+  instead of peeking from behind the tiles. `pointer-events: none` keeps card
+  clicks/hovers unaffected.
+- **Shape Sorter card image** — every card is a clean packshot except Shape
+  Sorter, whose default first frame was a lifestyle "vibe" shot (baby on a rug).
+  Pinned it to the white top-down product photo (`11-…-15.webp`, "detail 11")
+  via a `COVER_OVERRIDES` entry so it matches the set. (Its hero `01` frame
+  isn't on disk — only 6 curated frames were kept — so the default had fallen
+  through to the lifestyle `images[0]`.)
+
+---
+
 ## 2026-07-03 — About: pull-quote, milestone chips, sticker photo, CTA
 
 - **Bio pull-quote** (A1): "Simple, smart, and full of wonder" promoted from a

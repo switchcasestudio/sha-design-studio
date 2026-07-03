@@ -10,6 +10,7 @@ import flowerRaw from '@/assets/svg/flower-yellow.svg?raw';
 import starRaw from '@/assets/svg/star-blue.svg?raw';
 import woodenCover from '@/assets/images/projects/products/wooden-collection-cover.webp';
 import gardenCover from '@/assets/images/projects/products/garden-collection-cover.webp';
+import shapeSorterCover from '@/assets/images/projects/products/shape-sorter/11-Tiny-Rockers-Shape-Sorter-15.webp';
 import './Projects.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -33,10 +34,13 @@ const BADGE_LABELS = {
   'mobile-character-design': 'Mobiles',
 };
 
-// The wide 3:1 tiles get purpose-built covers: the whole collection lined up
-// on one white canvas (composed from the individual packshots — see the
-// project's design deck), instead of one product stretched across two grid
-// columns.
+// Explicit cover image for a card, overriding the default (heroImage / first
+// image). Two uses:
+//  - the wide 3:1 tiles get purpose-built covers with the whole collection
+//    lined up on one white canvas (composed from the individual packshots);
+//  - Shape Sorter's default first frame is a lifestyle "vibe" shot (baby on a
+//    rug), unlike every other card's clean packshot, so it's pinned to the
+//    white product photo to match the set.
 const COVER_OVERRIDES = {
   'wooden-toy-design': {
     src: woodenCover,
@@ -45,6 +49,10 @@ const COVER_OVERRIDES = {
   'garden-of-adventures-packaging': {
     src: gardenCover,
     alt: 'Garden of Adventures collection: bunny comforter with beet rattle, My First Garden gift box and carded rattle packaging',
+  },
+  'tiny-rockers-shape-sorter': {
+    src: shapeSorterCover,
+    alt: 'Tiny Rockers Shape Sorter — the cream disc with six tactile geometric shapes, shown top-down on white',
   },
 };
 
@@ -172,7 +180,7 @@ function Projects() {
             snapshots on a table and straighten when you reach for them. */}
         <div className="container">
           <ul className="projects-overview">
-            {/* Motifs peek out from behind the card corners. Absolutely
+            {/* Motifs float over the card corners like stickers. Absolutely
                 positioned li's don't take grid cells, so the 2-up flow of the
                 real cards is untouched. */}
             <li

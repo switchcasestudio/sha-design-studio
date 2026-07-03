@@ -54,7 +54,8 @@
 
 .overview-card {
   margin: 0;
-  /* Cards paint above the motifs, which peek out from behind the corners. */
+  /* Stacking context for the tile; the decorative motifs sit above these
+     (higher z-index) so they float over the photo corners. */
   position: relative;
   z-index: 1;
   /* Hand-placed tilt, alternating direction down the page. Deterministic
@@ -139,18 +140,18 @@
   opacity: 1;
 }
 
-/* Scrim: clear at the top, deepening to near-opaque ink at the bottom so the
-   client + title stay readable over any product shot. Sits above the images,
-   below the text. */
+/* Scrim: clear at the top, deepening only in a shallow band at the very bottom
+   so the client + title stay readable while the product photo shows through as
+   much as possible. Sits above the images, below the text. */
 .overview-card__media::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(26, 26, 26, 0.82) 0%,
-    rgba(26, 26, 26, 0.55) 16%,
-    rgba(26, 26, 26, 0) 46%
+    rgba(26, 26, 26, 0.7) 0%,
+    rgba(26, 26, 26, 0.34) 14%,
+    rgba(26, 26, 26, 0) 34%
   );
   pointer-events: none;
 }
@@ -198,12 +199,13 @@
   text-wrap: balance;
 }
 
-/* ---------- Motifs peeking from behind the cards ----------
-   Decorative brand shapes in the grid gutters, mostly hidden behind the
-   tiles (cards carry z-index: 1), with a slow wobble. */
+/* ---------- Motifs floating over the cards ----------
+   Decorative brand shapes that sit ON TOP of the tiles (z-index above the
+   cards' z-index: 1), overlapping the photo corners like stickers, with a slow
+   wobble. pointer-events: none so they never block a card's click/hover. */
 .projects-overview__motif {
   position: absolute;
-  z-index: 0;
+  z-index: 3;
   pointer-events: none;
   animation: overview-wobble 9s ease-in-out infinite;
 }
@@ -243,9 +245,8 @@
   animation-delay: -6s;
 }
 
-/* Off the right edge of the bottom wide tile. Cards paint above the motifs,
-   so a motif only reads if it pokes past a card edge into a gutter — the
-   -1.5% stays within the container's side padding (no horizontal scroll). */
+/* Off the right edge of the bottom wide tile. The -1.5% stays within the
+   container's side padding so there's no horizontal scroll. */
 .projects-overview__motif--star {
   width: clamp(40px, 4.5vw, 72px);
   top: 80%;

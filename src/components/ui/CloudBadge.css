@@ -1,8 +1,11 @@
 .cloud-badge {
   display: inline-block;
-  background-color: var(--color-blue-soft);
-  color: var(--color-ink);
-  font-weight: var(--weight-semibold);
+  /* Yellow on deep blue (client preference). blue-deep is the darkest brand
+     blue, so the yellow reads as clearly as the pairing allows (~3.5:1 — below
+     AA 4.5 for this small a label, a deliberate brand call; bold helps). */
+  background-color: var(--color-blue-deep);
+  color: var(--color-yellow);
+  font-weight: var(--weight-bold);
   font-size: var(--text-xs);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
