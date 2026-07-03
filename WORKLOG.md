@@ -4,6 +4,48 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Services: process road, sticker cards, closing CTA
+
+The four numbered services rendered as four unrelated boxes on a dead-end page.
+
+- **Dotted process road** (S1): a self-drawing dotted connector (same
+  pathLength-in-a-mask technique as the home JourneyPath) now draws in each gap
+  between cards as it scrolls into view — 01→04 reads as one journey. Ink dots
+  on the yellow canvas (orange-on-yellow is too weak). List gap tightened since
+  the connectors carry the rhythm now. Reduced-motion: dots render statically.
+- **Sticker cards** (S2): alternating ±0.6deg resting tilt that straightens with
+  a lift on hover; one brand motif tucked over each card's top-right corner
+  (daisy / star / heart / clover), tinted per card, with a gentle pop on hover.
+- **Chip cascade** (S4): deliverable chips now spring-pop in a stagger — toys
+  spilling out of the box. Reduced-motion: fade only.
+- **Closing CTA band** (S5): the page no longer dead-ends at the expertise pills
+  — it closes on the shared orange `CtaBand` ("Got a product itching to exist?"
+  → /inquire). Page bottom padding removed so the band sits flush to the footer.
+- **Expertise pills** (S6): static sticker tilts (via the motion target, not
+  CSS, so hover straightens them cleanly).
+- **Skipped S3** (index-in-a-shape badge): a coloured badge behind the number
+  would put the index text on a new background and break its AA contrast on the
+  dark/bright cards — the corner motifs already bring shape-play to each card,
+  so this was dropped rather than risk the contrast.
+
+### ⚠️ Question for Shiran (S7)
+The `#02` "Product Design" card is a big black (ink) card. Your 07-02 homepage
+feedback was that big black moments feel off-brand. It may be fine here as
+page-level contrast between the orange/blue cards — but flagging it. Candidate
+swap if you'd rather: `--color-orange-deep` or a deep-yellow card.
+
+---
+
+## 2026-07-03 — Refactor: shared CtaBand closing section
+
+Extracted the homepage's orange finale band into a reusable
+`src/components/sections/CtaBand.jsx` (+ `.css`), copy passed in as props. Home
+now renders `<CtaBand …>` with its existing copy (no visual change); Services
+and About reuse the same closing beat. The old `home-cta*` markup + CSS and the
+`MOTIFS` inline-SVG map are gone. Motifs are now `<BrandShape>`.
+
+---
+
 ## 2026-07-03 — Inquire: the conversion page joins the playroom
 
 The plainest page — and the one the whole site funnels toward — now feels the
