@@ -43,7 +43,9 @@
      past its neighbor (which would also make its image taller). Keeps columns,
      and therefore every image, exactly equal. */
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-8) var(--space-6);
+  /* Equal row + column gaps so the spacing between tiles reads the same in
+     both directions. */
+  gap: var(--space-6);
 }
 
 .overview-card {
