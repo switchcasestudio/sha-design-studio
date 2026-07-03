@@ -11,8 +11,8 @@ empty space under its header instead of sitting as a small top-right sticker.
 
 - **All four cards** get it (client: applying it to only some read as a
   mistake), each shape in a colour paired to its own card (no more all-yellow):
-  orange card → **cream** daisy, ink card → **orange** star, blue card → coral
-  heart, cream card → blue clover. Four distinct pairings down the page.
+  orange card → **cream** daisy, ink card → **orange** star, blue card →
+  **bold-orange** (`--color-orange`) heart, cream card → **blue** clover.
 - The motif is anchored low (`bottom: -space-32`, `left: -space-8`), sized
   `clamp(170px, 20vw, 280px)` — a bit smaller than the first pass per the
   client — and sits **behind** the text (`z-index: 0`; both columns raised to
