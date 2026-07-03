@@ -306,9 +306,10 @@
   }
 
   /* Once stacked single-column, the wide cover would be a thin band — give it
-     a taller crop so it reads like the other tiles. */
+     a taller crop. 16:9 (not 4:3) so the collection-lineup covers keep more
+     than one product in frame when object-fit crops the sides. */
   .overview-card--wide .overview-card__media {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
   }
 
   /* Gentler tilts once cards fill the viewport width. */

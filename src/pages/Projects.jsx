@@ -8,6 +8,8 @@ import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
 import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
 import flowerRaw from '@/assets/svg/flower-yellow.svg?raw';
 import starRaw from '@/assets/svg/star-blue.svg?raw';
+import woodenCover from '@/assets/images/projects/products/wooden-collection-cover.webp';
+import gardenCover from '@/assets/images/projects/products/garden-collection-cover.webp';
 import './Projects.css';
 
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
@@ -29,6 +31,21 @@ const BADGE_LABELS = {
   'garden-of-adventures-packaging': 'Gift set & packaging',
   'tiny-rockers-shape-sorter': 'Shape sorter',
   'mobile-character-design': 'Mobiles',
+};
+
+// The wide 3:1 tiles get purpose-built covers: the whole collection lined up
+// on one white canvas (composed from the individual packshots — see the
+// project's design deck), instead of one product stretched across two grid
+// columns.
+const COVER_OVERRIDES = {
+  'wooden-toy-design': {
+    src: woodenCover,
+    alt: 'The wooden toy collection lined up together: stacking train, car race ramp, ride-on trike and activity walk-behind',
+  },
+  'garden-of-adventures-packaging': {
+    src: gardenCover,
+    alt: 'Garden of Adventures collection: bunny comforter with beet rattle, My First Garden gift box and carded rattle packaging',
+  },
 };
 
 // Second frame that peeks in on hover — a lifestyle shot to contrast the
@@ -70,7 +87,8 @@ function OverviewCard({ project, idx }) {
   // The hover frame only mounts (and therefore only loads) on first
   // hover/focus — nobody pays for images they never peek at.
   const [peek, setPeek] = useState(false);
-  const image = project.heroImage ?? project.images[0];
+  const image =
+    COVER_OVERRIDES[project.id] ?? project.heroImage ?? project.images[0];
   const peekImage = peek ? peekFrame(project, image) : null;
   const isWide = WIDE_PROJECT_IDS.has(project.id);
   const wake = () => setPeek(true);
