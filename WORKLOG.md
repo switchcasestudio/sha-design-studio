@@ -4,6 +4,83 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-02 — Home: pure shapes + tint-ramp exploration (client feedback)
+
+- Journey stops: emojis removed — the brand shapes stand alone. Client loves
+  the hue variation, so the four markers now walk a deliberate tint ramp:
+  yellow daisy → soft-blue clover → soft-orange heart → deep-yellow star.
+- Same idea echoed in Kind Words: the mirrored reply bubble is blue-deep
+  against the first bubble's brand blue — two different blues on purpose.
+- Client direction to explore more hue/saturation play with blue/yellow/
+  orange across the site — tint tokens (-soft/-deep) are the palette for it.
+
+---
+
+## 2026-07-02 — Home: bubble conversation + flower journey stops (client feedback)
+
+- **Kind Words**: heading back to ink (client keeps black here), and a second
+  **mirrored** speech bubble (right-aligned, flipped tail/tilt/quote-mark,
+  right-aligned attribution) stacked under the first — reads as a
+  conversation. Content is an explicit placeholder in `testimonials.js`
+  (`placeholder-second`, "Your name here") until a real quote arrives; both
+  quotes still need real content before launch.
+- **Journey stops**: emoji-in-circle dots replaced with the brand shapes the
+  client loves (same SVG set the hero morphs through): yellow daisy →
+  blue clover → coral heart (Tiny Love) → yellow star (SHA, the /inquire
+  link — lifts + spins on hover). Emoji rides inside each shape like the
+  brand's flower badges. Dots grew to 84px (72px mobile), spine offsets
+  adjusted.
+
+---
+
+## 2026-07-02 — Home: de-blacken the display layer (client feedback)
+
+Client: the big black moments (ink ticker band, ink display headings, ink
+journey rings) feel off-brand. Ink now stays body-text-only on the homepage;
+the display layer speaks orange, per the guidelines ("orange = headings").
+
+- FactsTicker band: ink → **orange**, cream display text (3.4:1 — legal for
+  its ≥20px display type only), flower separators yellow/blue-soft/cream.
+- Section headings on cream (Fresh from the studio / How I got here / Kind
+  Words) → **orange**. "What I Do" stays ink on yellow — orange-on-yellow
+  fails contrast and ink-on-yellow is the documented brand pair.
+- Journey: dot rings + labels → orange-deep (labels bumped to 20px display
+  so the 4.4:1 pair clears the large-text bar); details stay ink-soft.
+- Button hovers that flipped to black pills now flip to orange (What I Do)
+  and yellow/ink (CTA band).
+
+---
+
+## 2026-07-02 — Home: break the box-stack, cut redundancy
+
+Client feedback: bottom half of the homepage read as "div after div" — six
+identical full-width rounded panels with identical 96px gaps — plus a third
+marquee and a stats panel repeating the ticker's facts.
+
+- **Removed the wave TextPath marquee** (third marquee on one page) and
+  **deleted StatBlocks** — its numbers folded into the FactsTicker
+  (now: products / years / brands / giggles / process).
+- **Journey redesigned off the yellow box onto the cream canvas**: a dotted
+  orange play-road (SVG wave) that draws itself on scroll (pathLength inside a
+  mask so the dots survive), stops pinned along it — captions below the dips,
+  above the crests. Last stop (SHA Studio) is now a live link to `/inquire`.
+  Mobile keeps the vertical dashed spine.
+- **Kind Words is a blue speech bubble** (sticker tilt, tail, yellow display
+  quote mark) on the canvas instead of another full panel. Attribution sits
+  under the tail. Quote is still the known placeholder — client to supply.
+- **Orange CTA moved to the end as a full-bleed finale band** (rounded
+  shoulders, wobbling brand motifs from the shared SVG set) — the page's last
+  word before the footer, instead of a mid-page box.
+- **Section order now:** hero → logos → work grid → ink ticker → journey →
+  What I Do → Kind Words → orange CTA. Color rhythm: cream / ink / cream /
+  yellow / blue / orange — one dominant accent per beat, varied geometry
+  (band / canvas / panel / bubble / full-bleed) instead of repeated boxes.
+- Also wrote `PRODUCT.md` (register, principles) for design tooling.
+- Follow-up: `npm run lint` fails repo-wide (ESLint can't find a config and
+  wanders into `dist/`) — pre-existing, worth fixing separately.
+
+---
+
 ## 2026-07-01 — Project detail: gallery gap + header balance
 
 - **Reduced the gallery → Process gap.** The fan box over-reserved height (380px

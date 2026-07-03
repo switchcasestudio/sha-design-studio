@@ -2,14 +2,17 @@ import Marquee from '@/components/ui/Marquee';
 import './FactsTicker.css';
 
 // Studio facts pulled from Shiran's portfolio — the numbers that make a brand
-// trust the playfulness. Rendered as one looping display-face band.
+// trust the playfulness, all on one looping display-face band. (This band IS
+// the numbers beat; the old "By the numbers" panel folded into it.)
 const FACTS = [
   '10+ products on shelves',
   '6+ years designing for babies',
+  '5 brands worldwide',
+  '∞ giggles tested',
   'sketch → prototype → production',
 ];
 
-// Flower separators cycle through the accent tints against the ink band.
+// Flower separators cycle through the accent tints against the orange band.
 const SEPARATOR_TINTS = ['ticker-sep--yellow', 'ticker-sep--blue', 'ticker-sep--soft'];
 
 /**

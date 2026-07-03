@@ -7,14 +7,23 @@ import HomeAssemble from '@/components/sections/HomeAssemble';
 import HomeWorkGrid from '@/components/sections/HomeWorkGrid';
 import JourneyPath from '@/components/sections/JourneyPath';
 import SocialProof from '@/components/sections/SocialProof';
-import StatBlocks from '@/components/sections/StatBlocks';
-import TextPath from '@/components/ui/TextPath';
 import { reducedReveal, slideUp } from '@/lib/motion';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { siteConfig } from '@/utils/siteConfig';
 import { testimonials } from '@/data/testimonials';
+import { inlineSvg } from '@/utils/svg';
+import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
+import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
+import flowerRaw from '@/assets/svg/flower-yellow.svg?raw';
 import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
 import './Home.css';
+
+// Brand motifs scattered on the closing orange band — geometry from the shared
+// SVG set, tinted via `color` on the wrapper (see utils/svg.js).
+const MOTIFS = {
+  daisy: inlineSvg(daisyRaw),
+  clover: inlineSvg(cloverRaw),
+  flower: inlineSvg(flowerRaw),
+};
 
 // Color-world block: slides up and settles on enter (position/opacity only —
 // the block's own background color is never touched).
@@ -37,10 +46,6 @@ function ColorWorld({ children, className }) {
 }
 
 function Home() {
-  // The marquee SVG scales with viewport width, so the same fontSize renders
-  // much smaller on phones — bump it up there.
-  const isMobile = useMediaQuery('(max-width: 767px)');
-
   return (
     <>
       {/* ---------- Signature hero: 100vh brand frame ----------
@@ -57,38 +62,19 @@ function Home() {
         <HomeWorkGrid />
       </ColorWorld>
 
-      {/* ---------- Studio facts on a loud ink band ---------- */}
+      {/* ---------- Studio facts on a loud orange band ----------
+          Absorbs the old "By the numbers" panel — same facts, one beat. */}
       <ColorWorld className="home-ticker">
         <FactsTicker />
       </ColorWorld>
 
-      {/* ---------- The designer's journey (yellow play-path) ---------- */}
-      <ColorWorld className="journey">
+      {/* ---------- The designer's journey — a dotted play-path drawn straight
+          on the cream canvas (no box), stops popping in along it. */}
+      <section className="journey">
         <JourneyPath />
-      </ColorWorld>
+      </section>
 
-      {/* ---------- The studio by the numbers (blue toy blocks) ---------- */}
-      <ColorWorld className="stats">
-        <StatBlocks />
-      </ColorWorld>
-
-      {/* ---------- Orange mega-CTA: the page's loudest beat ---------- */}
-      <ColorWorld className="home-cta">
-        <div className="container">
-          <div className="home-cta__panel">
-            <h2 className="home-cta__title">Got a toy in your head?</h2>
-            <p className="home-cta__text">
-              From first sketch to factory floor — let&apos;s turn it into the
-              thing a baby won&apos;t let go of.
-            </p>
-            <Button as={Link} to="/inquire" variant="primary" size="lg">
-              Let&apos;s chat
-            </Button>
-          </div>
-        </div>
-      </ColorWorld>
-
-      {/* ---------- "What I Do" CTA ---------- */}
+      {/* ---------- "What I Do" — the one classic yellow panel ---------- */}
       <ColorWorld className="home-what">
         <div className="container">
           <div className="home-what__panel">
@@ -120,57 +106,81 @@ function Home() {
         </div>
       </ColorWorld>
 
-      {/* ---------- Kind Words / Testimonials ---------- */}
+      {/* ---------- Kind Words — a blue speech bubble on the canvas ---------- */}
       <ColorWorld className="home-words">
         <div className="container">
-          <div className="home-words__panel">
-            <h2 className="home-words__title">Kind Words</h2>
+          <h2 className="home-words__title">Kind Words</h2>
 
-            {/* TODO: verify testimonial attribution — the only quote is credited
-                to "Jaya Dixon" but its text refers to "Channing" and to interior
-                "space", which doesn't match Sha / Shiran Bar's product work.
-                Likely placeholder/wrong-domain copy. Don't ship as-is; confirm a
-                real testimonial + attribution before launch. */}
-            {testimonials.map((testimonial) => (
-              <blockquote key={testimonial.id} className="home-words__quote">
-                <p>"{testimonial.comment}"</p>
-
-                <footer className="home-words__attribution">
-                  {testimonial.image && (
-                    <img
-                      className="home-words__avatar"
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      loading="lazy"
-                    />
-                  )}
-                  <cite className="home-words__cite">
-                    <span className="home-words__name">
-                      — {testimonial.name}
-                    </span>
-                    {testimonial.title && (
-                      <span className="home-words__role">
-                        {testimonial.title}
-                      </span>
-                    )}
-                  </cite>
-                </footer>
+          {/* TODO: verify testimonial attribution — the only quote is credited
+              to "Jaya Dixon" but its text refers to "Channing" and to interior
+              "space", which doesn't match Sha / Shiran Bar's product work.
+              Likely placeholder/wrong-domain copy. Don't ship as-is; confirm a
+              real testimonial + attribution before launch. */}
+          {/* Bubbles alternate sides: even from the left, odd mirrored from
+              the right — a back-and-forth conversation down the page. */}
+          {testimonials.map((testimonial, index) => (
+            <figure
+              key={testimonial.id}
+              className={`home-words__item${index % 2 ? ' home-words__item--flip' : ''}`}
+            >
+              <blockquote className="home-words__bubble">
+                <p>{testimonial.comment}</p>
               </blockquote>
-            ))}
-          </div>
+
+              <figcaption className="home-words__attribution">
+                {testimonial.image && (
+                  <img
+                    className="home-words__avatar"
+                    src={testimonial.image}
+                    alt=""
+                    loading="lazy"
+                  />
+                )}
+                <cite className="home-words__cite">
+                  <span className="home-words__name">{testimonial.name}</span>
+                  {testimonial.title && (
+                    <span className="home-words__role">
+                      {testimonial.title}
+                    </span>
+                  )}
+                </cite>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </ColorWorld>
 
-      {/* ---------- Marquee ribbon: brand line scrolling along a wave ---------- */}
-      <ColorWorld className="home-marquee">
-        <TextPath
-          text="Designing Playful, Thoughtful Products  ·  Simple, Smart & Full of Wonder  ·  "
-          path="M0 140 C 130 100 270 100 400 140 S 670 180 800 140 S 1070 100 1200 140 S 1470 180 1600 140"
-          viewBox="0 0 1600 280"
-          fontSize={isMobile ? '150px' : '110px'}
-          duration={20}
-          reversed
-        />
+      {/* ---------- Orange finale: full-bleed CTA band, the page's loudest
+          beat and its last word before the footer. ---------- */}
+      <ColorWorld className="home-cta">
+        <div className="home-cta__band">
+          <span
+            className="home-cta__motif home-cta__motif--daisy"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: MOTIFS.daisy }}
+          />
+          <span
+            className="home-cta__motif home-cta__motif--clover"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: MOTIFS.clover }}
+          />
+          <span
+            className="home-cta__motif home-cta__motif--flower"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: MOTIFS.flower }}
+          />
+
+          <div className="container home-cta__inner">
+            <h2 className="home-cta__title">Got a toy in your head?</h2>
+            <p className="home-cta__text">
+              From first sketch to factory floor: let&apos;s turn it into the
+              thing a baby won&apos;t let go of.
+            </p>
+            <Button as={Link} to="/inquire" variant="primary" size="lg">
+              Let&apos;s chat
+            </Button>
+          </div>
+        </div>
       </ColorWorld>
     </>
   );

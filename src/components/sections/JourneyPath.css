@@ -1,127 +1,202 @@
 /* ==========================================================================
-   Journey path — yellow rounded panel; four stops on a dashed play-path.
-   Horizontal on desktop, a vertical spine on phones.
+   Journey path — a dotted play-road winding across the cream canvas itself,
+   no panel. Desktop: stops pinned along the SVG wave (captions below the
+   road's dips, above its crests). Phones: a vertical dashed spine.
    ========================================================================== */
-.journey {
-  padding-block: var(--space-12);
-}
-
-.journey__panel {
-  background-color: var(--color-yellow);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-12);
-}
-
 .journey__title {
   font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  color: var(--color-ink);
-  margin-bottom: var(--space-10);
+  color: var(--color-orange);
+  margin-bottom: var(--space-4);
 }
 
 .journey__path {
   list-style: none;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
   position: relative;
-  counter-reset: stop;
+  /* Same shape as the SVG viewBox so % pins line up with path anchors.
+     The block margins give the hanging captions room to breathe. */
+  aspect-ratio: 1200 / 300;
+  min-height: 240px;
+  margin-block: var(--space-12) var(--space-8);
 }
 
-/* The dashed road between the first and last dot. */
-.journey__path::before {
-  content: '';
+.journey__road {
   position: absolute;
-  top: 28px;
-  left: clamp(40px, 7%, 90px);
-  right: clamp(40px, 7%, 90px);
-  border-top: 3px dashed rgba(26, 26, 26, 0.35);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
+/* Dotted orange trail — round dabs, treasure-map style. */
+.journey__road-dots {
+  stroke: var(--color-orange);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.5 20;
+}
+
+/* Each stop is pinned so the DOT's center sits exactly on the road point
+   (translate up by half the 64px dot). The li carries a transform, so it is
+   also the containing block for the absolutely-hung caption on crest stops. */
 .journey__stop {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  max-width: 190px;
-  text-align: center;
+  position: absolute;
+  left: var(--stop-x);
+  top: var(--stop-y);
+  transform: translate(-50%, -42px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  width: max-content;
+  max-width: 220px;
 }
 
+/* Brand-shape marker (daisy / clover / heart / star) with the emoji riding
+   inside — the flower-badge pattern, not a plain outlined circle. */
 .journey__dot {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-cream);
-  border: 3px solid var(--color-ink);
+  position: relative;
+  width: 84px;
+  height: 84px;
   display: grid;
   place-items: center;
-  font-size: var(--text-2xl);
-  line-height: 1;
-  margin-bottom: var(--space-3);
+  transition: transform var(--duration-base) var(--ease-out);
 }
 
+.journey__dot-shape {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 4px 10px rgba(26, 26, 26, 0.14));
+}
+
+.journey__dot-shape svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tint ramp across the stops — one hue variation per marker, on purpose. */
+.journey__dot--yellow {
+  color: var(--color-yellow);
+}
+
+.journey__dot--blue-soft {
+  color: var(--color-blue-soft);
+}
+
+.journey__dot--orange-soft {
+  color: var(--color-orange-soft);
+}
+
+.journey__dot--yellow-deep {
+  color: var(--color-yellow-deep);
+}
+
+.journey__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--space-3);
+}
+
+/* Crest stops hang their caption above the dot instead. */
+.journey__stop--high .journey__meta {
+  position: absolute;
+  bottom: calc(100% + var(--space-3));
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0;
+  width: max-content;
+  max-width: 220px;
+}
+
+/* Display face at 20px — large-text bar, so orange-deep (4.4:1+) is legal. */
 .journey__label {
-  font-weight: var(--weight-bold);
-  font-size: var(--text-base);
-  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xl);
+  color: var(--color-orange-deep);
+  white-space: nowrap;
 }
 
 .journey__detail {
   font-size: var(--text-sm);
-  color: var(--color-ink);
+  color: var(--color-ink-soft);
   line-height: var(--leading-normal);
   margin-top: var(--space-1);
 }
 
-@media (max-width: 767px) {
-  .journey__panel {
-    padding: var(--space-8);
-  }
+/* The last stop is a real link: its shape lifts and spins up on hover. */
+.journey__stop-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 
+.journey__stop-link:hover .journey__dot,
+.journey__stop-link:focus-visible .journey__dot {
+  transform: translateY(-4px) rotate(8deg) scale(1.06);
+}
+
+.journey__stop-link .journey__detail {
+  color: var(--color-orange-deep);
+  font-weight: var(--weight-semibold);
+}
+
+@media (max-width: 767px) {
   .journey__path {
+    aspect-ratio: auto;
+    min-height: 0;
+    display: flex;
     flex-direction: column;
     gap: var(--space-8);
     align-items: flex-start;
+    margin-block: var(--space-8) 0;
   }
 
-  /* Vertical spine down the dot column. */
+  .journey__road {
+    display: none;
+  }
+
+  /* Vertical dashed spine down the dot column. */
   .journey__path::before {
-    top: 28px;
-    bottom: 28px;
-    left: 27px;
-    right: auto;
-    border-top: 0;
-    border-left: 3px dashed rgba(26, 26, 26, 0.35);
-  }
-
-  .journey__stop {
-    max-width: none;
-    flex-direction: row;
-    text-align: left;
-    gap: var(--space-4);
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    grid-template-areas:
-      'dot label'
-      'dot detail';
-    align-items: center;
-    column-gap: var(--space-4);
+    content: '';
+    position: absolute;
+    top: 36px;
+    bottom: 36px;
+    left: 34px;
+    border-left: 3px dashed rgba(229, 75, 42, 0.5);
   }
 
   .journey__dot {
-    grid-area: dot;
-    margin-bottom: 0;
+    width: 72px;
+    height: 72px;
   }
 
-  .journey__label {
-    grid-area: label;
-    align-self: end;
+  .journey__stop {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    z-index: 1;
   }
 
-  .journey__detail {
-    grid-area: detail;
-    align-self: start;
-    margin-top: 0;
+  .journey__meta,
+  .journey__stop--high .journey__meta {
+    position: static;
+    transform: none;
+    margin: 0 0 0 var(--space-4);
+    align-items: flex-start;
+    max-width: none;
+  }
+
+  .journey__stop-link {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
   }
 }

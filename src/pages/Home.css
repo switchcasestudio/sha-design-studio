@@ -1,71 +1,43 @@
 /* The home hero headline now lives in the GSAP assemble section
    (HomeAssemble.css) — it replaced the old static .home-hero. */
 
+/* ==========================================================================
+   Section rhythm. Deliberately varied: the cream canvas breathes around the
+   journey, hugs the ink ticker tight, and the closing orange band goes
+   full-bleed. Never six identical boxes with identical gaps again.
+   ========================================================================== */
+
 /* ---------- Featured work grid ---------- */
 .home-work {
-  padding-block: var(--space-16) var(--space-8);
+  padding-block: var(--space-16) var(--space-10);
 }
 
-/* Full-bleed ink band; vertical rhythm comes from the sections around it.
-   The band inside is tilted, so clip the horizontal spill it creates. */
+/* Full-bleed orange band; tight cream slivers above/below so it reads as a
+   sticker slapped between sections, not another floating panel. The band
+   inside is tilted, so clip the horizontal spill it creates. */
 .home-ticker {
-  padding-block: var(--space-8);
+  padding-block: var(--space-8) var(--space-6);
   overflow-x: clip;
 }
 
-/* ---------- Orange mega-CTA ---------- */
-.home-cta {
-  padding-block: var(--space-12);
-}
-
-.home-cta__panel {
-  background-color: var(--color-orange);
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-12), 9vw, var(--space-24)) var(--space-8);
-  text-align: center;
-}
-
-.home-cta__title {
-  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-7xl));
-  color: var(--color-cream);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-4);
-}
-
-.home-cta__text {
-  color: var(--color-cream);
-  font-size: var(--text-lg);
-  max-width: 44ch;
-  margin-inline: auto;
-  margin-bottom: var(--space-8);
-}
-
-/* Cream pill on orange — the panel's own inverted button. */
-.home-cta__panel .btn {
-  background-color: var(--color-cream);
-  color: var(--color-orange);
-  border-color: var(--color-cream);
-  --focus-ring: var(--color-cream);
-}
-
-.home-cta__panel .btn:hover {
-  background-color: var(--color-ink);
-  border-color: var(--color-ink);
-  color: var(--color-cream);
+/* ---------- Journey (cream canvas — spacing only; visuals live in
+   JourneyPath.css) ---------- */
+.journey {
+  padding-block: clamp(var(--space-16), 9vw, var(--space-24)) var(--space-12);
 }
 
 /* ---------- What I Do ---------- */
 .home-what {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6);
 }
 
 .home-what__panel {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.1fr;
   background-color: var(--color-yellow);
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  min-height: 480px;
+  min-height: 440px;
 }
 
 .home-what__copy {
@@ -95,8 +67,9 @@
 }
 
 .home-what__copy .btn:hover {
-  background-color: var(--color-ink);
-  color: var(--color-yellow);
+  background-color: var(--color-orange);
+  border-color: var(--color-orange);
+  color: var(--color-cream);
 }
 
 .home-what__media {
@@ -112,38 +85,64 @@
   display: block;
 }
 
-/* ---------- Kind Words ---------- */
+/* ---------- Kind Words — blue speech bubble on the cream canvas ---------- */
 .home-words {
-  padding-block: var(--space-12);
+  padding-block: var(--space-16) var(--space-8);
 }
 
-.home-words__panel {
-  /* Brand blue (matches the About page — one blue across the site). The large
-     quote (24px) and the bold attribution (20px) both clear the 3:1 large-text
-     bar that bright blue allows. */
-  background-color: var(--color-blue);
-  color: var(--text-on-blue);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-16) var(--space-12);
-  --focus-ring: var(--color-cream);
-}
-
+/* Ink heading here by client call — the one black display moment they kept. */
 .home-words__title {
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
   font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  margin-bottom: var(--space-12);
+  color: var(--color-ink);
+  margin-bottom: var(--space-10);
 }
 
-.home-words__quote {
-  max-width: 56ch;
+.home-words__item {
+  max-width: 780px;
 }
 
-.home-words__quote + .home-words__quote {
+.home-words__item + .home-words__item {
   margin-top: var(--space-12);
 }
 
-.home-words__quote p {
+/* The bubble: brand blue, sticker-tilted, with a tail pointing at the
+   attribution below. Quote text is 24px on blue → clears the large-text bar
+   (see tokens.css notes). */
+.home-words__bubble {
+  position: relative;
+  background-color: var(--color-blue);
+  color: var(--text-on-blue);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-10) var(--space-12) var(--space-10) var(--space-16);
+  rotate: -1deg;
+  --focus-ring: var(--color-cream);
+}
+
+/* Oversized display quote mark hanging in the bubble's padding. */
+.home-words__bubble::before {
+  content: '“';
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-6xl);
+  line-height: 1;
+  color: var(--color-yellow);
+}
+
+/* Speech-bubble tail — same blue, clipped triangle under the left edge. */
+.home-words__bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -22px;
+  left: 64px;
+  width: 40px;
+  height: 26px;
+  background-color: var(--color-blue);
+  clip-path: polygon(0 0, 100% 0, 18% 100%);
+}
+
+.home-words__bubble p {
   font-size: var(--text-2xl);
   line-height: var(--leading-snug);
   font-weight: var(--weight-regular);
@@ -153,7 +152,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
+  padding-left: var(--space-16);
 }
 
 .home-words__avatar {
@@ -167,33 +167,155 @@
   display: flex;
   flex-direction: column;
   font-style: normal;
-  font-size: var(--text-base);
-  /* No opacity — solid white keeps 5.49:1 on the deep panel */
 }
 
 .home-words__name {
-  /* 20px bold → "large text", so white on bright blue (3.63:1) clears AA */
+  font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: var(--weight-bold);
+  color: var(--color-ink);
 }
 
 .home-words__role {
   font-size: var(--text-sm);
-  /* Hierarchy via size/weight, not opacity, to preserve contrast */
+  color: var(--color-ink-soft);
 }
 
-/* ---------- Marquee ribbon ----------
-   No band — large orange wavy tagline on the page's cream background. Orange on
-   cream (3.43:1) is legal at this size (large display text). */
-.home-marquee {
+/* Mirrored variant — bubble hugs the right edge, tail and quote mark flip,
+   tilt goes the other way. Bubbles alternate to read as a conversation. */
+.home-words__item--flip {
+  margin-left: auto;
+}
+
+/* Deep-blue variation on the reply bubble — the two blues are deliberately
+   different hues, echoing the tint play in the journey markers. */
+.home-words__item--flip .home-words__bubble {
+  rotate: 1deg;
+  padding: var(--space-10) var(--space-16) var(--space-10) var(--space-12);
+  background-color: var(--color-blue-deep);
+}
+
+.home-words__item--flip .home-words__bubble::after {
+  background-color: var(--color-blue-deep);
+}
+
+.home-words__item--flip .home-words__bubble::before {
+  content: '”';
+  left: auto;
+  right: var(--space-5);
+}
+
+.home-words__item--flip .home-words__bubble::after {
+  left: auto;
+  right: 64px;
+  clip-path: polygon(0 0, 100% 0, 82% 100%);
+}
+
+.home-words__item--flip .home-words__attribution {
+  justify-content: flex-end;
+  padding-left: 0;
+  padding-right: var(--space-16);
+  text-align: right;
+}
+
+/* ---------- Orange finale — full-bleed band, not another floating box.
+   Rounded shoulders let the cream peek above; the footer's cream bar sits
+   flush below. ---------- */
+.home-cta {
+  margin-top: var(--space-16);
+}
+
+.home-cta__band {
+  position: relative;
+  background-color: var(--color-orange);
+  border-radius: clamp(var(--radius-xl), 4vw, 3rem) clamp(var(--radius-xl), 4vw, 3rem) 0 0;
+  padding-block: clamp(var(--space-20), 12vw, var(--space-32));
+  overflow: hidden;
+  text-align: center;
+}
+
+.home-cta__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.home-cta__title {
+  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-7xl));
+  color: var(--color-cream);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-4);
+  text-wrap: balance;
+}
+
+.home-cta__text {
+  color: var(--color-cream);
+  font-size: var(--text-lg);
+  max-width: 44ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+}
+
+/* Cream pill on orange — the band's own inverted button. */
+.home-cta__band .btn {
+  background-color: var(--color-cream);
   color: var(--color-orange);
-  /* Clip the horizontal marquee scroll only; let the tall wavy glyphs overflow
-     vertically (into the margin gap) instead of clipping their peaks. clip +
-     visible is a valid pair and never adds a scrollbar. */
-  overflow-x: clip;
-  overflow-y: visible;
-  padding-block: var(--space-6);
-  margin-block: var(--space-12);
+  border-color: var(--color-cream);
+  --focus-ring: var(--color-cream);
+}
+
+.home-cta__band .btn:hover {
+  background-color: var(--color-yellow);
+  border-color: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+/* Brand motifs drifting on the band — decorative, slow wobble. */
+.home-cta__motif {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  animation: cta-wobble 9s ease-in-out infinite;
+}
+
+.home-cta__motif svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.home-cta__motif--daisy {
+  width: clamp(72px, 9vw, 130px);
+  top: clamp(var(--space-6), 4vw, var(--space-12));
+  left: 6%;
+  color: var(--color-yellow);
+  rotate: -10deg;
+}
+
+.home-cta__motif--clover {
+  width: clamp(56px, 7vw, 104px);
+  bottom: clamp(var(--space-6), 4vw, var(--space-12));
+  right: 7%;
+  color: var(--color-blue-soft);
+  animation-delay: -3s;
+  rotate: 8deg;
+}
+
+.home-cta__motif--flower {
+  width: clamp(40px, 5vw, 72px);
+  top: 18%;
+  right: 14%;
+  color: var(--color-cream);
+  opacity: 0.9;
+  animation-delay: -6s;
+}
+
+@keyframes cta-wobble {
+  0%,
+  100% {
+    transform: rotate(-4deg) translateY(0);
+  }
+  50% {
+    transform: rotate(4deg) translateY(-8px);
+  }
 }
 
 /* ---------- Responsive ---------- */
@@ -204,5 +326,48 @@
 
   .home-what__copy {
     padding: var(--space-8);
+  }
+
+  .home-what__media {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-words__bubble {
+    padding: var(--space-8) var(--space-6) var(--space-8) var(--space-10);
+  }
+
+  .home-words__bubble::before {
+    font-size: var(--text-5xl);
+    left: var(--space-3);
+  }
+
+  .home-words__attribution {
+    padding-left: var(--space-10);
+  }
+
+  .home-words__item--flip .home-words__bubble {
+    padding: var(--space-8) var(--space-10) var(--space-8) var(--space-6);
+  }
+
+  .home-words__item--flip .home-words__bubble::before {
+    font-size: var(--text-5xl);
+    right: var(--space-3);
+  }
+
+  .home-words__item--flip .home-words__attribution {
+    padding-right: var(--space-10);
+  }
+
+  /* Keep the motifs out of the headline's way on small screens. */
+  .home-cta__motif--flower {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-cta__motif {
+    animation: none;
   }
 }
