@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Stat blocks — blue rounded panel; four cream "toy blocks", each with a
+   tiny alternating tilt that straightens on hover.
+   ========================================================================== */
+.stats {
+  padding-block: var(--space-12);
+}
+
+.stats__panel {
+  background-color: var(--color-blue);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-12);
+}
+
+.stats__row {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+.stats__block {
+  background-color: var(--color-cream);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  rotate: -1.5deg;
+  transition: rotate var(--duration-base, 0.25s) var(--ease-out, ease-out);
+}
+
+.stats__block:nth-child(even) {
+  rotate: 1.5deg;
+}
+
+.stats__block:hover {
+  rotate: 0deg;
+}
+
+.stats__number {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+  line-height: var(--leading-tight);
+  color: var(--color-orange);
+  /* Keep the block width steady while the number counts up. */
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__label {
+  display: block;
+  margin-top: var(--space-2);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+}
+
+@media (max-width: 767px) {
+  .stats__panel {
+    padding: var(--space-8);
+  }
+
+  .stats__row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+}

@@ -1,0 +1,41 @@
+/* ==========================================================================
+   Facts ticker — full-bleed ink band, display face, cream text. The one hard
+   contrast beat on the cream page (cream on ink: 15.5:1).
+   ========================================================================== */
+.facts-ticker {
+  background-color: var(--color-ink);
+  padding-block: var(--space-4);
+  overflow-x: clip;
+}
+
+.facts-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+.facts-ticker__fact {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: clamp(var(--text-lg), 2.2vw, var(--text-3xl));
+  line-height: 1.2;
+  color: var(--color-cream);
+  white-space: nowrap;
+}
+
+.facts-ticker__sep {
+  font-size: clamp(var(--text-base), 1.6vw, var(--text-xl));
+  line-height: 1;
+}
+
+.ticker-sep--yellow {
+  color: var(--color-yellow);
+}
+
+.ticker-sep--blue {
+  color: var(--color-blue-soft);
+}
+
+.ticker-sep--soft {
+  color: var(--color-orange-soft);
+}

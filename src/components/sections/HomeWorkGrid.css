@@ -1,0 +1,132 @@
+/* ==========================================================================
+   Home work grid — asymmetric feature-plus-tiles, per the brand's "never a
+   perfectly even grid" rule. Cards are single fixed tiles; title rides a
+   bottom scrim on hover/focus (same pattern as the Projects overview).
+   ========================================================================== */
+.home-work__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.home-work__title {
+  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
+  color: var(--color-ink);
+}
+
+.home-work__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr;
+  grid-auto-rows: clamp(200px, 24vw, 280px);
+  gap: var(--space-4);
+}
+
+.home-work__card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  /* Tiny alternating tilt — toys on a shelf, not files in a drawer. */
+  transform: rotate(-0.6deg);
+}
+
+.home-work__card:nth-child(even) {
+  transform: rotate(0.6deg);
+}
+
+.home-work__card--feature {
+  grid-row: span 2;
+}
+
+.home-work__link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.home-work__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow, 0.4s) var(--ease-out, ease-out);
+}
+
+.home-work__link:hover .home-work__image,
+.home-work__link:focus-visible .home-work__image {
+  transform: scale(1.04);
+}
+
+.home-work__badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  background-color: var(--color-blue-soft);
+  color: var(--color-ink);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+}
+
+/* Title on a bottom scrim — slides up on hover / keyboard focus. */
+.home-work__scrim {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: var(--space-8) var(--space-4) var(--space-3);
+  background: linear-gradient(180deg, transparent, rgba(26, 26, 26, 0.72));
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--duration-base, 0.25s) var(--ease-out, ease-out),
+    transform var(--duration-base, 0.25s) var(--ease-out, ease-out);
+}
+
+.home-work__link:hover .home-work__scrim,
+.home-work__link:focus-visible .home-work__scrim {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-work__name {
+  color: var(--color-cream);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-work__scrim {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-work__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: clamp(180px, 30vw, 240px);
+  }
+}
+
+@media (max-width: 560px) {
+  .home-work__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 240px;
+  }
+
+  .home-work__card--feature {
+    grid-row: span 1;
+  }
+
+  /* Touch has no hover — keep the title readable. */
+  .home-work__scrim {
+    opacity: 1;
+    transform: none;
+  }
+}

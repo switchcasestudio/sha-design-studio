@@ -2,8 +2,12 @@ import { Link } from 'react-router-dom';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import Button from '@/components/ui/Button';
+import FactsTicker from '@/components/sections/FactsTicker';
 import HomeAssemble from '@/components/sections/HomeAssemble';
+import HomeWorkGrid from '@/components/sections/HomeWorkGrid';
+import JourneyPath from '@/components/sections/JourneyPath';
 import SocialProof from '@/components/sections/SocialProof';
+import StatBlocks from '@/components/sections/StatBlocks';
 import TextPath from '@/components/ui/TextPath';
 import { reducedReveal, slideUp } from '@/lib/motion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -47,6 +51,26 @@ function Home() {
 
       {/* ---------- Social proof: partner / client logo marquee ---------- */}
       <SocialProof />
+
+      {/* ---------- Featured work: the homepage finally shows the work ---------- */}
+      <ColorWorld className="home-work">
+        <HomeWorkGrid />
+      </ColorWorld>
+
+      {/* ---------- Studio facts on a loud ink band ---------- */}
+      <ColorWorld className="home-ticker">
+        <FactsTicker />
+      </ColorWorld>
+
+      {/* ---------- The designer's journey (yellow play-path) ---------- */}
+      <ColorWorld className="journey">
+        <JourneyPath />
+      </ColorWorld>
+
+      {/* ---------- The studio by the numbers (blue toy blocks) ---------- */}
+      <ColorWorld className="stats">
+        <StatBlocks />
+      </ColorWorld>
 
       {/* ---------- "What I Do" CTA ---------- */}
       <ColorWorld className="home-what">

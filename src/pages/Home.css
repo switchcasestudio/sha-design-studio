@@ -1,6 +1,16 @@
 /* The home hero headline now lives in the GSAP assemble section
    (HomeAssemble.css) — it replaced the old static .home-hero. */
 
+/* ---------- Featured work grid ---------- */
+.home-work {
+  padding-block: var(--space-16) var(--space-8);
+}
+
+/* Full-bleed ink band; vertical rhythm comes from the sections around it. */
+.home-ticker {
+  padding-block: var(--space-8);
+}
+
 /* ---------- What I Do ---------- */
 .home-what {
   padding-block: var(--space-12);

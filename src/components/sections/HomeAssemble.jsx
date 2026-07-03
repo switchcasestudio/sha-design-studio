@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { siteConfig } from '@/utils/siteConfig';
 import HeadlineMorph from '@/components/ui/HeadlineMorph';
 import HeroNav from '@/components/ui/HeroNav';
+import HeroToys from '@/components/sections/HeroToys';
 import './HomeAssemble.css';
 
 // 100vh brand hero: just the centred wordmark. Its letters morph between glyphs
@@ -13,6 +14,10 @@ function HomeAssemble() {
 
   return (
     <section ref={sectionRef} className="home-assemble">
+      {/* Product photos scattered like toys in the hero's empty cream pockets —
+          decorative, draggable, and the first hint of real work on the page. */}
+      <HeroToys />
+
       <div className="home-assemble__inner">
         <p className="home-assemble__brand">Designing Playful Products</p>
         {/* Solid wordmark whose letters playfully pop between the glyph and brand

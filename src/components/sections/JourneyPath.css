@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Journey path — yellow rounded panel; four stops on a dashed play-path.
+   Horizontal on desktop, a vertical spine on phones.
+   ========================================================================== */
+.journey {
+  padding-block: var(--space-12);
+}
+
+.journey__panel {
+  background-color: var(--color-yellow);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-12);
+}
+
+.journey__title {
+  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
+  color: var(--color-ink);
+  margin-bottom: var(--space-10);
+}
+
+.journey__path {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  position: relative;
+  counter-reset: stop;
+}
+
+/* The dashed road between the first and last dot. */
+.journey__path::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: clamp(40px, 7%, 90px);
+  right: clamp(40px, 7%, 90px);
+  border-top: 3px dashed rgba(26, 26, 26, 0.35);
+}
+
+.journey__stop {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  max-width: 190px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.journey__dot {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-cream);
+  border: 3px solid var(--color-ink);
+  display: grid;
+  place-items: center;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  margin-bottom: var(--space-3);
+}
+
+.journey__label {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+  color: var(--color-ink);
+}
+
+.journey__detail {
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  line-height: var(--leading-normal);
+  margin-top: var(--space-1);
+}
+
+@media (max-width: 767px) {
+  .journey__panel {
+    padding: var(--space-8);
+  }
+
+  .journey__path {
+    flex-direction: column;
+    gap: var(--space-8);
+    align-items: flex-start;
+  }
+
+  /* Vertical spine down the dot column. */
+  .journey__path::before {
+    top: 28px;
+    bottom: 28px;
+    left: 27px;
+    right: auto;
+    border-top: 0;
+    border-left: 3px dashed rgba(26, 26, 26, 0.35);
+  }
+
+  .journey__stop {
+    max-width: none;
+    flex-direction: row;
+    text-align: left;
+    gap: var(--space-4);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    grid-template-areas:
+      'dot label'
+      'dot detail';
+    align-items: center;
+    column-gap: var(--space-4);
+  }
+
+  .journey__dot {
+    grid-area: dot;
+    margin-bottom: 0;
+  }
+
+  .journey__label {
+    grid-area: label;
+    align-self: end;
+  }
+
+  .journey__detail {
+    grid-area: detail;
+    align-self: start;
+    margin-top: 0;
+  }
+}
