@@ -4,10 +4,81 @@
    ========================================================================== */
 
 .inquire-page {
+  position: relative;
   background-color: var(--color-cream);
   color: var(--color-ink);
   min-height: calc(100vh - 80px);
   padding-block: var(--space-16) var(--space-24);
+  /* Canvas motifs are clipped to the page so none cause horizontal scroll */
+  overflow: hidden;
+}
+
+/* ---------- Canvas motifs — behind the content, slow drift ---------- */
+.inquire-page__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.inquire-page__motif {
+  position: absolute;
+  display: block;
+  animation: inquire-float 7s ease-in-out infinite;
+}
+
+.inquire-page__motif svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Large daisy half-cropped off the left edge, low behind the intro column */
+.inquire-page__motif--daisy {
+  width: clamp(160px, 20vw, 300px);
+  bottom: 8%;
+  left: -6%;
+  color: var(--color-yellow-soft);
+  opacity: 0.55;
+  rotate: -12deg;
+}
+
+/* Small star up near the title */
+.inquire-page__motif--star {
+  width: clamp(40px, 5vw, 76px);
+  top: 12%;
+  left: 44%;
+  color: var(--color-blue-soft);
+  opacity: 0.7;
+  animation-delay: -2.5s;
+  rotate: 10deg;
+}
+
+/* Clover low-right, well clear of the form */
+.inquire-page__motif--clover {
+  width: clamp(70px, 9vw, 128px);
+  bottom: 6%;
+  right: 3%;
+  color: var(--color-orange-soft);
+  opacity: 0.5;
+  animation-delay: -4.5s;
+  rotate: 8deg;
+}
+
+@keyframes inquire-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Content sits above the canvas motifs */
+.inquire-page__hero {
+  position: relative;
+  z-index: 1;
 }
 
 .inquire-page__inner {
@@ -26,9 +97,32 @@
   margin-bottom: var(--space-6);
 }
 
+/* Tulip tucked at the end of the title like punctuation */
+.inquire-page__title-flower {
+  display: inline-block;
+  width: clamp(40px, 6vw, 72px);
+  margin-left: 0.2em;
+  color: var(--color-yellow);
+  vertical-align: baseline;
+  transform-origin: bottom center;
+}
+
+.inquire-page__title-flower svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .inquire-page__lead {
   font-size: var(--text-lg);
   max-width: 36ch;
+  margin-bottom: var(--space-2);
+}
+
+/* Response-time reassurance — placeholder copy, confirm with Shiran */
+.inquire-page__reply {
+  font-size: var(--text-base);
+  color: var(--color-ink-muted);
   margin-bottom: var(--space-8);
 }
 
@@ -56,13 +150,73 @@
   opacity: 0.7;
 }
 
-/* White form card — small form text/labels sit on white for clean contrast */
+/* What happens next — reassurance list with shape bullets */
+.inquire-page__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+}
+
+.inquire-page__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--color-ink-soft);
+}
+
+.inquire-page__step-shape {
+  flex: none;
+  width: 28px;
+  height: 28px;
+}
+
+.inquire-page__step-shape--orange {
+  color: var(--color-orange);
+}
+
+.inquire-page__step-shape--blue {
+  color: var(--color-blue);
+}
+
+.inquire-page__step-shape--yellow {
+  color: var(--color-yellow-deep);
+}
+
+/* White form card — small form text/labels sit on white for clean contrast.
+   Resting −0.5deg sticker tilt straightens on focus so it feels tactile but
+   still reads as stable while being filled in. */
 .inquire-page__form {
+  position: relative;
   width: 100%;
   background-color: var(--color-white);
   border-radius: var(--radius-2xl);
   padding: clamp(var(--space-6), 4vw, var(--space-10));
   box-shadow: var(--shadow-lg);
+  transform: rotate(-0.5deg);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.inquire-page__form:focus-within {
+  transform: rotate(0deg);
+}
+
+/* Flower hanging off the card's top-right corner — a sticker slapped on, like
+   the About "Hello!" flower. Mostly off the card so it reads as an add-on. */
+.inquire-page__form-flower {
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  width: clamp(64px, 8vw, 104px);
+  color: var(--color-yellow);
+  transform: rotate(12deg);
+}
+
+.inquire-page__form-flower svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* ---------- Responsive ---------- */
@@ -74,5 +228,22 @@
   .inquire-page__inner {
     grid-template-columns: 1fr;
     gap: var(--space-10);
+  }
+
+  /* Keep only the low daisy on mobile; the mid-page star/clover would crowd
+     the stacked layout and sit under the form. */
+  .inquire-page__motif--star,
+  .inquire-page__motif--clover {
+    display: none;
+  }
+
+  .inquire-page__motif--daisy {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inquire-page__motif {
+    animation: none;
   }
 }

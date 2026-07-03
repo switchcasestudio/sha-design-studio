@@ -4,6 +4,37 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Inquire: the conversion page joins the playroom
+
+The plainest page — and the one the whole site funnels toward — now feels the
+most like the brand (cream + orange is Shiran's signature combo).
+
+- **Celebratory success state** (I1): a successful send now *replaces* the form
+  (AnimatePresence) with a display-face orange "Thanks — Shiran will be in touch
+  soon!" and a burst of 7 brand stickers that spring out from centre and settle
+  with tilts. Reduced-motion: stickers render in their resting spots, no travel.
+  `role="status"` preserved. Error state untouched.
+- **Canvas motifs** (I2): daisy / star / clover drifting behind the content,
+  `aria-hidden`, clear of the form and the pointer path; star + clover hidden
+  under 768px; float gated by reduced-motion.
+- **Title + copy** (I3): "Let's stay connected" → "Let's make something
+  together", with a tulip popping in at the end like punctuation. Added a
+  response-time reassurance line and a personality placeholder on the message
+  textarea. Labels unchanged (a11y). *Placeholder copy — confirm with Shiran.*
+- **Form card** (I4): resting −0.5deg tilt that straightens on `:focus-within`;
+  a yellow flower hangs off the top-right corner, echoing the About "Hello!"
+  flower so the two pages rhyme.
+- **"Send Away" button** (I5): a daisy spins beside "Sending…" while submitting.
+- **"What happens next"** (I6): three shape-bulleted reassurance steps fill the
+  previously-empty left column. *Placeholder copy — confirm with Shiran.*
+- **Custom checkbox** (I7): brand box that fills yellow with an ink check that
+  springs in; native input kept in the DOM, focusable, focus ring preserved.
+
+Follow-up: three copy strings above (reply-time, next-steps, title) need
+Shiran's voice sign-off before launch.
+
+---
+
 ## 2026-07-03 — Sub-page whimsy pass: shared BrandShape (Fable 5 audit)
 
 Executing `docs/2026-07-03-subpage-whimsy-audit.md` — bringing Services / About /
