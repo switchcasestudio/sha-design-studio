@@ -4,6 +4,27 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Work grid: straight-at-rest tiles, white-on-blue tags, tag-safe motif, solid flower (client feedback)
+
+Second desktop pass on the Work overview, refining the previous one.
+
+- **Tilt only on hover**: cards sat at a resting ±tilt (scrapbook look); the
+  client wants them straight. Rest is now `rotate(0)`; the alternating `--tilt`
+  moves to the hover state (tilt + lift). Reduced-motion hover is now flat (was
+  keeping the static tilt).
+- **Motif never covers the tag**: the top daisy sat centred on the seam and
+  clipped the right card's top-left tag. Moved it left of the seam (`left: 47%
+  → 40%`) so it floats over the gutter/left-card top, clear of both cards' tags.
+  (Tags live inside the card's stacking context at z-index 1, so a badge can't
+  paint above a sibling motif at z-index 3 — repositioning is the fix, not
+  z-order.)
+- **Tag → white on blue**: was yellow on blue-deep; now white on blue-deep
+  (5.49:1, clears AA 4.5 — better than the yellow version).
+- **Cream flower solid**: dropped its `opacity: 0.9` (a see-through flower read
+  as a mistake); it's now full cream like the other motifs.
+
+---
+
 ## 2026-07-03 — Work grid: lighter scrim, yellow-on-blue tags, motifs to front, Shape Sorter packshot (client feedback)
 
 Desktop-only pass on the Work overview (`Projects.jsx` / `.css`); mobile to
