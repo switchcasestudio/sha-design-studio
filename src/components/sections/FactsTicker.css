@@ -1,10 +1,10 @@
 /* ==========================================================================
-   Facts ticker — full-bleed orange band, display face, cream text. The loud
-   brand-heartbeat beat on the cream page (cream on orange: 3.4:1, legal for
-   this large display type only — keep the font-size clamp ≥ 20px).
+   Facts ticker — full-bleed blue band, display face, cream text (3:1+, legal
+   for this large display type only — keep the font-size clamp ≥ 20px). Blue
+   is the work-grid section's dominant accent; flowers avoid blue-on-blue.
    ========================================================================== */
 .facts-ticker {
-  background-color: var(--color-orange);
+  background-color: var(--color-blue);
   padding-block: var(--space-5, 1.25rem);
   overflow-x: clip;
   /* A sticker slapped on slightly crooked — scaled a touch past full width so
@@ -37,8 +37,8 @@
   color: var(--color-yellow);
 }
 
-.ticker-sep--blue {
-  color: var(--color-blue-soft);
+.ticker-sep--coral {
+  color: var(--color-orange-soft);
 }
 
 .ticker-sep--soft {

@@ -4,6 +4,16 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-02 — Home: work-grid beat goes blue (client feedback)
+
+- "Fresh from the studio" section's dominant accent switched orange → blue:
+  heading + facts-ticker band now brand blue. Ticker flower separators
+  re-tinted warm (yellow / orange-soft / cream) so none sit blue-on-blue.
+- Page color rhythm now: cream hero → BLUE work+ticker → cream journey
+  (orange road) → yellow What I Do → blue bubbles → orange finale.
+
+---
+
 ## 2026-07-02 — Home: pure shapes + tint-ramp exploration (client feedback)
 
 - Journey stops: emojis removed — the brand shapes stand alone. Client loves

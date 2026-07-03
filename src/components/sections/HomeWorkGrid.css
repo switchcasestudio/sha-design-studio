@@ -11,11 +11,12 @@
   margin-bottom: var(--space-8);
 }
 
-/* Orange display heading — the brand's heading color (3.4:1 on cream is
-   legal for display sizes; this clamps ≥ 40px). */
+/* Blue display heading — this section's dominant accent is blue (client
+   call), echoed by the ticker band below. 3:1+ on cream is legal for
+   display sizes; this clamps ≥ 40px. */
 .home-work__title {
   font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  color: var(--color-orange);
+  color: var(--color-blue);
 }
 
 .home-work__grid {

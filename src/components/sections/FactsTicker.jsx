@@ -12,8 +12,9 @@ const FACTS = [
   'sketch → prototype → production',
 ];
 
-// Flower separators cycle through the accent tints against the orange band.
-const SEPARATOR_TINTS = ['ticker-sep--yellow', 'ticker-sep--blue', 'ticker-sep--soft'];
+// Flower separators cycle through warm tints against the blue band — no
+// blue flowers here, so nothing disappears blue-on-blue.
+const SEPARATOR_TINTS = ['ticker-sep--yellow', 'ticker-sep--coral', 'ticker-sep--soft'];
 
 /**
  * Ink marquee band of studio facts between the work grid and the journey —
