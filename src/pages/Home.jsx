@@ -7,23 +7,12 @@ import HomeAssemble from '@/components/sections/HomeAssemble';
 import HomeWorkGrid from '@/components/sections/HomeWorkGrid';
 import JourneyPath from '@/components/sections/JourneyPath';
 import SocialProof from '@/components/sections/SocialProof';
+import CtaBand from '@/components/sections/CtaBand';
 import { reducedReveal, slideUp } from '@/lib/motion';
 import { siteConfig } from '@/utils/siteConfig';
 import { testimonials } from '@/data/testimonials';
-import { inlineSvg } from '@/utils/svg';
-import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
-import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
-import flowerRaw from '@/assets/svg/flower-yellow.svg?raw';
 import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
 import './Home.css';
-
-// Brand motifs scattered on the closing orange band — geometry from the shared
-// SVG set, tinted via `color` on the wrapper (see utils/svg.js).
-const MOTIFS = {
-  daisy: inlineSvg(daisyRaw),
-  clover: inlineSvg(cloverRaw),
-  flower: inlineSvg(flowerRaw),
-};
 
 // Color-world block: slides up and settles on enter (position/opacity only —
 // the block's own background color is never touched).
@@ -152,36 +141,11 @@ function Home() {
 
       {/* ---------- Orange finale: full-bleed CTA band, the page's loudest
           beat and its last word before the footer. ---------- */}
-      <ColorWorld className="home-cta">
-        <div className="home-cta__band">
-          <span
-            className="home-cta__motif home-cta__motif--daisy"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: MOTIFS.daisy }}
-          />
-          <span
-            className="home-cta__motif home-cta__motif--clover"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: MOTIFS.clover }}
-          />
-          <span
-            className="home-cta__motif home-cta__motif--flower"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: MOTIFS.flower }}
-          />
-
-          <div className="container home-cta__inner">
-            <h2 className="home-cta__title">Got a toy in your head?</h2>
-            <p className="home-cta__text">
-              From first sketch to factory floor: let&apos;s turn it into the
-              thing a baby won&apos;t let go of.
-            </p>
-            <Button as={Link} to="/inquire" variant="primary" size="lg">
-              Let&apos;s chat
-            </Button>
-          </div>
-        </div>
-      </ColorWorld>
+      <CtaBand
+        title="Got a toy in your head?"
+        text="From first sketch to factory floor: let's turn it into the thing a baby won't let go of."
+        buttonLabel="Let's chat"
+      />
     </>
   );
 }

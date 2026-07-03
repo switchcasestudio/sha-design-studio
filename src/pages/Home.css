@@ -217,107 +217,6 @@
   text-align: right;
 }
 
-/* ---------- Orange finale — full-bleed band, not another floating box.
-   Rounded shoulders let the cream peek above; the footer's cream bar sits
-   flush below. ---------- */
-.home-cta {
-  margin-top: var(--space-16);
-}
-
-.home-cta__band {
-  position: relative;
-  background-color: var(--color-orange);
-  border-radius: clamp(var(--radius-xl), 4vw, 3rem) clamp(var(--radius-xl), 4vw, 3rem) 0 0;
-  padding-block: clamp(var(--space-20), 12vw, var(--space-32));
-  overflow: hidden;
-  text-align: center;
-}
-
-.home-cta__inner {
-  position: relative;
-  z-index: 1;
-}
-
-.home-cta__title {
-  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-7xl));
-  color: var(--color-cream);
-  letter-spacing: var(--tracking-tight);
-  margin-bottom: var(--space-4);
-  text-wrap: balance;
-}
-
-.home-cta__text {
-  color: var(--color-cream);
-  font-size: var(--text-lg);
-  max-width: 44ch;
-  margin-inline: auto;
-  margin-bottom: var(--space-8);
-}
-
-/* Cream pill on orange — the band's own inverted button. */
-.home-cta__band .btn {
-  background-color: var(--color-cream);
-  color: var(--color-orange);
-  border-color: var(--color-cream);
-  --focus-ring: var(--color-cream);
-}
-
-.home-cta__band .btn:hover {
-  background-color: var(--color-yellow);
-  border-color: var(--color-yellow);
-  color: var(--color-ink);
-}
-
-/* Brand motifs drifting on the band — decorative, slow wobble. */
-.home-cta__motif {
-  position: absolute;
-  display: block;
-  pointer-events: none;
-  animation: cta-wobble 9s ease-in-out infinite;
-}
-
-.home-cta__motif svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.home-cta__motif--daisy {
-  width: clamp(72px, 9vw, 130px);
-  top: clamp(var(--space-6), 4vw, var(--space-12));
-  left: 6%;
-  color: var(--color-yellow);
-  rotate: -10deg;
-}
-
-.home-cta__motif--clover {
-  width: clamp(56px, 7vw, 104px);
-  bottom: clamp(var(--space-6), 4vw, var(--space-12));
-  right: 7%;
-  color: var(--color-blue-soft);
-  animation-delay: -3s;
-  rotate: 8deg;
-}
-
-.home-cta__motif--flower {
-  width: clamp(40px, 5vw, 72px);
-  top: 18%;
-  right: 14%;
-  color: var(--color-cream);
-  opacity: 0.9;
-  animation-delay: -6s;
-}
-
-@keyframes cta-wobble {
-  0%,
-  100% {
-    transform: rotate(-4deg) translateY(0);
-  }
-  50% {
-    transform: rotate(4deg) translateY(-8px);
-  }
-}
-
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .home-what__panel {
@@ -358,16 +257,5 @@
 
   .home-words__item--flip .home-words__attribution {
     padding-right: var(--space-10);
-  }
-
-  /* Keep the motifs out of the headline's way on small screens. */
-  .home-cta__motif--flower {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-cta__motif {
-    animation: none;
   }
 }
