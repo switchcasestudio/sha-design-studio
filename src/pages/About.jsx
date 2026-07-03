@@ -98,8 +98,13 @@ function About() {
               </p>
 
               <p className="about-bio__signoff">
-                Simple, smart, and full of wonder
-                <BrandShape shape="star" className="about-bio__signoff-star" />
+                Simple, smart, and full of{' '}
+                {/* Keep the star glued to the last word so it never orphans on
+                    its own line as the column narrows. */}
+                <span className="about-bio__signoff-last">
+                  wonder
+                  <BrandShape shape="star" className="about-bio__signoff-star" />
+                </span>
               </p>
             </div>
 

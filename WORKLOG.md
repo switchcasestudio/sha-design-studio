@@ -4,6 +4,25 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — About chips + signoff star, Inquire sticky footer (client feedback)
+
+- **About milestone chips** (`.about-chip`): were small and noticeably tilted.
+  Chunkier now (padding `0.05em/0.55em → 0.22em/0.8em`, semibold → bold) with
+  only a whisper of tilt (±2/1.5/1deg → ±0.6/0.5/0.5deg).
+- **About signoff star**: "Simple, smart, and full of wonder ✷" — the star was a
+  flex item that dropped to its own line as the column narrowed. Signoff is now
+  plain inline text (not flex) and "wonder"+star are wrapped in a `nowrap` span,
+  so the star always hugs the last word and wraps with it.
+- **Inquire footer now visible**: the page forced `min-height: calc(100vh -
+  80px)`, so its short content left a full viewport of empty space and pushed
+  the footer below the fold. Removed that — the layout already makes `<main>`
+  flex:1 (sticky footer), so `<main>` now fills the gap (body is cream too, so
+  it's seamless) and the footer sits at the bottom of the viewport. Left the
+  same `min-height` on the tall colored pages (Work/ProjectDetail/Lab) where
+  it's harmless; this was genuinely an Inquire-only problem.
+
+---
+
 ## 2026-07-03 — Work grid: straight-at-rest tiles, white-on-blue tags, tag-safe motif, solid flower (client feedback)
 
 Second desktop pass on the Work overview, refining the previous one.

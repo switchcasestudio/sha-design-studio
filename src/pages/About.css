@@ -34,12 +34,10 @@
 
 /* The best line on the page, promoted from a bold body line to a display
    pull-quote. Cream on blue (3.63:1) clears the 3:1 large-text bar at this
-   size; the yellow star is a decorative full stop (contrast not binding). */
+   size; the yellow star is a decorative full stop (contrast not binding).
+   Plain inline text (not flex) so the star flows with the words and wraps
+   alongside the last one instead of dropping to its own line. */
 .about-bio__signoff {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.12em;
   margin-top: var(--space-6);
   font-family: var(--font-display);
   font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
@@ -47,8 +45,16 @@
   color: var(--color-cream);
 }
 
+/* "wonder" + the star travel together as one unbreakable unit */
+.about-bio__signoff-last {
+  white-space: nowrap;
+}
+
 .about-bio__signoff-star {
+  display: inline-block;
   width: clamp(24px, 3.4vw, 40px);
+  margin-left: 0.15em;
+  vertical-align: -0.15em;
   color: var(--color-yellow);
 }
 
@@ -59,16 +65,17 @@
 }
 
 /* Career milestones as cream sticker chips inline in the bio — ink on cream
-   (15.3:1). Slight alternating tilt; lift + straighten on hover. */
+   (15.3:1). Chunky pills with only a whisper of tilt; lift + straighten on
+   hover. */
 .about-chip {
   display: inline-block;
   vertical-align: middle;
-  padding: 0.05em 0.55em;
+  padding: 0.22em 0.8em;
   background-color: var(--color-cream);
   color: var(--color-ink);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   border-radius: var(--radius-pill);
-  line-height: 1.35;
+  line-height: 1.2;
   box-shadow: var(--shadow-sm);
   transition:
     transform var(--duration-base) var(--ease-out),
@@ -76,13 +83,13 @@
 }
 
 .about-chip--a {
-  transform: rotate(-2deg);
+  transform: rotate(-0.6deg);
 }
 .about-chip--b {
-  transform: rotate(1.5deg);
+  transform: rotate(0.5deg);
 }
 .about-chip--c {
-  transform: rotate(-1deg);
+  transform: rotate(-0.5deg);
 }
 
 .about-chip:hover {

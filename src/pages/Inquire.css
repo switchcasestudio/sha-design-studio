@@ -7,7 +7,11 @@
   position: relative;
   background-color: var(--color-cream);
   color: var(--color-ink);
-  min-height: calc(100vh - 80px);
+  /* No forced 100vh min-height: this page's content is short, and the layout
+     already makes <main> flex:1 (sticky footer). Forcing a viewport-tall page
+     here pushed the footer a full screen below the fold; letting it size to its
+     content lets <main> fill the gap (body is cream too, so it's seamless) and
+     the footer sits at the bottom of the viewport, in view. */
   padding-block: var(--space-16) var(--space-24);
   /* Canvas motifs are clipped to the page so none cause horizontal scroll */
   overflow: hidden;
