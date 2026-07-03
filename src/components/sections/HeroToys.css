@@ -37,32 +37,32 @@
 /* Scatter points — clear of the wordmark (centre) and the nav blobs at
    15%/36%, 85%/30%, 80%/74%. */
 .hero-toys__card--gymini {
-  width: clamp(150px, 15vw, 230px);
+  width: clamp(170px, 18vw, 280px);
   aspect-ratio: 4 / 3;
-  left: 6%;
-  top: 10%;
+  left: 5%;
+  top: 9%;
 }
 
 .hero-toys__card--trike {
-  width: clamp(120px, 12vw, 185px);
+  width: clamp(135px, 14vw, 220px);
   aspect-ratio: 3 / 3.6;
-  right: 24%;
-  top: 7%;
+  right: 22%;
+  top: 6%;
 }
 
 .hero-toys__card--piano {
-  width: clamp(140px, 14vw, 215px);
+  width: clamp(160px, 16vw, 250px);
   aspect-ratio: 4 / 3;
-  left: 9%;
-  bottom: 12%;
+  left: 8%;
+  bottom: 11%;
 }
 
 /* Handwritten-feeling nudge beside the bottom card. Body face, orange on
    cream — decorative, so the 3.43:1 pair is fine at this weight/size. */
 .hero-toys__hint {
   position: absolute;
-  left: calc(9% + clamp(140px, 14vw, 215px) + 16px);
-  bottom: 13%;
+  left: calc(8% + clamp(160px, 16vw, 250px) + 16px);
+  bottom: 12%;
   font-family: var(--font-body);
   font-weight: var(--weight-semibold);
   font-size: var(--text-sm);

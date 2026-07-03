@@ -53,6 +53,28 @@
   max-width: 12ch;
 }
 
+/* The value statement under the wordmark — display face, loud but smaller
+   than the mark so the hierarchy stays name → promise → action. */
+.home-assemble__statement {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: clamp(var(--text-xl), 2.8vw, var(--text-4xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-ink);
+  margin-top: var(--space-2);
+}
+
+.home-assemble__statement-accent {
+  color: var(--color-blue);
+}
+
+.home-assemble__actions {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
 @media (max-width: 767px) {
   .home-assemble {
     /* Still fill the first screen on mobile so "What I Do" starts below the fold */
@@ -77,5 +99,11 @@
      SVGs are sized in em, so they scale up with it automatically. */
   .home-assemble__headline {
     font-size: clamp(4.5rem, 24vw, 8rem);
+  }
+
+  .home-assemble__actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
   }
 }

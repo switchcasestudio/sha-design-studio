@@ -1,5 +1,7 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { siteConfig } from '@/utils/siteConfig';
+import Button from '@/components/ui/Button';
 import HeadlineMorph from '@/components/ui/HeadlineMorph';
 import HeroNav from '@/components/ui/HeroNav';
 import HeroToys from '@/components/sections/HeroToys';
@@ -27,6 +29,22 @@ function HomeAssemble() {
               wordmark — only blue/yellow shapes pop in the hero. */}
           <HeadlineMorph text={siteConfig.name} excludeColors={['red']} />
         </h1>
+
+        {/* The statement the wordmark alone never made — who this is for and
+            why they should care. Display face; the closing word flips blue. */}
+        <p className="home-assemble__statement">
+          Toys babies love&nbsp;&amp;&nbsp;brands{' '}
+          <span className="home-assemble__statement-accent">trust.</span>
+        </p>
+
+        <div className="home-assemble__actions">
+          <Button as={Link} to="/projects" variant="primary" size="lg">
+            See the work
+          </Button>
+          <Button as={Link} to="/inquire" variant="outline" size="lg">
+            Let&apos;s chat
+          </Button>
+        </div>
       </div>
 
       {/* The site nav, living in the hero as labelled brand shapes scattered

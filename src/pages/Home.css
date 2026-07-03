@@ -6,9 +6,52 @@
   padding-block: var(--space-16) var(--space-8);
 }
 
-/* Full-bleed ink band; vertical rhythm comes from the sections around it. */
+/* Full-bleed ink band; vertical rhythm comes from the sections around it.
+   The band inside is tilted, so clip the horizontal spill it creates. */
 .home-ticker {
   padding-block: var(--space-8);
+  overflow-x: clip;
+}
+
+/* ---------- Orange mega-CTA ---------- */
+.home-cta {
+  padding-block: var(--space-12);
+}
+
+.home-cta__panel {
+  background-color: var(--color-orange);
+  border-radius: var(--radius-2xl);
+  padding: clamp(var(--space-12), 9vw, var(--space-24)) var(--space-8);
+  text-align: center;
+}
+
+.home-cta__title {
+  font-size: clamp(var(--text-4xl), 6.5vw, var(--text-7xl));
+  color: var(--color-cream);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-4);
+}
+
+.home-cta__text {
+  color: var(--color-cream);
+  font-size: var(--text-lg);
+  max-width: 44ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+}
+
+/* Cream pill on orange — the panel's own inverted button. */
+.home-cta__panel .btn {
+  background-color: var(--color-cream);
+  color: var(--color-orange);
+  border-color: var(--color-cream);
+  --focus-ring: var(--color-cream);
+}
+
+.home-cta__panel .btn:hover {
+  background-color: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-cream);
 }
 
 /* ---------- What I Do ---------- */

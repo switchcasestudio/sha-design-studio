@@ -72,6 +72,22 @@ function Home() {
         <StatBlocks />
       </ColorWorld>
 
+      {/* ---------- Orange mega-CTA: the page's loudest beat ---------- */}
+      <ColorWorld className="home-cta">
+        <div className="container">
+          <div className="home-cta__panel">
+            <h2 className="home-cta__title">Got a toy in your head?</h2>
+            <p className="home-cta__text">
+              From first sketch to factory floor — let&apos;s turn it into the
+              thing a baby won&apos;t let go of.
+            </p>
+            <Button as={Link} to="/inquire" variant="primary" size="lg">
+              Let&apos;s chat
+            </Button>
+          </div>
+        </div>
+      </ColorWorld>
+
       {/* ---------- "What I Do" CTA ---------- */}
       <ColorWorld className="home-what">
         <div className="container">
