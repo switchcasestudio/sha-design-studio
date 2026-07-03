@@ -1,52 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import blob1Raw from '@/assets/svg/blob-blue.svg?raw';
-import blob2Raw from '@/assets/svg/blob-red.svg?raw';
-import blob3Raw from '@/assets/svg/blob-yellow.svg?raw';
-import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
-import coralRaw from '@/assets/svg/coral-red.svg?raw';
-import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
-import flower1Raw from '@/assets/svg/flower-red.svg?raw';
-import flower2Raw from '@/assets/svg/flower-yellow.svg?raw';
-import heartRaw from '@/assets/svg/heart-red.svg?raw';
-import ringRaw from '@/assets/svg/ring-blue.svg?raw';
-import splat1Raw from '@/assets/svg/splat-blue.svg?raw';
-import splat2Raw from '@/assets/svg/splat-red.svg?raw';
-import starRaw from '@/assets/svg/star-blue.svg?raw';
-import tulipRaw from '@/assets/svg/tulip-yellow.svg?raw';
+import { GEO } from '@/components/ui/BrandShape';
 import './HeadlineMorph.css';
 
-// These are SVG paths, so colour is ours to choose: strip the file's baked fill
-// and route every path through `currentColor`, then the wrapper's `color` tints
-// it. That decouples a shape's GEOMETRY from its colour — any motif can be blue
-// or yellow (or red elsewhere), and the same path can be reused in any tint.
-function prep(raw) {
-  return raw
-    .replace(/<\?xml[\s\S]*?\?>/g, '')
-    .replace(/<defs>[\s\S]*?<\/defs>/gi, '')
-    .replace(/class="cls-\d+"/g, 'fill="currentColor"')
-    .replace(/#(?:[0-9a-fA-F]{3}){1,2}\b/g, 'currentColor')
-    .trim();
-}
-
-// Geometry registry — keyed by shape, colour-agnostic. (blob1/2/3 are three
-// distinct blob paths; splat1/2 and flower1/2 likewise.)
-const GEO = {
-  blob1: prep(blob1Raw),
-  blob2: prep(blob2Raw),
-  blob3: prep(blob3Raw),
-  clover: prep(cloverRaw),
-  coral: prep(coralRaw),
-  daisy: prep(daisyRaw),
-  flower1: prep(flower1Raw),
-  flower2: prep(flower2Raw),
-  heart: prep(heartRaw),
-  ring: prep(ringRaw),
-  splat1: prep(splat1Raw),
-  splat2: prep(splat2Raw),
-  star: prep(starRaw),
-  tulip: prep(tulipRaw),
-};
+// Geometry comes from the shared BrandShape registry (colour-agnostic paths
+// routed through `currentColor`). This component owns the per-letter morph
+// timing; the shapes themselves are the same set used everywhere else.
 
 // Brand tints. `excludeColors` (e.g. ['red'] in the hero) drops a tint so the
 // shapes never blend into the red wordmark.

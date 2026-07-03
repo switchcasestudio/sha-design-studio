@@ -4,6 +4,21 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Sub-page whimsy pass: shared BrandShape (Fable 5 audit)
+
+Executing `docs/2026-07-03-subpage-whimsy-audit.md` — bringing Services / About /
+Inquire up to the homepage's playroom register. Branch `feat/subpage-whimsy`.
+
+- **`BrandShape` component** (`src/components/ui/BrandShape.jsx` + `.css`): the
+  14-shape geometry registry (`GEO`), lifted out of `HeadlineMorph` into one
+  shared, colour-agnostic source. Reuses the existing `inlineSvg` util (which is
+  what `HeadlineMorph`'s local `prep()` duplicated) — that duplication is now
+  gone. `HeadlineMorph` imports `GEO` from it; no behaviour change. Dumb by
+  design: geometry only, `aria-hidden`, forwardRef so `motion.create()` can
+  animate it. Every "motif" in the rest of this pass uses it.
+
+---
+
 ## 2026-07-02 — Home: work-grid beat goes blue (client feedback)
 
 - "Fresh from the studio" section's dominant accent switched orange → blue:

@@ -1,0 +1,13 @@
+/* Shared brand motif. Callers own size/position/colour; this just makes the
+   inlined SVG fill its box cleanly and inherit the wrapper's tint. */
+.brand-shape {
+  display: inline-block;
+  line-height: 0;
+  color: currentColor;
+}
+
+.brand-shape svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
