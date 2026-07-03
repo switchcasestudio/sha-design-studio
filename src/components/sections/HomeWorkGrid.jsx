@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import Button from '@/components/ui/Button';
+import CloudBadge from '@/components/ui/CloudBadge';
 import { projects } from '@/data';
 import { gridContainer, gridCard, reducedReveal } from '@/lib/motion';
 import './HomeWorkGrid.css';
@@ -74,9 +75,9 @@ function HomeWorkGrid() {
                   alt={image.alt}
                   loading="lazy"
                 />
-                <span className="home-work__badge">
+                <CloudBadge className="home-work__badge">
                   {BADGE_LABELS[project.id] ?? project.client}
-                </span>
+                </CloudBadge>
                 <span className="home-work__scrim">
                   <span className="home-work__name">{project.title}</span>
                 </span>

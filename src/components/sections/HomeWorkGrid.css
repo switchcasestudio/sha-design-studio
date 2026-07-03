@@ -63,16 +63,11 @@
   transform: scale(1.04);
 }
 
+/* Badge visuals come from the shared CloudBadge — this only places it. */
 .home-work__badge {
   position: absolute;
   top: var(--space-3);
   left: var(--space-3);
-  background-color: var(--color-blue-soft);
-  color: var(--color-ink);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-xs);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
 }
 
 /* Title on a bottom scrim — slides up on hover / keyboard focus. */
