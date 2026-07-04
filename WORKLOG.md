@@ -4,6 +4,42 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-07-03 — Mobile polish pass (client feedback)
+
+First dedicated mobile pass across the app. All scoped to `@media (max-width:
+768px)` except the connector fix (a real bug) and the shadow removal.
+
+- **Buttons slimmer** (`Button.css`): md/lg get less vertical padding + lower
+  min-height on phones (still ≥44px touch). The Services expertise pills are a
+  separate component and keep their size per the client.
+- **Expertise pills**: dropped the `box-shadow` (both rest + hover).
+- **About milestone chips**: less vertical padding on mobile so they breathe in
+  the line and don't crowd when wrapped (desktop chunk unchanged).
+- **Inquire**: the form now comes first on mobile (`order: -1`), above the intro.
+- **Services card motifs**: on stacked mobile cards the lower-left has no room,
+  so the motif moves to the bottom-RIGHT gap (beside the left-aligned chips) and
+  shows a proper chunk instead of a sliver.
+- **Services connectors (bug)**: the draw animation lived on a `<motion.path>`
+  inside `<defs><mask>` — a node with no layout box, so its `whileInView`
+  IntersectionObserver fired unreliably and could leave the mask black (dots
+  fully hidden = a "missing" connector). Moved the trigger to the outer
+  `motion.div` and propagate the `show` variant down. Now consistent.
+- **Mobile menu**: big chunky display-face links, tighter stack, staggered
+  entrance, and a soft brand daisy in the corner — no longer a boring list.
+  Overlay `overflow: hidden` so the shape can't scroll.
+- **Footer**: bigger wordmark that matches the logo mark's height (was floating
+  small/centred), balanced pair (no odd right gap), left-aligned nav wrap.
+- **Kind Words**: testimonial bubbles now animate in (`whileInView`, staggered).
+- **Hero declutter**: dropped the floating toy cards and the redundant shape-nav
+  bubbles on phones (the hamburger is the mobile nav; the bubbles were getting
+  clipped past one screen), and tamed the giant morphing wordmark (~24vw → 15vw)
+  so it reads as the hero instead of a chaotic wall.
+
+Still to confirm with Shiran (pre-existing, unrelated to this pass): the
+placeholder testimonial content (Kind Words) and the Inquire copy placeholders.
+
+---
+
 ## 2026-07-03 — Services: oversized motif in every card's header negative space (client feedback)
 
 On the yellow-canvas Services page, each card's motif now swells to fill the

@@ -105,8 +105,19 @@ function ServiceConnector() {
   // useId can contain ':' which is invalid inside url(#…); strip it.
   const maskId = `sc-${useId().replace(/:/g, '')}`;
 
+  // whileInView is driven from the OUTER div (which has a real layout box), not
+  // the <motion.path> — a path inside <defs><mask> has no box, so its own
+  // IntersectionObserver fires unreliably and could leave the mask black (dots
+  // fully hidden, i.e. a "missing" connector). The div propagates the `show`
+  // variant down to the path.
   return (
-    <div className="service-connector" aria-hidden="true">
+    <motion.div
+      className="service-connector"
+      aria-hidden="true"
+      initial={reduce ? undefined : 'hidden'}
+      whileInView={reduce ? undefined : 'show'}
+      viewport={{ once: true, margin: '-40px' }}
+    >
       <svg className="service-connector__svg" viewBox="0 0 24 80" fill="none">
         {!reduce && (
           <defs>
@@ -116,10 +127,13 @@ function ServiceConnector() {
                 stroke="#fff"
                 strokeWidth="8"
                 strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.7, ease: 'easeOut' }}
+                variants={{
+                  hidden: { pathLength: 0 },
+                  show: {
+                    pathLength: 1,
+                    transition: { duration: 0.7, ease: 'easeOut' },
+                  },
+                }}
               />
             </mask>
           </defs>
@@ -130,7 +144,7 @@ function ServiceConnector() {
           mask={reduce ? undefined : `url(#${maskId})`}
         />
       </svg>
-    </div>
+    </motion.div>
   );
 }
 

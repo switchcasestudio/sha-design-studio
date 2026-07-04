@@ -70,23 +70,11 @@
   transform: rotate(-4deg);
 }
 
-/* Phones: the hero packs the wordmark + nav row dead-centre, so keep just two
-   small cards pinned to the top corners and drop the third + the hint. */
+/* Phones: drop the scattered toy cards entirely. They crowded the eyebrow and
+   the wordmark and were the main source of the "too much going on" hero. The
+   morphing wordmark carries the playfulness on its own at this size. */
 @media (max-width: 767px) {
-  .hero-toys__card--gymini {
-    width: clamp(96px, 26vw, 140px);
-    left: 4%;
-    top: 4%;
-  }
-
-  .hero-toys__card--trike {
-    width: clamp(84px, 22vw, 120px);
-    right: 5%;
-    top: 5%;
-  }
-
-  .hero-toys__card--piano,
-  .hero-toys__hint {
+  .hero-toys {
     display: none;
   }
 }

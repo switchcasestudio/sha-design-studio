@@ -234,6 +234,11 @@
     gap: var(--space-10);
   }
 
+  /* Form first on phones — get the actual action above the intro copy. */
+  .inquire-page__form {
+    order: -1;
+  }
+
   /* Keep only the low daisy on mobile; the mid-page star/clover would crowd
      the stacked layout and sit under the form. */
   .inquire-page__motif--star,

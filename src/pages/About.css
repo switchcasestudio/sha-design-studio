@@ -304,4 +304,11 @@
     grid-template-columns: 1fr;
     padding: var(--space-8);
   }
+
+  /* Slimmer milestone chips on phones — the desktop chunk reads as too padded
+     inline, and the extra height made wrapped chips crowd each other. Less
+     vertical padding lets them breathe within the line. */
+  .about-chip {
+    padding: 0.1em 0.55em;
+  }
 }

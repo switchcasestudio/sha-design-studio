@@ -267,6 +267,8 @@
   flex-direction: column;
   background-color: var(--nav-bg);
   color: var(--nav-fg);
+  /* Clip the decorative bottom-right shape so it can't cause horizontal scroll */
+  overflow: hidden;
 }
 
 /* Top row mirrors the closed bar: logo left, close right, route colour fill */
@@ -282,25 +284,28 @@
 }
 
 .mobile-overlay__nav {
-  flex: 1;
+  /* Sit the links just below the top bar rather than filling the whole panel —
+     a tidy stack near the top reads better than four items floating in space. */
   padding-inline: var(--gutter);
-  padding-top: var(--space-8);
+  padding-top: var(--space-10);
 }
 
 .navbar__mobile-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  /* Tight stack — the big display type carries its own rhythm. */
+  gap: var(--space-1);
 }
 
+/* Big chunky brand links (display face) instead of the plain body list. */
 .navbar__mobile-link {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-body);
-  font-weight: var(--weight-semibold);
-  font-size: var(--text-2xl);
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-4xl), 12vw, var(--text-6xl));
+  line-height: 1.15;
   color: var(--nav-fg);
-  padding: var(--space-3) 0;
+  padding: var(--space-2) 0;
   transition:
     color var(--duration-fast) var(--ease-out),
     opacity var(--duration-fast) var(--ease-out);
@@ -310,14 +315,13 @@
    NavLink adds the `active` class automatically on the matched route. */
 .navbar__mobile-link.active {
   color: var(--nav-accent);
-  font-weight: var(--weight-bold);
 }
 
 .navbar__mobile-link.active::before {
   content: '';
   display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
+  width: 0.32em;
+  height: 0.32em;
   margin-right: var(--space-3);
   border-radius: var(--radius-full);
   background-color: var(--nav-accent);
@@ -326,4 +330,30 @@
 
 .navbar__mobile-link:active {
   opacity: 0.7;
+}
+
+/* Decorative brand shape anchored to the bottom-right of the open menu. Soft
+   and low-contrast so it warms the panel without competing with the links. */
+.mobile-overlay__motif {
+  position: absolute;
+  right: calc(-1 * var(--space-10));
+  bottom: calc(-1 * var(--space-10));
+  width: clamp(200px, 60vw, 340px);
+  color: var(--nav-accent);
+  opacity: 0.16;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mobile-overlay__motif svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Keep the top bar + links above the decorative shape. */
+.mobile-overlay__top,
+.mobile-overlay__nav {
+  position: relative;
+  z-index: 1;
 }

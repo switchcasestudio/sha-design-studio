@@ -131,6 +131,31 @@
     gap: var(--space-10);
   }
 
+  /* Logo + wordmark: bigger wordmark so its cap-to-baseline height matches the
+     mark's, and a smaller mark so the pair balances and fills the row (kills
+     the empty gap on the right). Baseline-independent alignment via center. */
+  .footer__ident {
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .footer__logo {
+    width: clamp(104px, 30vw, 128px);
+    transform: translateY(2px);
+  }
+
+  .footer__wordmark {
+    font-size: clamp(2rem, 11vw, 2.75rem);
+    line-height: 1;
+  }
+
+  /* Footer nav: keep the four links in a tidy left-aligned wrap instead of
+     spread edge-to-edge (which left odd gaps on a narrow column). */
+  .footer__list {
+    justify-content: flex-start;
+    gap: var(--space-3) var(--space-6);
+  }
+
   .footer__legal {
     margin-top: var(--space-10);
   }

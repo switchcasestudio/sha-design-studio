@@ -51,6 +51,22 @@
   min-height: 52px;
 }
 
+/* Slimmer buttons on phones — the desktop sizes read as too bulky at mobile
+   width. Vertical padding + min-height come down (still ≥44px touch target);
+   the large size also drops to base type so CTAs aren't chunky. */
+@media (max-width: 768px) {
+  .btn--md {
+    padding: var(--space-2) var(--space-5);
+    min-height: 44px;
+  }
+
+  .btn--lg {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+    min-height: 46px;
+  }
+}
+
 /* ----- Variants ----- */
 .btn--primary {
   background-color: var(--color-orange);

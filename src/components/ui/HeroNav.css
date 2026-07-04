@@ -59,25 +59,12 @@
   pointer-events: none;
 }
 
-/* On small screens the scatter overlaps the wordmark, so fall back to a tidy
-   centred row beneath it. */
+/* On phones the shape-nav is dropped: it duplicated the always-present
+   hamburger menu and, stacked under the wordmark + buttons, pushed the hero
+   past one screen (the bubbles got clipped at the bottom). The hamburger is the
+   mobile nav; the hero stays clean. */
 @media (max-width: 767px) {
   .hero-nav {
-    position: static;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-4);
-    margin-top: var(--space-8);
-  }
-
-  .hero-nav__link {
-    position: static;
-    transform: none;
-  }
-
-  .hero-nav__badge {
-    width: clamp(4.5rem, 22vw, 6rem);
-    height: clamp(4.5rem, 22vw, 6rem);
+    display: none;
   }
 }

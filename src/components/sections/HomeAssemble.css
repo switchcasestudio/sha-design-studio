@@ -87,20 +87,20 @@
 
   .home-assemble__inner {
     width: min(480px, 92vw);
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 
-  /* Much bigger wordmark on phones. Bagel's longest word here ("Design") is
-     ~3.05em wide, so ~24vw lets it fill ~80% of the line with margin to spare
-     for the morph shapes that bulge a little past their letter slot. The morph
-     SVGs are sized in em, so they scale up with it automatically. */
+  /* Tamer wordmark on phones. The previous ~24vw filled the screen and, with
+     several letters mid-morph at once, read as chaotic. ~15vw keeps it the clear
+     hero without overwhelming — and leaves breathing room around it. */
   .home-assemble__headline {
-    font-size: clamp(4.5rem, 24vw, 8rem);
+    font-size: clamp(2.75rem, 15vw, 4rem);
   }
 
   .home-assemble__actions {
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-3);
+    margin-top: var(--space-5);
   }
 }

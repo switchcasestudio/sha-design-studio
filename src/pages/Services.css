@@ -336,18 +336,13 @@
   color: var(--color-cream);
   background-color: var(--color-ink);
   border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
   cursor: default;
-  /* Framer Motion owns transform (entrance + hover pop); CSS owns colour +
-     shadow so the two never fight. */
-  transition:
-    background-color var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
+  /* Framer Motion owns transform (entrance + hover pop); CSS owns colour. */
+  transition: background-color var(--duration-base) var(--ease-out);
 }
 
 .services-page__expertise-item:hover {
   background-color: var(--color-ink-soft);
-  box-shadow: var(--shadow-md);
 }
 
 .services-page__expertise-item:nth-child(2) {
@@ -383,10 +378,15 @@
     padding: var(--space-8);
   }
 
-  /* Smaller motif on the narrower stacked cards (keeps the bottom-left crop
-     from the base rule; mobile polish comes in a later pass). */
+  /* On stacked mobile cards the content fills top-to-bottom, so there's no
+     lower-left negative space — the chips are left-aligned, leaving the
+     bottom-RIGHT empty. Move the (smaller) motif there and reduce the crop so a
+     good chunk of the shape actually shows in that gap. */
   .service-block__motif {
-    width: clamp(130px, 34vw, 200px);
+    width: clamp(120px, 34vw, 175px);
+    left: auto;
+    right: calc(-1 * var(--space-8));
+    bottom: calc(-1 * var(--space-10));
   }
 
   .service-connector {

@@ -35,6 +35,8 @@ function ColorWorld({ children, className }) {
 }
 
 function Home() {
+  const reduce = useReducedMotion();
+
   return (
     <>
       {/* ---------- Signature hero: 100vh brand frame ----------
@@ -108,9 +110,13 @@ function Home() {
           {/* Bubbles alternate sides: even from the left, odd mirrored from
               the right — a back-and-forth conversation down the page. */}
           {testimonials.map((testimonial, index) => (
-            <figure
+            <motion.figure
               key={testimonial.id}
               className={`home-words__item${index % 2 ? ' home-words__item--flip' : ''}`}
+              initial={reduce ? false : { opacity: 0, y: 32, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ type: 'spring', stiffness: 200, damping: 24, delay: index * 0.1 }}
             >
               <blockquote className="home-words__bubble">
                 <p>{testimonial.comment}</p>
@@ -134,7 +140,7 @@ function Home() {
                   )}
                 </cite>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
         </div>
       </ColorWorld>

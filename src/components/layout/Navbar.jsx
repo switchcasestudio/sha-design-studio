@@ -6,7 +6,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { navigation } from '@/utils/siteConfig';
 import { useHeroNav } from '@/context/HeroNavContext';
 import Logo from '@/components/ui/Logo';
+import BrandShape from '@/components/ui/BrandShape';
 import './Navbar.css';
+
+// The open-menu items = the primary nav + the Inquire route, as one list.
+const MOBILE_MENU = [...navigation, { href: '/inquire', label: 'Inquire' }];
 
 const THEMES = {
   '/projects': { route: 'navbar--projects', logo: 'white' },
@@ -250,9 +254,28 @@ function Navbar() {
               </div>
 
               <nav className="mobile-overlay__nav" aria-label="Primary">
-                <ul className="navbar__mobile-list">
-                  {navigation.map((item) => (
-                    <li key={item.href}>
+                <motion.ul
+                  className="navbar__mobile-list"
+                  initial={reduce ? false : 'hidden'}
+                  animate={reduce ? false : 'show'}
+                  variants={{
+                    show: {
+                      transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+                    },
+                  }}
+                >
+                  {MOBILE_MENU.map((item) => (
+                    <motion.li
+                      key={item.href}
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        show: {
+                          opacity: 1,
+                          y: 0,
+                          transition: { type: 'spring', stiffness: 300, damping: 26 },
+                        },
+                      }}
+                    >
                       <NavLink
                         to={item.href}
                         className="navbar__mobile-link"
@@ -260,19 +283,17 @@ function Navbar() {
                       >
                         {item.label}
                       </NavLink>
-                    </li>
+                    </motion.li>
                   ))}
-                  <li>
-                    <NavLink
-                      to="/inquire"
-                      className="navbar__mobile-link"
-                      onClick={closeMobile}
-                    >
-                      Inquire Now
-                    </NavLink>
-                  </li>
-                </ul>
+                </motion.ul>
               </nav>
+
+              {/* A big soft brand shape anchored bottom-right so the open menu
+                  reads as part of the playroom, not a blank list. */}
+              <BrandShape
+                shape="daisy"
+                className="mobile-overlay__motif"
+              />
             </motion.div>
           )}
         </AnimatePresence>,
