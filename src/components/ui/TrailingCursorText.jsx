@@ -3,7 +3,8 @@ import './TrailingCursorText.css';
 
 /**
  * TrailingCursorText — a string of characters that trails the cursor like a
- * rope. Each glyph keeps a fixed distance from the one ahead of it and rotates
+ * rope. Each glyph keeps a fixed distance from the one ahead of it and (with
+ * `upright`, the default) stays level rather than rotating
  * to follow the curve; a single smooth SVG stroke behind the glyphs forms one
  * clean blob. Fades out while scrolling / idle and re-emerges from the cursor.
  *
@@ -23,7 +24,7 @@ function TrailingCursorText({
   attach = 'end', // 'start' | 'end' — which end of the text rides the cursor
   followSpeed = 0.12, // head lag: lower = longer trail
   stiffness = 4, // how rigidly the body holds its spacing (1–10)
-  upright = false, // keep glyphs upright instead of rotating with the curve
+  upright = true, // glyphs stay level; they no longer rotate along the curve
   idleMs = 1400, // fade out after this long without mouse movement
   // When set, the trail only shows while the cursor is over the element matched
   // by this selector (e.g. the hero). Absent element → never shows.

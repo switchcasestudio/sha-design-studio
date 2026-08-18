@@ -88,10 +88,6 @@ const expertise = [
   'Consumer Products',
 ];
 
-// Resting tilts for the expertise pills — Framer owns transform, so the tilt
-// lives in the motion target (not CSS) and hover straightens it.
-const EXPERTISE_TILT = [-2, 1.5, -1];
-
 const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
 // A short dotted play-road drawn in the gap between two service cards — the
@@ -150,20 +146,17 @@ function ServiceConnector() {
 
 function ServiceBlock({ service, index }) {
   const reduce = useReducedMotion();
-  // Alternate resting tilt so the stacked cards read as pinned stickers.
-  const tilt = index % 2 === 0 ? -0.6 : 0.6;
 
   return (
     <motion.article
       className={`service-block service-block--${service.color}`}
       initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0, rotate: reduce ? 0 : tilt }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       whileHover={
         reduce
           ? undefined
           : {
-              rotate: 0,
               y: -4,
               transition: { type: 'spring', stiffness: 400, damping: 17 },
             }
@@ -276,15 +269,14 @@ function Services() {
                 <motion.li
                   key={area}
                   className="services-page__expertise-item"
-                  initial={{ opacity: 0, scale: 0.95, rotate: 0 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{
                     opacity: 1,
                     scale: 1,
-                    rotate: EXPERTISE_TILT[i] ?? 0,
                     transition: { ...spring, delay: 0.1 + i * 0.08 },
                   }}
                   viewport={{ once: true }}
-                  whileHover={{ scale: 1.05, y: -2, rotate: 0 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 >

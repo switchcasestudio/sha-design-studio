@@ -44,7 +44,6 @@
   left: -6%;
   color: var(--color-yellow-soft);
   opacity: 0.55;
-  rotate: -12deg;
 }
 
 /* Small star up near the title */
@@ -55,7 +54,6 @@
   color: var(--color-blue-soft);
   opacity: 0.7;
   animation-delay: -2.5s;
-  rotate: 10deg;
 }
 
 /* Clover low-right, well clear of the form */
@@ -66,7 +64,6 @@
   color: var(--color-orange-soft);
   opacity: 0.5;
   animation-delay: -4.5s;
-  rotate: 8deg;
 }
 
 @keyframes inquire-float {
@@ -198,12 +195,6 @@
   border-radius: var(--radius-2xl);
   padding: clamp(var(--space-6), 4vw, var(--space-10));
   box-shadow: var(--shadow-lg);
-  transform: rotate(-0.5deg);
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
-.inquire-page__form:focus-within {
-  transform: rotate(0deg);
 }
 
 /* Flower hanging off the card's top-right corner — a sticker slapped on, like
@@ -214,7 +205,6 @@
   right: -20px;
   width: clamp(64px, 8vw, 104px);
   color: var(--color-yellow);
-  transform: rotate(12deg);
 }
 
 .inquire-page__form-flower svg {

@@ -20,7 +20,7 @@
   text-decoration: none;
 }
 
-/* Shape + label scale/rotate together on hover (one wrapper, so the text grows
+/* Shape + label scale together on hover (one wrapper, so the text grows
    with the shape). Tint comes from inline `color`; the SVG path inherits it via
    currentColor. */
 .hero-nav__badge {

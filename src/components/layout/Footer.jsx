@@ -1,15 +1,24 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { Instagram, Linkedin, Mail } from 'lucide-react';
 import { siteConfig, footerNavigation } from '@/utils/siteConfig';
 import Logo from '@/components/ui/Logo';
 import './Footer.css';
+
+// Reach-out channels, rendered as outlined circle icons in the footer's fourth
+// column. Instagram + LinkedIn URLs are placeholders (see siteConfig).
+const SOCIAL_LINKS = [
+  { id: 'instagram', label: 'Instagram', href: siteConfig.social.instagram, Icon: Instagram },
+  { id: 'linkedin', label: 'LinkedIn', href: siteConfig.social.linkedin, Icon: Linkedin },
+  { id: 'email', label: `Email ${siteConfig.designer}`, href: `mailto:${siteConfig.email}`, Icon: Mail },
+];
 
 function Footer() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="footer">
-      {/* Contact moved to its own /inquire route — footer is now brand + nav + bio */}
+      {/* Contact moved to its own /inquire route — footer is brand + nav + bio + social */}
       <div className="footer__bar">
         <div className="container">
           <motion.div
@@ -19,18 +28,35 @@ function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="footer__ident">
-              {/* Sized to the wordmark's visible cap-to-baseline height (SHA cap
-                  → STUDIO baseline), with a tiny nudge down so the mark's dot
-                  meets the cap line instead of poking above the font's overshoot. */}
-              <Logo size={138} variant="orange" className="footer__logo" />
-              <p className="footer__wordmark">
-                Sha
-                <br />
-                Design
-                <br />
-                Studio
-              </p>
+            <div className="footer__brand">
+              <div className="footer__ident">
+                <Logo size={104} variant="orange" className="footer__logo" />
+                {/* The tagline replaces the old stacked "SHA DESIGN STUDIO"
+                    wordmark — one word per line, sized so all four lines fit
+                    inside the mark's own height (cap line to the base bar). */}
+                <p className="footer__tagline">
+                  {siteConfig.tagline.split(' ').map((word) => (
+                    <span key={word}>{word}</span>
+                  ))}
+                </p>
+              </div>
+
+              <div className="footer__legal">
+                <p>
+                  © {year} • {siteConfig.name}
+                  <br />
+                  Developed by{' '}
+                  <a
+                    href="https://www.switchcasestudio.com"
+                    className="footer__legal-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Switch Case Studio
+                  </a>
+                  .
+                </p>
+              </div>
             </div>
 
             <nav className="footer__col" aria-label="Footer">
@@ -62,30 +88,33 @@ function Footer() {
 
             <div className="footer__col">
               <h4 className="footer__eyebrow footer__eyebrow--who">Who I Am</h4>
-              {/* TODO(shiran): replace with a real one-line bio (who / where /
-                  availability) — this slot previously repeated the hero tagline
-                  verbatim. Placeholder below; confirm wording + location. */}
+              <p className="footer__who-name">Shiran Bar Hayon</p>
               <p className="footer__who">
-                {siteConfig.designer} — industrial designer for toys &amp; baby
-                products. Available for new projects.
+                Industrial &amp; product designer.
+                <br />
+                Creating playful, thoughtful products.
+                <br />
+                Available for new projects.
               </p>
             </div>
-          </motion.div>
 
-          <div className="footer__legal">
-            <p>
-              © {year} • {siteConfig.name} • Developed by{' '}
-              <a
-                href="https://www.switchcasestudio.com"
-                className="footer__legal-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Switch Case Studio
-              </a>
-              .
-            </p>
-          </div>
+            <ul className="footer__social">
+              {SOCIAL_LINKS.map(({ id, label, href, Icon }) => (
+                <li key={id}>
+                  <a
+                    className="footer__social-link"
+                    href={href}
+                    aria-label={label}
+                    {...(href.startsWith('mailto:')
+                      ? {}
+                      : { target: '_blank', rel: 'noopener noreferrer' })}
+                  >
+                    <Icon size={18} strokeWidth={1.75} aria-hidden="true" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
       </div>
     </footer>

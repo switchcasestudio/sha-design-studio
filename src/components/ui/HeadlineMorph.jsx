@@ -61,8 +61,9 @@ function pickColor(active, allowed) {
 const POP = { type: 'spring', stiffness: 380, damping: 18 };
 
 // Presentational only — the parent owns timing/coordination and passes `state`
-// (null = glyph; otherwise { html, geo, rot, color }). The shape bakes in its
-// resting rotation and is tinted via the wrapper's `color`.
+// (null = glyph; otherwise { html, geo, rot, color }). `rot` is only ever a
+// 180 flip (axis-preserving, never a tilt) and the shape is tinted via the
+// wrapper's `color`.
 function MorphLetter({ char, state }) {
   const rot = state ? state.rot : 0;
 
@@ -88,9 +89,9 @@ function MorphLetter({ char, state }) {
             key={`shape-${state.geo}`}
             className="hm__face hm__shape"
             style={{ color: state.color }}
-            initial={{ scale: 0, rotate: rot - 45, opacity: 0 }}
+            initial={{ scale: 0, rotate: rot, opacity: 0 }}
             animate={{ scale: 1, rotate: rot, opacity: 1 }}
-            exit={{ scale: 0, rotate: rot + 45, opacity: 0 }}
+            exit={{ scale: 0, rotate: rot, opacity: 0 }}
             transition={POP}
             dangerouslySetInnerHTML={{ __html: state.html }}
           />

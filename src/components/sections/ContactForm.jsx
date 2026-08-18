@@ -9,18 +9,18 @@ import './ContactForm.css';
 const MotionShape = motion.create(BrandShape);
 
 // The confetti-of-stickers that lands around the thank-you on a successful send.
-// Each piece springs from the centre (0,0) out to its resting {x,y,rot} — a
+// Each piece springs from the centre (0,0) out to its resting {x,y} — a
 // handful of stickers settling, not a physics firework. Offsets frame a
 // centred two-line message; overflow is clipped by the panel so nothing
 // escapes the card on narrow screens.
 const SUCCESS_BURST = [
-  { shape: 'flower2', color: 'var(--color-yellow-deep)', x: 0, y: -104, rot: 8, delay: 0 },
-  { shape: 'daisy', color: 'var(--color-yellow)', x: -150, y: -64, rot: -18, delay: 0.05 },
-  { shape: 'star', color: 'var(--color-orange)', x: 156, y: -56, rot: 16, delay: 0.09 },
-  { shape: 'heart', color: 'var(--color-orange-soft)', x: -168, y: 60, rot: -12, delay: 0.13 },
-  { shape: 'clover', color: 'var(--color-blue)', x: 146, y: 74, rot: 20, delay: 0.11 },
-  { shape: 'tulip', color: 'var(--color-orange)', x: -104, y: 108, rot: -8, delay: 0.17 },
-  { shape: 'ring', color: 'var(--color-blue-soft)', x: 118, y: 116, rot: 12, delay: 0.19 },
+  { shape: 'flower2', color: 'var(--color-yellow-deep)', x: 0, y: -104, delay: 0 },
+  { shape: 'daisy', color: 'var(--color-yellow)', x: -150, y: -64, delay: 0.05 },
+  { shape: 'star', color: 'var(--color-orange)', x: 156, y: -56, delay: 0.09 },
+  { shape: 'heart', color: 'var(--color-orange-soft)', x: -168, y: 60, delay: 0.13 },
+  { shape: 'clover', color: 'var(--color-blue)', x: 146, y: 74, delay: 0.11 },
+  { shape: 'tulip', color: 'var(--color-orange)', x: -104, y: 108, delay: 0.17 },
+  { shape: 'ring', color: 'var(--color-blue-soft)', x: 118, y: 116, delay: 0.19 },
 ];
 
 // Required fields and how to validate them. Keeping this declarative lets the
@@ -148,14 +148,14 @@ function ContactForm() {
         >
           <div className="contact-form__burst" aria-hidden="true">
             {SUCCESS_BURST.map((b) => {
-              const rest = { scale: 1, x: b.x, y: b.y, rotate: b.rot, opacity: 1 };
+              const rest = { scale: 1, x: b.x, y: b.y, opacity: 1 };
               return (
                 <MotionShape
                   key={b.shape}
                   shape={b.shape}
                   className="contact-form__burst-shape"
                   style={{ color: b.color }}
-                  initial={reduce ? rest : { scale: 0, x: 0, y: 0, rotate: 0, opacity: 0 }}
+                  initial={reduce ? rest : { scale: 0, x: 0, y: 0, opacity: 0 }}
                   animate={rest}
                   transition={
                     reduce

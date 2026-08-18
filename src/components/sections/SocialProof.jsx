@@ -36,7 +36,10 @@ export function SocialProof({ label = 'Brands I’ve worked with' }) {
       </div>
 
       <div className="social-proof__viewport">
-        <Marquee speed={45} gap="var(--space-16)">
+        {/* Wider gap than the old strip used: the logos are much smaller now,
+            so a tight gap fit two-plus full cycles on screen at once and the
+            same mark read as repeating. */}
+        <Marquee speed={45} gap="clamp(var(--space-16), 9vw, var(--space-32))">
           {reel.map((logo, i) => (
             <img
               key={`${logo.id}-${i}`}

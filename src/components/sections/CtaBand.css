@@ -71,7 +71,6 @@
   top: clamp(var(--space-6), 4vw, var(--space-12));
   left: 6%;
   color: var(--color-yellow);
-  rotate: -10deg;
 }
 
 .cta-band__motif--clover {
@@ -80,7 +79,6 @@
   right: 7%;
   color: var(--color-blue-soft);
   animation-delay: -3s;
-  rotate: 8deg;
 }
 
 .cta-band__motif--flower {
@@ -95,10 +93,10 @@
 @keyframes cta-wobble {
   0%,
   100% {
-    transform: rotate(-4deg) translateY(0);
+    transform: translateY(0);
   }
   50% {
-    transform: rotate(4deg) translateY(-8px);
+    transform: translateY(-8px);
   }
 }
 

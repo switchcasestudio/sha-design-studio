@@ -82,18 +82,8 @@
     box-shadow var(--duration-base) var(--ease-out);
 }
 
-.about-chip--a {
-  transform: rotate(-0.6deg);
-}
-.about-chip--b {
-  transform: rotate(0.5deg);
-}
-.about-chip--c {
-  transform: rotate(-0.5deg);
-}
-
 .about-chip:hover {
-  transform: rotate(0deg) translateY(-2px) scale(1.04);
+  transform: translateY(-2px) scale(1.04);
   box-shadow: var(--shadow-md);
 }
 
@@ -110,13 +100,6 @@
   position: relative;
   max-width: 760px;
   margin-inline: auto;
-  /* Resting sticker tilt, straightening on hover — like the scrapbook cards */
-  transform: rotate(1deg);
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
-.about-bio__photo-frame:hover {
-  transform: rotate(0deg);
 }
 
 .about-bio__photo-placeholder {

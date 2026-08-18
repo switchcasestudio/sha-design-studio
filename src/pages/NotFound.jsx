@@ -9,8 +9,8 @@ function NotFound() {
       <div className="container notfound__inner">
         <motion.h1
           className="notfound__code"
-          initial={{ scale: 0, rotate: -20 }}
-          animate={{ scale: 1, rotate: 0 }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 12 }}
         >
           404

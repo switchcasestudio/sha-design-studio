@@ -8,16 +8,12 @@ import './PhotoGallery.css';
  *
  * Takes up to `max` images (normalized {src, alt} from the data module):
  * they start as a centered pile, then spring out into a horizontal fan.
- * Each photo has a random tilt, lifts on hover, and can be dragged —
- * snapping back when released.
+ * Each photo lifts on hover and can be dragged — snapping back when released.
+ * Frames stay square to the page: the fan reads through offset, not rotation.
  */
 
 const Y_OFFSETS = [16, 36, 8, 24, 48];
 const STEP = 205; // horizontal distance between photo centers, px
-
-function randomRotation(direction) {
-  return (Math.random() * 3 + 1) * (direction === 'left' ? -1 : 1);
-}
 
 const containerVariants = {
   hidden: { opacity: 1 },
@@ -28,11 +24,10 @@ const containerVariants = {
 };
 
 const photoVariants = {
-  hidden: { x: 0, y: 0, rotate: 0, scale: 1 },
+  hidden: { x: 0, y: 0, scale: 1 },
   visible: (custom) => ({
     x: custom.x,
     y: custom.y,
-    rotate: 0,
     scale: 1,
     transition: {
       type: 'spring',
@@ -44,27 +39,15 @@ const photoVariants = {
   }),
 };
 
-function Photo({ src, alt, direction, onTap }) {
-  const [rotation, setRotation] = useState(0);
-
-  useEffect(() => {
-    setRotation(randomRotation(direction));
-  }, [direction]);
-
+function Photo({ src, alt, onTap }) {
   return (
     <motion.div
       className="photo-fan__photo"
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       whileTap={{ scale: 1.2, zIndex: 9999 }}
-      whileHover={{
-        scale: 1.1,
-        rotateZ: 2 * (direction === 'left' ? -1 : 1),
-        zIndex: 9999,
-      }}
+      whileHover={{ scale: 1.1, zIndex: 9999 }}
       whileDrag={{ scale: 1.1, zIndex: 9999 }}
-      initial={{ rotate: 0 }}
-      animate={{ rotate: rotation }}
       /* onTap only fires for clicks/taps, not after a real drag */
       onTap={onTap}
     >
@@ -87,7 +70,6 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
       x: (i - mid) * STEP,
       y: Y_OFFSETS[i % Y_OFFSETS.length],
       zIndex: 50 - i * 10, // left-most on top, like the original
-      direction: i % 2 === 0 ? 'left' : 'right',
     }));
   }, [images, max]);
 
@@ -138,7 +120,6 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
                 <Photo
                   src={photo.src}
                   alt={photo.alt}
-                  direction={photo.direction}
                   onTap={
                     onPhotoTap ? () => onPhotoTap(photo.order) : undefined
                   }

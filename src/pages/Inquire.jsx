@@ -58,8 +58,8 @@ function Inquire() {
               <motion.span
                 className="inquire-page__title-flower"
                 aria-hidden="true"
-                initial={reduce ? false : { scale: 0, rotate: -30 }}
-                animate={{ scale: 1, rotate: 0 }}
+                initial={reduce ? false : { scale: 0 }}
+                animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 12, delay: 0.5 }}
               >
                 <BrandShape shape="tulip" />

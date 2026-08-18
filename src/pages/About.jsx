@@ -121,8 +121,8 @@ function About() {
 
           <motion.div
             className="about-bio__photo"
-            initial={{ opacity: 0, x: 40, rotate: 3 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ ...spring, delay: 0.3 }}
           >
             <div className="about-bio__photo-frame">
@@ -132,8 +132,8 @@ function About() {
 
               <motion.div
                 className="about-bio__hello"
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ scale: 1, rotate: 0 }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
                 transition={{
                   type: 'spring',
                   stiffness: 400,
@@ -143,7 +143,6 @@ function About() {
                 /* Playful pop on hover, like the hero motifs */
                 whileHover={{
                   scale: 1.12,
-                  rotate: 8,
                   transition: { type: 'spring', stiffness: 300, damping: 14 },
                 }}
                 whileTap={{ scale: 1.04 }}
@@ -161,8 +160,8 @@ function About() {
                   no more, so the frame stays a photo not a sticker sheet. */}
               <motion.div
                 className="about-bio__heart"
-                initial={{ scale: 0, rotate: 24 }}
-                animate={{ scale: 1, rotate: 0 }}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
                 transition={{
                   type: 'spring',
                   stiffness: 400,
@@ -171,7 +170,6 @@ function About() {
                 }}
                 whileHover={{
                   scale: 1.12,
-                  rotate: -8,
                   transition: { type: 'spring', stiffness: 300, damping: 14 },
                 }}
                 whileTap={{ scale: 1.04 }}

@@ -58,21 +58,12 @@
      (higher z-index) so they float over the photo corners. */
   position: relative;
   z-index: 1;
-  /* Tilt is applied only on hover (cards sit straight at rest). Direction
-     alternates down the page — deterministic (nth-child, not random) so it
-     never shifts between renders. */
-  --tilt: -1.3deg;
-}
-
-.overview-card:nth-child(even) {
-  --tilt: 1.1deg;
 }
 
 /* Feature tiles span the full row and carry a long landscape cover photo,
-   breaking up the 2-up rhythm. Wide = long lever arm, so a gentler angle. */
+   breaking up the 2-up rhythm. */
 .overview-card.overview-card--wide {
   grid-column: 1 / -1;
-  --tilt: -0.7deg;
 }
 
 .overview-card--wide .overview-card__media {
@@ -99,9 +90,8 @@
   overflow: hidden;
   background-color: var(--color-white);
   box-shadow: var(--shadow-md);
-  /* Straight at rest; tilts + lifts on hover. */
-  transform: rotate(0deg);
-  /* Overshooting bezier — the card springs into its tilt with a small bounce. */
+  /* Lifts on hover — never tilts; every edge stays square to the page. */
+  /* Overshooting bezier — the card springs up with a small bounce. */
   transition:
     transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow var(--duration-base) var(--ease-out);
@@ -109,7 +99,7 @@
 
 .overview-card__link:hover .overview-card__media,
 .overview-card__link:focus-visible .overview-card__media {
-  transform: rotate(var(--tilt)) translateY(-6px);
+  transform: translateY(-6px);
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
 }
 
@@ -225,7 +215,6 @@
   top: -3%;
   left: 40%;
   color: var(--color-yellow);
-  rotate: -12deg;
 }
 
 /* Off the right edge of the first wide tile */
@@ -235,7 +224,6 @@
   right: -1.5%;
   color: var(--color-blue-soft);
   animation-delay: -3s;
-  rotate: 10deg;
 }
 
 /* Off the left edge, between the second pair of tiles. Solid cream (no opacity
@@ -256,16 +244,15 @@
   right: -1.5%;
   color: var(--color-blue-soft);
   animation-delay: -1.5s;
-  rotate: 14deg;
 }
 
 @keyframes overview-wobble {
   0%,
   100% {
-    transform: rotate(-4deg) translateY(0);
+    transform: translateY(0);
   }
   50% {
-    transform: rotate(4deg) translateY(-8px);
+    transform: translateY(-8px);
   }
 }
 
@@ -316,14 +303,6 @@
     aspect-ratio: 16 / 9;
   }
 
-  /* Gentler tilts once cards fill the viewport width. */
-  .overview-card {
-    --tilt: -0.8deg;
-  }
-
-  .overview-card:nth-child(even) {
-    --tilt: 0.7deg;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

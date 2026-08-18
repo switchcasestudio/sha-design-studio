@@ -18,7 +18,6 @@ const ITEMS = [
     html: inlineSvg(blobBlueRaw),
     tint: 'var(--color-blue)',
     ink: 'var(--text-on-blue)',
-    rot: -6,
     dy: '0.18em', // blob's solid mass sits low — drop the label onto it
     pos: { x: '15%', y: '36%' },
   },
@@ -26,14 +25,12 @@ const ITEMS = [
     html: inlineSvg(daisyRaw),
     tint: 'var(--color-yellow)',
     ink: 'var(--color-white)', // match Work/About (light), not the dark on-yellow ink
-    rot: 5,
     pos: { x: '85%', y: '30%' },
   },
   {
     html: inlineSvg(flowerRaw),
     tint: 'var(--color-orange)',
     ink: 'var(--text-on-orange)',
-    rot: -3,
     pos: { x: '80%', y: '74%' },
   },
 ];
@@ -69,7 +66,7 @@ function HeroNav() {
       transition={reduce ? { duration: 0 } : { duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
       {navigation.map((item, i) => {
-        const { html, tint, ink, rot, dy, pos } = ITEMS[i];
+        const { html, tint, ink, dy, pos } = ITEMS[i];
         return (
           <Link
             key={item.href}
@@ -82,9 +79,8 @@ function HeroNav() {
               className="hero-nav__badge"
               style={{ color: tint }}
               initial={false}
-              whileHover={reduce ? undefined : { scale: 1.12, rotate: rot + 6 }}
+              whileHover={reduce ? undefined : { scale: 1.12 }}
               whileTap={reduce ? undefined : { scale: 0.96 }}
-              animate={{ rotate: rot }}
               transition={BADGE_HOVER}
             >
               <span

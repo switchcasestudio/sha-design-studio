@@ -1,39 +1,75 @@
-/* ---------- Cream footer (brand / nav / bio / legal) ----------
-   The contact panel + form moved to the /inquire route. */
+/* ---------- Cream footer (brand / nav / bio / social) ----------
+   Four columns, hairline-divided. The contact panel + form moved to /inquire. */
 .footer__bar {
   background-color: var(--color-cream);
   color: var(--color-ink);
-  padding-block: var(--space-8) var(--space-6);
+  padding-block: var(--space-10) var(--space-8);
 }
 
 .footer__cols {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--space-8);
+  /* Four columns of identical width. minmax(0, 1fr) rather than a bare 1fr so a
+     long word can't push its own column wider than the other three. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-6);
   align-items: start;
 }
 
+/* Hairline rules between columns — the only structural lines in the footer, so
+   they carry the column rhythm without a heavier border. */
+.footer__cols > * + * {
+  padding-left: var(--space-6);
+  border-left: 1px solid rgba(26, 26, 26, 0.14);
+}
+
+/* ---------- Column 1: mark + stacked tagline, legal beneath ---------- */
 .footer__ident {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
-/* Optical nudge: the display font's top overshoot lifts the line box above the
-   visible cap, so centring alone floats the mark's dot above "SHA". A hair of
-   translate drops the dot onto the cap line. */
 .footer__logo {
-  transform: translateY(3px);
+  flex: none;
 }
 
-.footer__wordmark {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-xl), 2.5vw, var(--text-3xl));
-  line-height: 1.05;
-  text-transform: uppercase;
-  color: var(--color-ink);
+/* One word per line in brand orange, sized so all four lines fit inside the
+   mark's own height (104px wide renders ~71px tall, so the stack must stay
+   under that: 4 lines x 14px x 1.2 = 67px). */
+.footer__tagline {
+  color: var(--color-orange);
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  line-height: 1.2;
+  font-weight: var(--weight-medium);
 }
 
+.footer__tagline span {
+  display: block;
+}
+
+.footer__legal {
+  margin-top: var(--space-6);
+  color: var(--text-muted);
+}
+
+/* Target the <p> directly so it beats the global `p { font-size }`. */
+.footer__legal p {
+  font-size: clamp(0.625rem, 1vw, var(--text-sm));
+  line-height: var(--leading-snug);
+}
+
+.footer__legal-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.footer__legal-link:hover {
+  color: var(--color-orange);
+}
+
+/* ---------- Columns 2 & 3 ---------- */
 .footer__col {
   display: flex;
   flex-direction: column;
@@ -55,12 +91,14 @@
   padding-left: 1px;
 }
 
-/* Links spread evenly across the column; wraps to a second row if needed */
+/* A balanced 2x2 block rather than one row. With all four footer columns at
+   identical width, a quarter-column can't hold four links on one line at any
+   desktop width under ~1200px — a 2x2 grid stays tidy at every size instead of
+   orphaning "Inquire" onto its own row. */
 .footer__list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  gap: var(--space-2) var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 0 var(--space-5);
 }
 
 .footer__link {
@@ -68,9 +106,10 @@
   /* Top-align the label so the links' first line matches the "Who I Am" text,
      while the 44px min-height still gives a comfortable tap target below. */
   align-items: flex-start;
-  gap: var(--space-2);
-  min-height: 44px; /* comfortable footer tap target */
-  font-size: var(--text-xl);
+  /* Padding rather than min-height: same comfortable tap target, but a wrapped
+     row no longer opens a 44px gap between lines. */
+  padding-block: var(--space-2);
+  font-size: var(--text-base);
   font-weight: var(--weight-medium);
   line-height: var(--leading-snug);
   color: var(--color-ink);
@@ -87,76 +126,94 @@
   opacity: 0.7;
 }
 
-/* Current route: brand orange + bold.
-   Bold at 20px → "large text", so orange on cream (3.43:1) clears the 3:1 bar. */
 .footer__link--active {
   color: var(--color-orange);
   font-weight: var(--weight-bold);
 }
 
-.footer__who {
-  font-size: var(--text-xl);
+/* Name leads the bio block, so the person reads before the description. */
+.footer__who-name {
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
   line-height: var(--leading-snug);
   color: var(--color-ink);
 }
 
-.footer__legal {
-  margin-top: var(--space-8);
-  color: var(--text-muted);
+.footer__who {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--color-ink);
 }
 
-/* Target the <p> directly so it beats the global `p { font-size }`. Smaller so
-   the credit sits on a single line on phones; scales back up on wider screens. */
-.footer__legal p {
-  font-size: clamp(0.625rem, 2.4vw, var(--text-sm));
-  line-height: var(--leading-snug);
+.footer__col .footer__who-name + .footer__who {
+  margin-top: calc(var(--space-3) * -1 + var(--space-1));
 }
 
-/* Footer7-style bottom link: muted, warms up on hover */
-.footer__legal-link {
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color var(--duration-fast) var(--ease-out);
+/* ---------- Column 4: outlined circle icons ---------- */
+.footer__social {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-.footer__legal-link:hover {
+.footer__social-link {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.footer__social-link:hover {
   color: var(--color-orange);
+  border-color: var(--color-orange);
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
+  .footer__cols {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-10) var(--space-8);
+  }
+
+  /* Rules only make sense between side-by-side columns, so drop them on the
+     wrapped rows and re-add just the one that stays adjacent. */
+  .footer__cols > * + * {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .footer__cols > *:nth-child(2n) {
+    padding-left: var(--space-8);
+    border-left: 1px solid rgba(26, 26, 26, 0.14);
+  }
+}
+
+@media (max-width: 640px) {
   .footer__cols {
     grid-template-columns: 1fr;
     gap: var(--space-10);
   }
 
-  /* Logo + wordmark: bigger wordmark so its cap-to-baseline height matches the
-     mark's, and a smaller mark so the pair balances and fills the row (kills
-     the empty gap on the right). Baseline-independent alignment via center. */
+  .footer__cols > *:nth-child(2n) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
   .footer__ident {
     gap: var(--space-4);
-    align-items: center;
   }
 
   .footer__logo {
-    width: clamp(104px, 30vw, 128px);
-    transform: translateY(2px);
+    width: clamp(88px, 26vw, 112px);
   }
 
-  .footer__wordmark {
-    font-size: clamp(2rem, 11vw, 2.75rem);
-    line-height: 1;
-  }
-
-  /* Footer nav: keep the four links in a tidy left-aligned wrap instead of
-     spread edge-to-edge (which left odd gaps on a narrow column). */
-  .footer__list {
-    justify-content: flex-start;
-    gap: var(--space-3) var(--space-6);
-  }
-
-  .footer__legal {
-    margin-top: var(--space-10);
+  .footer__tagline {
+    font-size: var(--text-base);
   }
 }

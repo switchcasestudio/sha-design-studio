@@ -22,8 +22,9 @@ const SHAPES = {
 // x/y pin each stop to the road's anchor points (percentages of the 1200×300
 // viewBox below); `high` stops sit on the road's upper crests and hang their
 // captions above the dot so nothing collides with the descending curve.
-// Each stop gets its own tint from the brand ramps (yellow → soft blue →
-// soft orange → deep yellow) — the hue variation is deliberate, per client.
+// Stops are tinted with the site's three dominant brand colours only —
+// yellow, blue, orange — never the light/deep tints, so the path reads as the
+// same palette as the rest of the page.
 const STOPS = [
   {
     shape: 'daisy',
@@ -35,7 +36,7 @@ const STOPS = [
   },
   {
     shape: 'clover',
-    tint: 'blue-soft',
+    tint: 'blue',
     label: 'HAPE, China',
     detail: 'Toy-design internship',
     x: '35%',
@@ -44,7 +45,7 @@ const STOPS = [
   },
   {
     shape: 'heart',
-    tint: 'orange-soft',
+    tint: 'orange',
     label: 'Tiny Love',
     detail: '5 years, 10+ products shipped',
     x: '65%',
@@ -52,7 +53,7 @@ const STOPS = [
   },
   {
     shape: 'star',
-    tint: 'yellow-deep',
+    tint: 'yellow',
     label: 'SHA Studio',
     detail: 'Your product next?',
     x: '95%',

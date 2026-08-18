@@ -67,11 +67,10 @@ export const gridCard = {
 
 // Decorative badge motif blooms in as its parent card reveals.
 export const badgeBloom = {
-  hidden: { opacity: 0, scale: 0, rotate: -12 },
+  hidden: { opacity: 0, scale: 0 },
   show: {
     opacity: 1,
     scale: 1,
-    rotate: 0,
     transition: { duration: duration.entrance, ease: ease.bloom },
   },
 };

@@ -67,7 +67,6 @@
   font-weight: var(--weight-semibold);
   font-size: var(--text-sm);
   color: var(--color-orange);
-  transform: rotate(-4deg);
 }
 
 /* Phones: drop the scattered toy cards entirely. They crowded the eyebrow and

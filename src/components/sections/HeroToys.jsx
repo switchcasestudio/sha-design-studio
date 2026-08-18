@@ -9,9 +9,9 @@ import './HeroToys.css';
 // the floor. Positioned (in CSS) around the wordmark and the HeroNav blobs at
 // 15/36, 85/30 and 80/74 — the cards claim the remaining corners.
 const TOYS = [
-  { src: gyminiPhoto, mod: 'gymini', rot: -6, bobDur: 5.2, bobDelay: 0 },
-  { src: trikePhoto, mod: 'trike', rot: 5, bobDur: 6.4, bobDelay: 0.9 },
-  { src: pianoPhoto, mod: 'piano', rot: 4, bobDur: 5.8, bobDelay: 1.6 },
+  { src: gyminiPhoto, mod: 'gymini', bobDur: 5.2, bobDelay: 0 },
+  { src: trikePhoto, mod: 'trike', bobDur: 6.4, bobDelay: 0.9 },
+  { src: pianoPhoto, mod: 'piano', bobDur: 5.8, bobDelay: 1.6 },
 ];
 
 const DRAG_SNAP = { type: 'spring', stiffness: 220, damping: 16 };
@@ -29,19 +29,18 @@ function HeroToys() {
 
   return (
     <div className="hero-toys" aria-hidden="true">
-      {TOYS.map(({ src, mod, rot, bobDur, bobDelay }) =>
+      {TOYS.map(({ src, mod, bobDur, bobDelay }) =>
         interactive ? (
           <motion.div
             key={mod}
             className={`hero-toys__card hero-toys__card--${mod}`}
-            style={{ rotate: rot }}
             drag
             dragSnapToOrigin
             dragTransition={{
               bounceStiffness: DRAG_SNAP.stiffness,
               bounceDamping: DRAG_SNAP.damping,
             }}
-            whileDrag={{ scale: 1.08, rotate: 0, zIndex: 3 }}
+            whileDrag={{ scale: 1.08, zIndex: 3 }}
             whileHover={{ scale: 1.04 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
@@ -62,7 +61,6 @@ function HeroToys() {
           <div
             key={mod}
             className={`hero-toys__card hero-toys__card--${mod}`}
-            style={{ rotate: `${rot}deg` }}
           >
             <img src={src} alt="" draggable="false" />
           </div>

@@ -4,6 +4,92 @@ A running record of notable work and follow-ups. Newest entries on top.
 
 ---
 
+## 2026-08-18 — Homepage/footer design pass + app-wide de-tilt (client feedback)
+
+Nine items from a screenshot-annotated review, plus a follow-up round.
+
+- **Social-proof logos → grey + smaller** (`SocialProof.*`): the source PNGs are
+  pre-recoloured brand orange on transparent, so `filter: brightness(0)` +
+  `opacity: .72` collapses them to a soft charcoal while keeping the alpha
+  channel — client marks now read as neutral credentials instead of competing
+  with the brand orange. Height 28-42px → 18-26px. Also widened the marquee gap
+  (`--space-16` → `clamp(--space-16, 9vw, --space-32)`): at the smaller size the
+  old gap fit 2+ full cycles on screen, so the same logo visibly repeated.
+- **"Fresh from the studio" → staggered collage** (`HomeWorkGrid.*`): replaced
+  the uniform 3-across bento with two columns, the right one offset down, and a
+  per-slot aspect ratio so no two frames match. Captions moved from a
+  hover-only scrim to always-visible text beneath each frame
+  (`Client — Title`) — the old scrim hid the project name entirely on touch.
+  Badges now overhang the frame corner, alternating left/right; they're siblings
+  of the link (which clips its corners) with `pointer-events: none` so they
+  don't steal the click. Shows all 6 projects now, not 5, so the columns
+  balance 3/3.
+- **Facts ticker removed**: component files deleted along with the import, the
+  section, and its `.home-ticker` CSS block.
+- **Kind Words → one blue card** (`Home.*`): was two alternating speech bubbles
+  which left half the canvas empty on wide screens. Both quotes now stack inside
+  a single card with `— Name` attributions. Dropped the bubble/tail/flip CSS and
+  its dead responsive overrides.
+- **CTA band copy**: two-line display headline "Got an idea? / Let's make it
+  real." plus the subline "From first sketch to final product, let's create it
+  together." (`title` now takes a node, not just a string.)
+- **Footer rebuilt** (`Footer.*`): four columns of identical width
+  (`repeat(4, minmax(0, 1fr))` — `minmax(0, …)` so a long word can't push its own
+  column wider). Col 1 = mark + tagline one word per line in orange, sized so all
+  four lines sit inside the mark's own height (measured 69px against 71px), with
+  the legal credit beneath. Col 2 = nav. Col 3 = "Shiran Bar Hayon" + three-line
+  bio. Col 4 = new Instagram/LinkedIn/email outlined circle icons. Hairline rules
+  between columns.
+- **What I Do copy**: "I bring ideas to life through playful, thoughtful product
+  design — from first sketch to production."
+- **Journey path → dominant palette only** (`JourneyPath.*`): the stops were
+  using the light/deep tints (`blue-soft` #7aa0d2, `orange-soft` #f37a5c,
+  `yellow-deep` #e8b91e), which is why the section read washed out next to the
+  rest of the page. Now `--color-blue` #4a7fbf, `--color-orange` #e54b2a,
+  `--color-yellow` #f2c94c. Verified the client's swatches were these tokens by
+  sampling the CTA band they screenshotted (`rgb(229,75,42)` = `--color-orange`);
+  the small hex differences were just screenshot colour-profile shift, so the
+  fix points at tokens rather than hardcoding new hex.
+- **CRUCIAL — every tilt removed, app-wide** (14 files): no element may sit off
+  the X axis. Flattened resting tilts, hover tilts and float-animation rocking
+  across Services cards + expertise pills, Projects cards + motifs, About chips +
+  photo frame + badges, Inquire form card + motifs + flower, CtaBand motifs,
+  JourneyPath dots, hero photo cards, the hero blob nav (its labels rode the
+  tilt), the navbar logo, the project-detail photo fan, the success-burst
+  confetti, and the trailing cursor text (its `upright` option is now the
+  default). Also deleted the now-dead tilt data: `rot` fields, `EXPERTISE_TILT`,
+  `--tilt`, `randomRotation`.
+
+Deliberately kept four rotations, all functional rather than layout: the submit
+spinner (360°), the mobile menu toggle (90° on tap), the About accordion
+icon/chevron, and the hero wordmark's `h` → blob **180°** flip (axis-preserving,
+and it's what makes the shape still read as an 'h'). The `LETTER_SHAPES` table
+was asserted to contain only 0/180 before restoring that one.
+
+Verified with a computed-transform scan (`atan2` on the matrix, excluding 0/180)
+on `/`, `/projects`, `/services`, `/about`, `/inquire` and a project detail page:
+**0 off-axis elements on every route.** `npm run build` clean.
+
+Known trade-off: identical footer columns and a single-line nav can't coexist —
+the four links need 239px but an equal quarter-column offers 188px at a 1000px
+viewport and only clears 239px above ~1204px. Identical columns was the explicit
+ask, so the nav is a balanced 2x2 rather than orphaning "Inquire" onto its own
+row at some widths.
+
+Not verified: mobile. The browser window manager clamped every resize request
+(asked 440px, got 1897px), so the new breakpoints — collage to one column with
+the offset dropped, footer 4→2→1 — were only checked by reading the CSS and
+confirming no media-query rule references a deleted class. Worth a real device.
+
+Still to confirm with Shiran (pre-existing): the wrong-domain testimonial copy
+(Kind Words still ships "Channing"/interior-design text and a "Your name here"
+placeholder), the empty sketch placeholders on project detail, and the
+Instagram/LinkedIn URLs added to `siteConfig` — both point at site roots and are
+marked TODO. Also noted: `npm run lint` has never worked in this repo (no ESLint
+config file), so `npm run build` is the only gate.
+
+---
+
 ## 2026-07-03 — Mobile polish pass (client feedback)
 
 First dedicated mobile pass across the app. All scoped to `@media (max-width:

@@ -22,10 +22,16 @@
 
 .social-proof__logo {
   /* Normalize by height so mixed logo shapes share a baseline */
-  height: clamp(28px, 3.4vw, 42px);
+  height: clamp(18px, 2.1vw, 26px);
   width: auto;
   object-fit: contain;
   user-select: none;
+  /* The source PNGs are pre-recolored brand orange on transparent. brightness(0)
+     collapses every opaque pixel to black while keeping the alpha channel, so the
+     alpha lift below renders them as a soft charcoal — client-facing marks read as
+     neutral credentials instead of competing with the brand orange. */
+  filter: brightness(0);
+  opacity: 0.72;
 }
 
 /* Soft edges: a cream gradient guarantees the logos dissolve into the canvas,

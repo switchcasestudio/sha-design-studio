@@ -10,8 +10,11 @@ export const siteConfig = {
     'Industrial design for toys and baby products by Shiran Bar. Simple, smart, and full of wonder.',
   designer: 'Shiran Bar',
   email: 'hayonshiran@gmail.com',
+  // TODO(shiran): replace the instagram + linkedin placeholders with the real
+  // studio profile URLs before launch — they currently point at the site roots.
   social: {
     instagram: 'https://instagram.com/',
+    linkedin: 'https://linkedin.com/',
     facebook: 'https://facebook.com/',
     twitter: 'https://twitter.com/',
   },

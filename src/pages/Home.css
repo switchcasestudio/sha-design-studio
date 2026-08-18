@@ -12,14 +12,6 @@
   padding-block: var(--space-16) var(--space-10);
 }
 
-/* Full-bleed orange band; tight cream slivers above/below so it reads as a
-   sticker slapped between sections, not another floating panel. The band
-   inside is tilted, so clip the horizontal spill it creates. */
-.home-ticker {
-  padding-block: var(--space-8) var(--space-6);
-  overflow-x: clip;
-}
-
 /* ---------- Journey (cream canvas — spacing only; visuals live in
    JourneyPath.css) ---------- */
 .journey {
@@ -85,80 +77,50 @@
   display: block;
 }
 
-/* ---------- Kind Words — blue speech bubble on the cream canvas ---------- */
+/* ---------- Kind Words — one blue card holding every quote ----------
+   Was two alternating speech bubbles, which left half the canvas empty on wide
+   screens. A single card keeps the quotes as one block of proof. */
 .home-words {
   padding-block: var(--space-16) var(--space-8);
 }
 
-/* Ink heading here by client call — the one black display moment they kept. */
-.home-words__title {
-  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  color: var(--color-ink);
-  margin-bottom: var(--space-10);
-}
-
-.home-words__item {
-  max-width: 780px;
-}
-
-.home-words__item + .home-words__item {
-  margin-top: var(--space-12);
-}
-
-/* The bubble: brand blue, sticker-tilted, with a tail pointing at the
-   attribution below. Quote text is 24px on blue → clears the large-text bar
-   (see tokens.css notes). */
-.home-words__bubble {
-  position: relative;
+.home-words__card {
   background-color: var(--color-blue);
   color: var(--text-on-blue);
   border-radius: var(--radius-2xl);
-  padding: var(--space-10) var(--space-12) var(--space-10) var(--space-16);
-  rotate: -1deg;
+  padding: clamp(var(--space-8), 4vw, var(--space-12));
   --focus-ring: var(--color-cream);
 }
 
-/* Oversized display quote mark hanging in the bubble's padding. */
-.home-words__bubble::before {
-  content: '“';
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-5);
-  font-family: var(--font-display);
-  font-size: var(--text-6xl);
-  line-height: 1;
-  color: var(--color-yellow);
+/* Cream display heading, inside the card now rather than above it. */
+.home-words__title {
+  font-size: clamp(var(--text-3xl), 4.2vw, var(--text-5xl));
+  color: var(--text-on-blue);
+  margin-bottom: var(--space-8);
 }
 
-/* Speech-bubble tail — same blue, clipped triangle under the left edge. */
-.home-words__bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -22px;
-  left: 64px;
-  width: 40px;
-  height: 26px;
-  background-color: var(--color-blue);
-  clip-path: polygon(0 0, 100% 0, 18% 100%);
+.home-words__item + .home-words__item {
+  margin-top: var(--space-10);
 }
 
-.home-words__bubble p {
-  font-size: var(--text-2xl);
-  line-height: var(--leading-snug);
+/* 20px+ on blue clears the large-text contrast bar (see tokens.css notes). */
+.home-words__quote p {
+  font-size: clamp(var(--text-lg), 1.5vw, var(--text-xl));
+  line-height: var(--leading-relaxed);
   font-weight: var(--weight-regular);
+  max-width: 60ch;
 }
 
 .home-words__attribution {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-top: var(--space-8);
-  padding-left: var(--space-16);
+  margin-top: var(--space-4);
 }
 
 .home-words__avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-pill);
   object-fit: cover;
 }
@@ -170,51 +132,15 @@
 }
 
 .home-words__name {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  color: var(--color-ink);
+  font-size: var(--text-base);
+  color: var(--text-on-blue);
+  opacity: 0.85;
 }
 
 .home-words__role {
   font-size: var(--text-sm);
-  color: var(--color-ink-soft);
-}
-
-/* Mirrored variant — bubble hugs the right edge, tail and quote mark flip,
-   tilt goes the other way. Bubbles alternate to read as a conversation. */
-.home-words__item--flip {
-  margin-left: auto;
-}
-
-/* Deep-blue variation on the reply bubble — the two blues are deliberately
-   different hues, echoing the tint play in the journey markers. */
-.home-words__item--flip .home-words__bubble {
-  rotate: 1deg;
-  padding: var(--space-10) var(--space-16) var(--space-10) var(--space-12);
-  background-color: var(--color-blue-deep);
-}
-
-.home-words__item--flip .home-words__bubble::after {
-  background-color: var(--color-blue-deep);
-}
-
-.home-words__item--flip .home-words__bubble::before {
-  content: '”';
-  left: auto;
-  right: var(--space-5);
-}
-
-.home-words__item--flip .home-words__bubble::after {
-  left: auto;
-  right: 64px;
-  clip-path: polygon(0 0, 100% 0, 82% 100%);
-}
-
-.home-words__item--flip .home-words__attribution {
-  justify-content: flex-end;
-  padding-left: 0;
-  padding-right: var(--space-16);
-  text-align: right;
+  color: var(--text-on-blue);
+  opacity: 0.7;
 }
 
 /* ---------- Responsive ---------- */
@@ -229,33 +155,5 @@
 
   .home-what__media {
     min-height: 280px;
-  }
-}
-
-@media (max-width: 600px) {
-  .home-words__bubble {
-    padding: var(--space-8) var(--space-6) var(--space-8) var(--space-10);
-  }
-
-  .home-words__bubble::before {
-    font-size: var(--text-5xl);
-    left: var(--space-3);
-  }
-
-  .home-words__attribution {
-    padding-left: var(--space-10);
-  }
-
-  .home-words__item--flip .home-words__bubble {
-    padding: var(--space-8) var(--space-10) var(--space-8) var(--space-6);
-  }
-
-  .home-words__item--flip .home-words__bubble::before {
-    font-size: var(--text-5xl);
-    right: var(--space-3);
-  }
-
-  .home-words__item--flip .home-words__attribution {
-    padding-right: var(--space-10);
   }
 }

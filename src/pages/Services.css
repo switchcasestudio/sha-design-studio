@@ -81,7 +81,6 @@
   width: clamp(170px, 20vw, 280px);
   pointer-events: none;
   z-index: 0;
-  transform: rotate(-8deg);
   transition: transform var(--duration-base) var(--ease-out);
 }
 
@@ -92,7 +91,7 @@
 }
 
 .service-block:hover .service-block__motif {
-  transform: rotate(-3deg) scale(1.03);
+  transform: scale(1.03);
 }
 
 /* Text sits above the motif. Each column gets its own stacking context; the

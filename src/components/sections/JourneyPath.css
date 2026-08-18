@@ -79,16 +79,12 @@
   color: var(--color-yellow);
 }
 
-.journey__dot--blue-soft {
-  color: var(--color-blue-soft);
+.journey__dot--blue {
+  color: var(--color-blue);
 }
 
-.journey__dot--orange-soft {
-  color: var(--color-orange-soft);
-}
-
-.journey__dot--yellow-deep {
-  color: var(--color-yellow-deep);
+.journey__dot--orange {
+  color: var(--color-orange);
 }
 
 .journey__meta {
@@ -135,7 +131,7 @@
 
 .journey__stop-link:hover .journey__dot,
 .journey__stop-link:focus-visible .journey__dot {
-  transform: translateY(-4px) rotate(8deg) scale(1.06);
+  transform: translateY(-4px) scale(1.06);
 }
 
 .journey__stop-link .journey__detail {
