@@ -147,7 +147,7 @@
 }
 
 /* Color themes.
-   The orange card is the brand BRIGHT orange (#E54B2A). Bright orange clears AA
+   The orange card is the brand BRIGHT orange (#e95a29). Bright orange clears AA
    only for large text (≥24px / ≥18.66px bold), so its small text (chips +
    INCLUDES label) is moved onto solid cream/ink tags — see the scoped overrides
    below. Blue keeps its -deep shade (white/blue-deep = 5.49:1); the ink and

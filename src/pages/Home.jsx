@@ -38,10 +38,7 @@ function Home() {
 
   return (
     <>
-      {/* ---------- Signature hero: 100vh brand frame ----------
-          This IS the home headline. The wordmark's letters morph between glyphs
-          and brand motifs (HeadlineMorph) and a cursor follower trails inside
-          the section — no scroll-driven entrance. */}
+      {/* ---------- Hero: calm centred headline framed by brand motifs ---------- */}
       <HomeAssemble />
 
       {/* ---------- Social proof: partner / client logo marquee ---------- */}

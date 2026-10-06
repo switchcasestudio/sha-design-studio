@@ -1,106 +1,89 @@
 /* ==========================================================================
-   Home assemble — the signature 100vh hero.
-   Just the centred wordmark; the playfulness comes from the letters↔shapes
-   morph (HeadlineMorph) and the cursor follower. No scattered motifs, no
-   scroll-driven entrance — the layout is static and correct with JS off.
+   Home hero — calm, centred headline framed by resting brand motifs.
+   Base styles render the settled layout (correct with JS off and under
+   reduced motion). On desktop GSAP pins the section and scroll pops the
+   motifs in from off-frame; on phones they pop in once on load.
    ========================================================================== */
 .home-assemble {
   position: relative;
-  /* Fill the first screen. min-height (not height) so content never clips on
-     short screens; dvh avoids the mobile address-bar gap. */
   min-height: 100vh; /* fallback */
   min-height: 100dvh;
   display: grid;
   place-items: center;
   overflow: hidden;
   background-color: var(--color-cream);
+  padding-block: var(--space-16);
 }
 
-/* Centred brand headline. */
+/* Centred headline — the clear zone the motifs never enter. */
 .home-assemble__inner {
   position: relative;
   z-index: 2;
-  width: min(900px, 80vw);
+  width: min(560px, 54vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
   text-align: center;
+  animation: home-hero-rise 900ms var(--ease-out) both;
 }
 
-/* Tagline eyebrow above the morphing wordmark. Set in the body (running-text)
-   face — not the display face — so it reads as a calm label against the chunky
-   wordmark rather than competing with it. */
 .home-assemble__brand {
   font-family: var(--font-body);
-  font-weight: 500;
-  font-size: clamp(var(--text-lg), 2.2vw, var(--text-2xl));
+  font-weight: 400;
+  font-size: clamp(var(--text-xl), 2.4vw, var(--text-3xl));
   line-height: 1.05;
-  letter-spacing: var(--tracking-tight);
   color: var(--color-orange);
 }
 
-/* Solid wordmark (Bagel display face); letters pop between glyph and motifs.
-   Self-contained clamp so the size scales smoothly with the viewport (min on
-   phones → fluid mid-range → cap on large screens), independent of the
-   breakpoint-stepped --text tokens. */
+/* Set in the body face (not Bagel) — the quiet, clean headline the client
+   asked for. */
 .home-assemble__headline {
-  font-family: var(--font-hero);
-  font-size: clamp(3.25rem, 10vw, 10rem);
-  line-height: 1.05;
-  letter-spacing: var(--tracking-normal);
-  color: var(--color-orange);
-  max-width: 12ch;
-}
-
-/* The value statement under the wordmark — display face, loud but smaller
-   than the mark so the hierarchy stays name → promise → action. All brand
-   blue (client call); the display size keeps blue-on-cream legal. */
-.home-assemble__statement {
-  font-family: var(--font-display);
-  font-weight: var(--weight-regular);
-  font-size: clamp(var(--text-xl), 2.8vw, var(--text-4xl));
-  line-height: var(--leading-tight);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(var(--text-5xl), 7vw, var(--text-7xl));
+  line-height: 1.04;
   letter-spacing: var(--tracking-tight);
-  color: var(--color-blue);
-  margin-top: var(--space-2);
+  text-wrap: balance;
+  color: var(--color-orange);
+  max-width: 13ch;
 }
 
-.home-assemble__actions {
-  display: flex;
-  gap: var(--space-4);
-  margin-top: var(--space-6);
+/* Motifs rest in the side margins, centred on their left/top anchor (via the
+   `translate` property, so GSAP's transform composes on top of it). */
+.home-assemble__motif {
+  position: absolute;
+  z-index: 1;
+  width: var(--motif-size);
+  translate: -50% -50%;
+}
+
+.home-assemble__motif svg {
+  height: auto;
+}
+
+@keyframes home-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 }
 
 @media (max-width: 767px) {
-  .home-assemble {
-    /* Still fill the first screen on mobile so "What I Do" starts below the fold */
-    min-height: 100vh; /* fallback */
-    min-height: 100dvh;
-    /* On mobile the scattered nav becomes a static row (see HeroNav.css), so the
-       hero has TWO grid rows (wordmark + nav). Pack them as one group dead-centre
-       (vertically + horizontally). The big wordmark fills the space, and the
-       badges no longer fade out — they just scroll away with the section (see
-       HeroNav), so there's no abrupt disappearance / empty-space glitch. */
-    align-content: center;
-  }
-
   .home-assemble__inner {
-    width: min(480px, 92vw);
-    gap: var(--space-3);
+    width: min(360px, 82vw);
   }
 
-  /* Tamer wordmark on phones. The previous ~24vw filled the screen and, with
-     several letters mid-morph at once, read as chaotic. ~15vw keeps it the clear
-     hero without overwhelming — and leaves breathing room around it. */
   .home-assemble__headline {
-    font-size: clamp(2.75rem, 15vw, 4rem);
+    font-size: clamp(2.75rem, 13vw, 4rem);
   }
 
-  .home-assemble__actions {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    margin-top: var(--space-5);
+  /* Phones keep only the four corner shapes, a touch larger. */
+  .home-assemble__motif[data-mobile='hide'] {
+    display: none;
+  }
+
+  .home-assemble__motif {
+    width: calc(var(--motif-size) * 1.8);
   }
 }

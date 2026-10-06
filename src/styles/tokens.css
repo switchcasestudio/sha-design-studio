@@ -8,17 +8,17 @@
   --color-cream: #f5f0e1; /* Background / canvas */
   --color-cream-soft: #fbf7ec; /* Light card backgrounds */
 
-  --color-orange: #e54b2a; /* Primary brand — logo, headings, accents */
-  --color-orange-deep: #c93d1f; /* Hover / pressed states */
-  --color-orange-soft: #f37a5c; /* Light tint */
+  --color-orange: #e95a29; /* Primary brand — logo, headings, accents */
+  --color-orange-deep: #cc4718; /* Hover / pressed states */
+  --color-orange-soft: #f4835c; /* Light tint */
 
-  --color-yellow: #f2c94c; /* Service cards, "What I Do" */
-  --color-yellow-deep: #e8b91e; /* Hover */
-  --color-yellow-soft: #f7da7a; /* Light tint */
+  --color-yellow: #f5c943; /* Service cards, "What I Do" */
+  --color-yellow-deep: #e9b51c; /* Hover */
+  --color-yellow-soft: #f8d977; /* Light tint */
 
-  --color-blue: #4a7fbf; /* About, testimonials, Full-service */
-  --color-blue-deep: #3a6ba5; /* Hover */
-  --color-blue-soft: #7aa0d2; /* Light tint / badge fill */
+  --color-blue: #2d68f5; /* About, testimonials, Full-service */
+  --color-blue-deep: #1d52d6; /* Hover */
+  --color-blue-soft: #6f97f8; /* Light tint / badge fill */
 
   --color-ink: #1a1a1a; /* Body text / dark cards */
   --color-ink-soft: #2c2c2c; /* Secondary text */
@@ -40,7 +40,7 @@
   --text-muted: var(--color-ink-muted);
 
   /* Semantic text-on-surface tokens.
-     WCAG note: brand orange (#e54b2a) and blue (#4a7fbf) are mid-tones — they
+     WCAG note: brand orange (#e95a29) and blue (#2d68f5) are mid-tones — they
      clear the 3:1 LARGE-text bar with cream/white but cannot reach 4.5:1 for
      normal text against ANY foreground. So small text is placed on the deeper
      shades instead, where white passes 4.5:1 (orange-deep 5.04, blue-deep 5.49).
@@ -135,7 +135,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
-  --shadow-card: 0 8px 24px rgba(229, 75, 42, 0.08);
+  --shadow-card: 0 8px 24px rgba(233, 90, 41, 0.08);
 
   /* ----- Motion ----- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

@@ -35,21 +35,21 @@ The palette is warm, playful, and confident — built on a cream canvas with thr
 | Role | Name | Hex | CSS variable | Notes |
 |---|---|---|---|---|
 | **Background canvas** | Cream | `#F5F0E1` | `--color-cream` | Default page background. Warm parchment. |
-| **Primary accent** | Orange | `#E54B2A` | `--color-orange` | Logo, headings, CTAs, the Portfolio page background. The brand's heartbeat. |
-| **Secondary** | Yellow | `#F2C94C` | `--color-yellow` | "What I Do" section, Design Session card, Hello! badge. Warm and inviting. |
-| **Tertiary** | Blue | `#4A7FBF` | `--color-blue` | About page background, "Kind Words" testimonial, Full-service tier. |
+| **Primary accent** | Orange | `#e95a29` | `--color-orange` | Logo, headings, CTAs, the Portfolio page background. The brand's heartbeat. |
+| **Secondary** | Yellow | `#f5c943` | `--color-yellow` | "What I Do" section, Design Session card, Hello! badge. Warm and inviting. |
+| **Tertiary** | Blue | `#2d68f5` | `--color-blue` | About page background, "Kind Words" testimonial, Full-service tier. |
 | **Ink** | Dark | `#1A1A1A` | `--color-ink` | Body text, dark tier cards, blackletter headings. |
 
 ### Tints & shades (for hover/pressed states)
 
 | Variable | Hex | Use |
 |---|---|---|
-| `--color-orange-deep` | `#C93D1F` | Orange hover/pressed |
-| `--color-orange-soft` | `#F37A5C` | Light orange tint |
-| `--color-yellow-deep` | `#E8B91E` | Yellow hover |
-| `--color-yellow-soft` | `#F7DA7A` | Light yellow tint |
-| `--color-blue-deep` | `#3A6BA5` | Blue hover |
-| `--color-blue-soft` | `#7AA0D2` | Cloud-shaped badge fill |
+| `--color-orange-deep` | `#cc4718` | Orange hover/pressed |
+| `--color-orange-soft` | `#f4835c` | Light orange tint |
+| `--color-yellow-deep` | `#e9b51c` | Yellow hover |
+| `--color-yellow-soft` | `#f8d977` | Light yellow tint |
+| `--color-blue-deep` | `#1d52d6` | Blue hover |
+| `--color-blue-soft` | `#6f97f8` | Cloud-shaped badge fill |
 | `--color-cream-soft` | `#FBF7EC` | Light card backgrounds |
 
 ### Usage rules

@@ -101,23 +101,6 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  transition: opacity var(--duration-base) var(--ease-out),
-    transform var(--duration-base) var(--ease-out);
-}
-
-/* Home-hero state: the nav lives in the hero as shapes, so the header's text
-   nav lifts + fades out (and goes non-interactive). Space is preserved so the
-   logo/CTA keep their positions. */
-.navbar__nav--ghost {
-  opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .navbar__nav {
-    transition: none;
-  }
 }
 
 .navbar__list {
