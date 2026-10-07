@@ -1,0 +1,29 @@
+.scroll-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.scroll-marquee__row {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.scroll-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding-right: 0.35em;
+  font-size: clamp(72px, 13vw, 200px);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--hd);
+}
+
+.scroll-marquee__dot {
+  display: inline-block;
+  font-size: 0.5em;
+  color: var(--hl-bg);
+}

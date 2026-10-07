@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn';
+import { useTheme } from '@/theme/ThemeContext';
 import './Button.css';
 
 /**
@@ -10,6 +11,9 @@ import './Button.css';
  *  - outline  oat pill, the quiet default (→ ink)
  *  - dark     ink pill (→ pool)
  *  - ghost    no fill until hover
+ *
+ * Vivid theme: the hover colour sweeps up from below as a circle, the label
+ * rolls up to a copy of itself, and the pill springs a little larger.
  */
 function Button({
   as: Component = 'button',
@@ -19,12 +23,23 @@ function Button({
   children,
   ...props
 }) {
+  const { isVivid } = useTheme();
+
   return (
     <Component
       className={cn('btn', `btn--${variant}`, `btn--${size}`, className)}
       {...props}
     >
-      {children}
+      {isVivid ? (
+        <span className="btn__roll">
+          <span className="btn__roll-face">{children}</span>
+          <span className="btn__roll-face btn__roll-copy" aria-hidden="true">
+            {children}
+          </span>
+        </span>
+      ) : (
+        children
+      )}
     </Component>
   );
 }

@@ -105,3 +105,106 @@
 .btn--dark:hover {
   background-color: var(--pool);
 }
+
+/* ==========================================================================
+   Vivid theme — only under html[data-motion='vivid']
+   The hover fill is a circle (::before) that sweeps up from the bottom; each
+   variant names its sweep colour in --btn-sweep and keeps its resting fill.
+   ========================================================================== */
+html[data-motion='vivid'] .btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color 350ms ease,
+    transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .btn::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 100%;
+  width: 150%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--btn-sweep, var(--ink));
+  transform: translate(-50%, 0) scale(0);
+  transition: transform 550ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-motion='vivid'] .btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+html[data-motion='vivid'] .btn:active:not(:disabled) {
+  transform: scale(0.95);
+  transition-duration: 120ms;
+}
+
+html[data-motion='vivid'] .btn:hover:not(:disabled)::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Resting fills stay put on hover; the sweep does the colour change */
+html[data-motion='vivid'] .btn--capsule,
+html[data-motion='vivid'] .btn--yellow,
+html[data-motion='vivid'] .btn--capsule:hover,
+html[data-motion='vivid'] .btn--yellow:hover {
+  --btn-sweep: var(--pool);
+  background-color: var(--yolk);
+}
+
+html[data-motion='vivid'] .btn--primary,
+html[data-motion='vivid'] .btn--primary:hover {
+  --btn-sweep: var(--ink);
+  background-color: var(--tomato);
+}
+
+html[data-motion='vivid'] .btn--outline,
+html[data-motion='vivid'] .btn--outline:hover {
+  --btn-sweep: var(--ink);
+  background-color: var(--oat);
+}
+
+html[data-motion='vivid'] .btn--ghost,
+html[data-motion='vivid'] .btn--ghost:hover {
+  --btn-sweep: var(--oat);
+  background-color: transparent;
+}
+
+html[data-motion='vivid'] .btn--dark,
+html[data-motion='vivid'] .btn--dark:hover {
+  --btn-sweep: var(--pool);
+  background-color: var(--ink);
+}
+
+/* Text roll */
+html[data-motion='vivid'] .btn__roll {
+  position: relative;
+  display: inline-grid;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+html[data-motion='vivid'] .btn__roll-face {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  grid-area: 1 / 1;
+  transition: transform 550ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .btn__roll-copy {
+  transform: translateY(110%);
+}
+
+html[data-motion='vivid'] .btn:hover:not(:disabled) .btn__roll-face {
+  transform: translateY(-110%);
+}
+
+html[data-motion='vivid'] .btn:hover:not(:disabled) .btn__roll-copy {
+  transform: translateY(0);
+}

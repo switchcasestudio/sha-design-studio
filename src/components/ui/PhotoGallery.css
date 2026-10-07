@@ -125,3 +125,18 @@ button.photo-fan__photo {
     scroll-snap-align: start;
   }
 }
+
+/* ---------- Vivid theme: dealt prints that lift on hover ---------- */
+html[data-motion='vivid'] .photo-fan__item {
+  will-change: transform;
+}
+
+html[data-motion='vivid'] .photo-fan__photo {
+  transition:
+    background-color 0.3s var(--ease-out),
+    padding 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .photo-fan__photo:hover {
+  padding: 12px;
+}

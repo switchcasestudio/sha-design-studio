@@ -9,6 +9,13 @@ import { siteConfig } from '@/utils/siteConfig';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import Lightbox from '@/components/ui/Lightbox';
 import { rise } from '@/lib/motion';
+import { useTheme } from '@/theme/ThemeContext';
+import SplitText from '@/theme/vivid/SplitText';
+import Magnetic from '@/theme/vivid/Magnetic';
+import { ease as vEase, spring } from '@/theme/vivid/motion';
+import HeroMedia from '@/theme/vivid/work/HeroMedia';
+import ScaleInPanel from '@/theme/vivid/work/ScaleInPanel';
+import ScrollMarquee from '@/theme/vivid/work/ScrollMarquee';
 import './ProjectDetail.css';
 
 // The one phrase per project title that sits in the highlight block. Kept to
@@ -45,6 +52,45 @@ const processStep = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: rise },
 };
+
+// Vivid theme: steps pop in with a springy overshoot, one after another.
+const vividProcessTrack = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const vividProcessStep = {
+  hidden: { opacity: 0, y: 90, scale: 0.8, rotate: -4 },
+  show: { opacity: 1, y: 0, scale: 1, rotate: 0, transition: spring.bouncy },
+};
+
+// Vivid theme: tags and reference rows cascade in once the panel shows.
+const vividList = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+};
+const vividTag = {
+  hidden: { opacity: 0, scale: 0.4, y: 20 },
+  show: { opacity: 1, scale: 1, y: 0, transition: spring.bouncy },
+};
+const vividMetaRow = {
+  hidden: { opacity: 0, x: 60 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: vEase.expoOut } },
+};
+const vividInView = (list) => ({
+  variants: list,
+  initial: 'hidden',
+  whileInView: 'show',
+  viewport: { once: true, amount: 0.3 },
+});
+
+// Wrap a pill in the vivid magnetic pull; regular gets the pill untouched.
+function MaybeMagnetic({ on, children }) {
+  return on ? <Magnetic strength={0.35}>{children}</Magnetic> : children;
+}
+
+// SplitText for a title fragment that may be empty
+const split = (text, delay, by = 'words', trigger = 'mount') =>
+  text ? <SplitText text={text} by={by} delay={delay} trigger={trigger} /> : text;
 
 // How a project's multiple collections relate to each other. Kept app-side
 // because the source data is generated ("do not edit by hand").
@@ -87,9 +133,19 @@ function distinctiveLabels(titles) {
 }
 
 // Hook: scroll-reveal props for a section, gated on the reduced-motion pref.
+// The vivid theme swaps the 16px rise for a long, expo-eased climb.
 function useReveal() {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
   if (reduce) return {};
+  if (isVivid) {
+    return {
+      initial: { opacity: 0, y: 70 },
+      whileInView: { opacity: 1, y: 0 },
+      viewport: { once: true, margin: '-60px' },
+      transition: { duration: 1, ease: vEase.expoOut },
+    };
+  }
   return {
     initial: { opacity: 0, y: 16 },
     whileInView: { opacity: 1, y: 0 },
@@ -133,14 +189,18 @@ function ProjectOverview({ entries }) {
 // ---------- Process: numbered steps laid out horizontally ----------
 function ProjectTimeline({ steps }) {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
+  const track = isVivid ? vividProcessTrack : processTrack;
+  const stepVariant = isVivid ? vividProcessStep : processStep;
   return (
     <section className="pd-process" aria-labelledby="pd-process-title">
       <h2 id="pd-process-title" className="pd-heading">
-        How it <span className="hl">took shape</span>
+        {split('How it', 0, 'words', 'view')}{' '}
+        <span className="hl">{split('took shape', 0.15, 'words', 'view')}</span>
       </h2>
       <motion.ol
         className="pd-process__track"
-        variants={reduce ? undefined : processTrack}
+        variants={reduce ? undefined : track}
         initial={reduce ? false : 'hidden'}
         whileInView={reduce ? undefined : 'show'}
         viewport={{ once: true, margin: '-80px' }}
@@ -149,7 +209,7 @@ function ProjectTimeline({ steps }) {
           <motion.li
             key={step.n}
             className="pd-process__step"
-            variants={reduce ? undefined : processStep}
+            variants={reduce ? undefined : stepVariant}
           >
             <span className="pd-process__num">{step.n}</span>
             <h3 className="pd-process__step-title">{step.title}</h3>
@@ -164,6 +224,7 @@ function ProjectTimeline({ steps }) {
 // ---------- Sketches: full-width image(s), click to open in the lightbox ----------
 function ProjectSketches({ sketches, onOpen }) {
   const reveal = useReveal();
+  const { isVivid } = useTheme();
   // Track each real image's position in the (placeholder-free) lightbox set.
   let lightboxIndex = -1;
 
@@ -174,7 +235,8 @@ function ProjectSketches({ sketches, onOpen }) {
       {...reveal}
     >
       <h2 id="pd-sketches-title" className="pd-heading">
-        From the <span className="hl">sketchbook</span>
+        {split('From the', 0, 'words', 'view')}{' '}
+        <span className="hl">{split('sketchbook', 0.15, 'words', 'view')}</span>
       </h2>
       <div className="pd-sketches__grid">
         {sketches.map((sketch, i) => {
@@ -197,7 +259,18 @@ function ProjectSketches({ sketches, onOpen }) {
           );
 
           return (
-            <figure key={sketch.assetPath ?? i} className="pd-sketches__item">
+            <motion.figure
+              key={sketch.assetPath ?? i}
+              className="pd-sketches__item"
+              {...(isVivid
+                ? {
+                    initial: { clipPath: 'inset(0% 0% 100% 0%)', y: 60 },
+                    whileInView: { clipPath: 'inset(0% 0% 0% 0%)', y: 0 },
+                    viewport: { once: true, amount: 0.2 },
+                    transition: { duration: 1.1, ease: vEase.expoOut, delay: i * 0.12 },
+                  }
+                : {})}
+            >
               {interactive ? (
                 <button
                   type="button"
@@ -223,7 +296,7 @@ function ProjectSketches({ sketches, onOpen }) {
                   {sketch.caption}
                 </figcaption>
               )}
-            </figure>
+            </motion.figure>
           );
         })}
       </div>
@@ -234,6 +307,7 @@ function ProjectSketches({ sketches, onOpen }) {
 function ProjectDetail() {
   const { projectId } = useParams();
   const reduceMotion = useReducedMotion();
+  const { isVivid } = useTheme();
   const project = getProjectById(projectId);
   const caseStudy = getCaseStudy(projectId);
   // Index into the active image set currently open in the lightbox (null = closed)
@@ -318,36 +392,55 @@ function ProjectDetail() {
   };
 
   const hero = project.heroImage ?? project.images[0];
+  const StoryPanel = isVivid ? ScaleInPanel : 'section';
 
   return (
     <div className="project-detail ground-tomato">
       {/* ---------- Hero: identity + the product, straight on the tomato page ---------- */}
       <motion.header
         className="pd-hero"
-        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...rise, delay: 0.05 }}
+        {...(isVivid
+          ? {}
+          : {
+              initial: reduceMotion ? false : { opacity: 0, y: 16 },
+              animate: { opacity: 1, y: 0 },
+              transition: { ...rise, delay: 0.05 },
+            })}
       >
         <div className="container pd-hero__grid">
           <div className="pd-hero__copy">
-            <Link to="/projects" className="pd-pill pd-pill--back">
-              <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
-              All projects
-            </Link>
+            <MaybeMagnetic on={isVivid}>
+              <Link to="/projects" className="pd-pill pd-pill--back">
+                <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
+                All projects
+              </Link>
+            </MaybeMagnetic>
 
             <div className="pd-hero__identity">
-              <span className="project-detail__category">
+              <motion.span
+                className="project-detail__category"
+                {...(isVivid
+                  ? {
+                      initial: { opacity: 0, y: 20, scale: 0.6 },
+                      animate: { opacity: 1, y: 0, scale: 1 },
+                      transition: { ...spring.bouncy, delay: 0.1 },
+                    }
+                  : {})}
+              >
                 {project.category}
-              </span>
+              </motion.span>
               <h1 className="project-detail__title">
-                {titleBefore}
-                <span className="hl">{titleHl}</span>
-                {titleAfter}
+                {split(titleBefore, 0.15)}
+                <span className="hl">{split(titleHl, 0.35)}</span>
+                {split(titleAfter, 0.55)}
               </h1>
             </div>
           </div>
 
-          {hero && (
+          {hero && isVivid && (
+            <HeroMedia image={hero} className="pd-hero__media" />
+          )}
+          {hero && !isVivid && (
             <figure className="pd-hero__media">
               <img
                 src={hero.src}
@@ -360,32 +453,56 @@ function ProjectDetail() {
         </div>
       </motion.header>
 
+      {isVivid && (
+        <ScrollMarquee
+          className="pd-marquee"
+          text={noBreakHyphens(TITLE_HIGHLIGHT[project.id] ?? project.title)}
+        />
+      )}
+
       {/* ---------- Story left, reference card right — one cream panel, so
           the long read sits ink on cream rather than on tomato ---------- */}
-      <section className="pd-story panel ground-cream" aria-label="About the project">
+      <StoryPanel className="pd-story panel ground-cream" aria-label="About the project">
         <div className="container project-detail__header-grid">
           <div className="project-detail__intro">
             {overviewEntries.length > 0 && (
               <ProjectOverview entries={overviewEntries} />
             )}
 
-            <ul className="project-detail__tags" aria-label="Disciplines">
+            <motion.ul
+              className="project-detail__tags"
+              aria-label="Disciplines"
+              {...(isVivid ? vividInView(vividList) : {})}
+            >
               {project.tags.map((tag) => (
-                <li key={tag} className="project-detail__tag">
+                <motion.li
+                  key={tag}
+                  className="project-detail__tag"
+                  {...(isVivid ? { variants: vividTag } : {})}
+                >
                   {tag}
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
 
           <aside className="project-detail__aside">
-            <dl className="project-detail__meta">
-              <div className="project-detail__meta-item">
+            <motion.dl
+              className="project-detail__meta"
+              {...(isVivid ? vividInView(vividList) : {})}
+            >
+              <motion.div
+                className="project-detail__meta-item"
+                {...(isVivid ? { variants: vividMetaRow } : {})}
+              >
                 <dt>Client</dt>
                 <dd>{project.client}</dd>
-              </div>
+              </motion.div>
 
-              <div className="project-detail__meta-item">
+              <motion.div
+                className="project-detail__meta-item"
+                {...(isVivid ? { variants: vividMetaRow } : {})}
+              >
                 <dt>Role</dt>
                 <dd>
                   <ul className="project-detail__roles">
@@ -394,10 +511,13 @@ function ProjectDetail() {
                     ))}
                   </ul>
                 </dd>
-              </div>
+              </motion.div>
 
               {caseStudy?.brief?.goals?.length > 0 && (
-                <div className="project-detail__meta-item">
+                <motion.div
+                  className="project-detail__meta-item"
+                  {...(isVivid ? { variants: vividMetaRow } : {})}
+                >
                   <dt>Goals</dt>
                   <dd>
                     <ul className="project-detail__roles">
@@ -406,12 +526,12 @@ function ProjectDetail() {
                       ))}
                     </ul>
                   </dd>
-                </div>
+                </motion.div>
               )}
-            </dl>
+            </motion.dl>
           </aside>
         </div>
-      </section>
+      </StoryPanel>
 
       <div className="container">
         {/* ---------- Gallery, with the collection switcher right above the
@@ -494,25 +614,30 @@ function ProjectDetail() {
 
         {/* ---------- Footer nav ---------- */}
         <nav className="project-detail__nav" aria-label="Project navigation">
-          <Link to="/projects" className="pd-pill pd-pill--back">
-            <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
-            All projects
-          </Link>
+          <MaybeMagnetic on={isVivid}>
+            <Link to="/projects" className="pd-pill pd-pill--back">
+              <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
+              All projects
+            </Link>
+          </MaybeMagnetic>
 
           <div className="project-detail__next">
             <span className="project-detail__next-label" id="pd-next-label">
               Next project
             </span>
-            <Link
-              to={`/projects/${nextProject.id}`}
-              className="pd-pill pd-pill--next"
-              aria-describedby="pd-next-label"
-            >
-              <span className="project-detail__next-title">
-                {noBreakHyphens(nextProject.title)}
-              </span>
-              <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
-            </Link>
+            <MaybeMagnetic on={isVivid}>
+              <Link
+                to={`/projects/${nextProject.id}`}
+                className="pd-pill pd-pill--next"
+                aria-describedby="pd-next-label"
+                {...(isVivid ? { 'data-cursor': 'Next' } : {})}
+              >
+                <span className="project-detail__next-title">
+                  {noBreakHyphens(nextProject.title)}
+                </span>
+                <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
+              </Link>
+            </MaybeMagnetic>
           </div>
         </nav>
       </div>

@@ -46,3 +46,94 @@
 .notfound__code .hl::before {
   bottom: 0.18em;
 }
+
+/* ==========================================================================
+   Vivid theme — the 404 playroom (rendered only in vivid). Draggable digits
+   and toy shapes; the zero's block wobbles.
+   ========================================================================== */
+.notfound--vivid {
+  position: relative;
+  min-height: 80vh;
+  overflow: hidden;
+}
+
+.notfound__toys {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.notfound__toy {
+  position: absolute;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.notfound__toy:active,
+.notfound__digit:active {
+  cursor: grabbing;
+}
+
+.notfound__toy svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.notfound--vivid .notfound__inner {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.notfound--vivid .notfound__inner > * {
+  pointer-events: auto;
+}
+
+.notfound--vivid .notfound__code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notfound__digit {
+  display: inline-block;
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.notfound--vivid .notfound__digit.hl {
+  margin-inline: 0.04em;
+}
+
+.notfound--vivid .notfound__digit.hl::before {
+  bottom: 0.18em;
+}
+
+.notfound__hint {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--pool);
+  font-weight: var(--weight-medium);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion='vivid'] .notfound--vivid .notfound__digit.hl::before {
+    animation: v-nf-wobble 2.4s ease-in-out infinite;
+  }
+
+  @keyframes v-nf-wobble {
+    0%,
+    100% {
+      transform: rotate(-3deg) scale(1);
+    }
+    50% {
+      transform: rotate(3deg) scale(1.04);
+    }
+  }
+}

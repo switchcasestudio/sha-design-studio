@@ -147,3 +147,123 @@
     min-height: 280px;
   }
 }
+
+/* ==========================================================================
+   Vivid theme — only applies with html[data-motion='vivid'].
+   ========================================================================== */
+
+/* What I do: the photo is taller than its frame so it can drift on scroll,
+   and zooms on hover. */
+html[data-motion='vivid'] .home-what__magnet {
+  align-self: flex-start;
+}
+
+html[data-motion='vivid'] .home-what__parallax {
+  position: absolute;
+  inset: -14% 0;
+}
+
+html[data-motion='vivid'] .home-what__media--vivid .home-what__image {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-motion='vivid'] .home-what__panel:hover .home-what__image {
+  transform: scale(1.07);
+}
+
+@media (max-width: 900px) {
+  html[data-motion='vivid'] .home-what__media--vivid {
+    min-height: 340px;
+  }
+}
+
+/* Spinning sticker on the photo's corner */
+html[data-motion='vivid'] .home-what__sticker {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  z-index: 2;
+  width: clamp(104px, 10vw, 136px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--tomato);
+  color: var(--ink);
+}
+
+html[data-motion='vivid'] .home-what__sticker svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: home-spin 12s linear infinite;
+  fill: currentColor;
+  font-size: 11.5px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-motion='vivid'] .home-what__panel:hover .home-what__sticker svg {
+  animation-duration: 3s;
+}
+
+html[data-motion='vivid'] .home-what__sticker-core {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--yolk);
+  animation: home-spin 6s linear infinite reverse;
+}
+
+@keyframes home-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Kind words: soft paper spotlight trailing the pointer, a big bouncing quote mark */
+html[data-motion='vivid'] .home-words__card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+html[data-motion='vivid'] .home-words__spot {
+  position: absolute;
+  z-index: -1;
+  width: clamp(240px, 32vw, 460px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--paper);
+  opacity: 0.16;
+  translate: -50% -50%;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+html[data-motion='vivid'] .home-words__item {
+  position: relative;
+}
+
+html[data-motion='vivid'] .home-words__mark {
+  position: absolute;
+  top: -0.32em;
+  left: -0.12em;
+  z-index: -1;
+  display: block;
+  font-size: clamp(7rem, 12vw, 11rem);
+  line-height: 1;
+  color: var(--yolk);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+html[data-motion='vivid'] .home-words__quote {
+  position: relative;
+  padding-left: clamp(var(--space-8), 5vw, var(--space-16));
+}
+
+html[data-motion='vivid'] .home-words__item .home-words__attribution {
+  padding-left: clamp(var(--space-8), 5vw, var(--space-16));
+}

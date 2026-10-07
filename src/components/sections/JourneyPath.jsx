@@ -1,5 +1,18 @@
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion } from 'motion/react';
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useTheme } from '@/theme/ThemeContext';
+import WipeHeading from '@/theme/vivid/home/WipeHeading';
+import { spring } from '@/theme/vivid/motion';
 import { badgeBloom, gridContainer, reducedReveal } from '@/lib/motion';
 import { inlineSvg } from '@/utils/svg';
 import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
@@ -67,6 +80,173 @@ const STOPS = [
 const ROAD =
   'M 60 210 C 180 210 300 90 420 90 S 660 210 780 210 S 1020 90 1140 90';
 
+function StopBody({ stop }) {
+  return (
+    <>
+      <span className={`journey__dot journey__dot--${stop.tint}`} aria-hidden="true">
+        <span
+          className="journey__dot-shape"
+          dangerouslySetInnerHTML={{ __html: SHAPES[stop.shape] }}
+        />
+      </span>
+      <span className="journey__meta">
+        <strong className="journey__label">{stop.label}</strong>
+        <span className="journey__detail">{stop.detail}</span>
+      </span>
+    </>
+  );
+}
+
+const vividStop = {
+  off: { opacity: 0, scale: 0.3, y: 40 },
+  on: { opacity: 1, scale: 1, y: 0, transition: spring.bouncy },
+};
+
+/* Vivid, desktop: the section pins (CSS sticky inside a tall scroller) and
+   scrolling draws the road. A tomato traveller rides the tip of the line and
+   each stop springs up the moment the line reaches it. */
+function VividJourneyDesktop() {
+  const scrollerRef = useRef(null);
+  const roadRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: scrollerRef,
+    offset: ['start start', 'end end'],
+  });
+  const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 24 });
+  const draw = useTransform(smooth, [0.04, 0.88], [0, 1], { clamp: true });
+  const tx = useMotionValue('5%');
+  const ty = useMotionValue('70%');
+  const [reached, setReached] = useState(0);
+
+  useMotionValueEvent(draw, 'change', (v) => {
+    const path = roadRef.current;
+    if (path) {
+      const pt = path.getPointAtLength(v * path.getTotalLength());
+      tx.set(`${(pt.x / 1200) * 100}%`);
+      ty.set(`${(pt.y / 300) * 100}%`);
+    }
+    // Anchors sit at roughly equal thirds of the road's length.
+    const count = v <= 0.001 ? 0 : Math.min(4, Math.floor(v * 3 + 0.04) + 1);
+    if (count !== reached) setReached(count);
+  });
+
+  return (
+    <div ref={scrollerRef} className="journey-vivid">
+      <div className="journey-vivid__stage">
+        <div className="container">
+          <div className="journey-vivid__head">
+            <WipeHeading as="h2" className="journey__title">
+              How I <span className="hl">got here</span>
+            </WipeHeading>
+            {/* Odometer: a strip of 00–04 that springs to the stop reached */}
+            <span className="journey-vivid__count" aria-hidden="true">
+              <span className="journey-vivid__digits">
+                <motion.span
+                  className="journey-vivid__strip"
+                  animate={{ y: `${-reached * 1.1}em` }}
+                  transition={spring.bouncy}
+                >
+                  {[0, 1, 2, 3, 4].map((n) => (
+                    <span key={n}>{String(n).padStart(2, '0')}</span>
+                  ))}
+                </motion.span>
+              </span>
+              <span className="journey-vivid__total">/ 04</span>
+            </span>
+          </div>
+
+          <ol className="journey__path journey__path--vivid">
+            <svg
+              className="journey__road"
+              viewBox="0 0 1200 300"
+              preserveAspectRatio="none"
+              fill="none"
+              aria-hidden="true"
+            >
+              <defs>
+                <mask id="journey-vivid-mask" maskUnits="userSpaceOnUse">
+                  <motion.path
+                    ref={roadRef}
+                    d={ROAD}
+                    stroke="#fff"
+                    strokeWidth="24"
+                    strokeLinecap="round"
+                    style={{ pathLength: draw }}
+                  />
+                </mask>
+              </defs>
+              <path className="journey__road-ghost" d={ROAD} />
+              <path
+                className="journey__road-dots"
+                d={ROAD}
+                mask="url(#journey-vivid-mask)"
+              />
+            </svg>
+
+            <motion.span
+              className="journey-vivid__traveller"
+              aria-hidden="true"
+              style={{ left: tx, top: ty }}
+            />
+
+            {STOPS.map((stop, i) => (
+              <motion.li
+                key={stop.label}
+                className={`journey__stop${stop.high ? ' journey__stop--high' : ''}`}
+                style={{ '--stop-x': stop.x, '--stop-y': stop.y }}
+                data-active={i < reached ? 'true' : 'false'}
+                variants={vividStop}
+                initial="off"
+                animate={i < reached ? 'on' : 'off'}
+              >
+                {stop.to ? (
+                  <Link className="journey__stop-link" to={stop.to} data-cursor="Let's talk">
+                    <StopBody stop={stop} />
+                  </Link>
+                ) : (
+                  <StopBody stop={stop} />
+                )}
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Vivid, phones: the vertical spine stays, each stop bounces in on scroll. */
+function VividJourneyMobile() {
+  return (
+    <div className="container">
+      <WipeHeading as="h2" className="journey__title">
+        How I <span className="hl">got here</span>
+      </WipeHeading>
+      <ol className="journey__path">
+        {STOPS.map((stop, i) => (
+          <motion.li
+            key={stop.label}
+            className={`journey__stop${stop.high ? ' journey__stop--high' : ''}`}
+            data-active="true"
+            initial={{ opacity: 0, x: -50, scale: 0.6 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.8 }}
+            transition={{ ...spring.bouncy, delay: i * 0.05 }}
+          >
+            {stop.to ? (
+              <Link className="journey__stop-link" to={stop.to}>
+                <StopBody stop={stop} />
+              </Link>
+            ) : (
+              <StopBody stop={stop} />
+            )}
+          </motion.li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 /**
  * "How I got here" — the designer's journey as a dotted play-path winding
  * across the cream canvas itself (no panel). The road draws in as it scrolls
@@ -75,6 +255,10 @@ const ROAD =
  */
 function JourneyPath() {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
+  const desktop = useMediaQuery('(min-width: 768px)');
+
+  if (isVivid) return desktop ? <VividJourneyDesktop /> : <VividJourneyMobile />;
 
   return (
     <div className="container">

@@ -1,8 +1,16 @@
 import { useRef } from 'react';
+import { motion, useTransform } from 'motion/react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { siteConfig } from '@/utils/siteConfig';
 import BrandShape from '@/components/ui/BrandShape';
+import { useTheme } from '@/theme/ThemeContext';
+import SplitText from '@/theme/vivid/SplitText';
+import WipeHeading from '@/theme/vivid/home/WipeHeading';
+import { usePointerParallax } from '@/theme/vivid/home/usePointerParallax';
+import { spring } from '@/theme/vivid/motion';
 import './HomeAssemble.css';
+
+const MotionShape = motion.create(BrandShape);
 
 // The hero the client chose (a quieter take on the June "assemble" hero): a
 // centred headline framed by a light ring of brand motifs resting in the side
@@ -45,8 +53,49 @@ function pullOffset(m, axis) {
     unit * (m.pull / 100) * (axis === 'x' ? window.innerWidth : window.innerHeight);
 }
 
+// Vivid only: the motif's outer span keeps the GSAP scroll assemble; inside it
+// a parallax layer drifts against the pointer (deeper = bigger shapes), and
+// the shape itself can be grabbed, flung and springs home.
+function VividMotif({ m, i, pointer }) {
+  const depth = (m.size / 10) * (i % 2 ? -1 : 1) * 70;
+  const px = useTransform(pointer.x, (v) => v * depth);
+  const py = useTransform(pointer.y, (v) => v * depth);
+
+  return (
+    <span
+      className="home-assemble__motif"
+      data-mobile={m.mobile ? 'show' : 'hide'}
+      style={{
+        left: `${m.x}%`,
+        top: `${m.y}%`,
+        color: TINT[m.color],
+        '--motif-size': `${m.size}vw`,
+        '--float-delay': `${-i * 0.7}s`,
+      }}
+    >
+      <motion.span className="home-assemble__parallax" style={{ x: px, y: py }}>
+        <MotionShape
+          shape={m.shape}
+          className="home-assemble__drag"
+          data-cursor="Drag"
+          drag
+          dragSnapToOrigin
+          dragElastic={0.9}
+          dragTransition={{ bounceStiffness: 260, bounceDamping: 9 }}
+          whileHover={{ scale: 1.18, rotate: i % 2 ? -14 : 14 }}
+          whileTap={{ scale: 0.88 }}
+          whileDrag={{ scale: 1.3, rotate: 0, zIndex: 5 }}
+          transition={spring.bouncy}
+        />
+      </motion.span>
+    </span>
+  );
+}
+
 function HomeAssemble() {
   const sectionRef = useRef(null);
+  const { isVivid } = useTheme();
+  const pointer = usePointerParallax(sectionRef, isVivid);
 
   useGSAP(
     () => {
@@ -70,7 +119,14 @@ function HomeAssemble() {
           tl.fromTo(
             el,
             { x: pullOffset(m, 'x'), y: pullOffset(m, 'y'), scale: 0.5 },
-            { x: 0, y: 0, scale: 1, duration: 1, ease: 'power3.out' },
+            {
+              x: 0,
+              y: 0,
+              scale: 1,
+              duration: 1,
+              // Vivid lets the shapes overshoot and settle, the regular kit never does.
+              ease: isVivid ? 'back.out(2.2)' : 'power3.out',
+            },
             i * 0.04
           );
         });
@@ -82,9 +138,9 @@ function HomeAssemble() {
           autoAlpha: 0,
           scale: 0.5,
           stagger: 0.08,
-          duration: 0.6,
-          delay: 0.2,
-          ease: 'power3.out',
+          duration: isVivid ? 1.1 : 0.6,
+          delay: isVivid ? 0.5 : 0.2,
+          ease: isVivid ? 'elastic.out(1, 0.45)' : 'power3.out',
         });
       });
 
@@ -92,12 +148,17 @@ function HomeAssemble() {
         document.fonts.ready.then(() => ScrollTrigger.refresh());
       }
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [isVivid] }
   );
 
   return (
-    <section ref={sectionRef} className="home-assemble">
-      {MOTIFS.map((m, i) => (
+    <section
+      ref={sectionRef}
+      className={`home-assemble${isVivid ? ' home-assemble--vivid' : ''}`}
+    >
+      {isVivid
+        ? MOTIFS.map((m, i) => <VividMotif key={i} m={m} i={i} pointer={pointer} />)
+        : MOTIFS.map((m, i) => (
         <BrandShape
           key={i}
           shape={m.shape}
@@ -110,14 +171,32 @@ function HomeAssemble() {
             '--motif-size': `${m.size}vw`,
           }}
         />
-      ))}
+          ))}
 
       <div className="home-assemble__inner">
-        <p className="home-assemble__brand">{siteConfig.name}</p>
-        <h1 className="home-assemble__headline">
+        <p className="home-assemble__brand">
+          {isVivid ? (
+            <SplitText text={siteConfig.name} by="chars" trigger="mount" delay={0.1} />
+          ) : (
+            siteConfig.name
+          )}
+        </p>
+        <WipeHeading as="h1" className="home-assemble__headline" trigger="mount">
           Designing <span className="hl">thoughtful</span> products
-        </h1>
+        </WipeHeading>
       </div>
+
+      {isVivid && (
+        <motion.span
+          className="home-assemble__hint"
+          aria-hidden="true"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, ...spring.bouncy }}
+        >
+          Scroll · or grab a shape
+        </motion.span>
+      )}
     </section>
   );
 }

@@ -1,0 +1,68 @@
+/* Only mounted in the vivid theme on fine pointers (see Cursor.jsx). */
+html.has-vivid-cursor,
+html.has-vivid-cursor * {
+  cursor: none !important;
+}
+
+html.has-vivid-cursor :is(input, textarea, select, [contenteditable='true']) {
+  cursor: auto !important;
+}
+
+html.has-vivid-cursor :is(input, textarea)[type]:not([type='checkbox']):not([type='radio']):not([type='submit']):not([type='button']),
+html.has-vivid-cursor textarea {
+  cursor: text !important;
+}
+
+/* No box of its own: a positioned, z-indexed wrapper would be its own
+   stacking context and the difference blend would only see transparency. */
+.vivid-cursor {
+  display: contents;
+}
+
+.vivid-cursor__dot,
+.vivid-cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  z-index: calc(var(--z-tooltip) + 20);
+}
+
+.vivid-cursor__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--paper);
+  mix-blend-mode: difference;
+}
+
+.vivid-cursor__ring {
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--paper);
+  mix-blend-mode: difference;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.vivid-cursor__ring--hover {
+  background-color: var(--paper);
+}
+
+/* Labelled: a solid yolk disc with ink text, no blending so the word reads */
+.vivid-cursor__ring--label {
+  mix-blend-mode: normal;
+  background-color: var(--yolk);
+  border-color: var(--yolk);
+}
+
+.vivid-cursor__label {
+  font-family: var(--font-sans);
+  font-size: var(--type-ui);
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}

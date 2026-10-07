@@ -87,3 +87,88 @@
     width: calc(var(--motif-size) * 1.8);
   }
 }
+
+/* ==========================================================================
+   Vivid theme — draggable, pointer-reactive shapes and a split-letter
+   headline. Everything below only applies with html[data-motion='vivid'].
+   ========================================================================== */
+html[data-motion='vivid'] .home-assemble--vivid .home-assemble__inner {
+  animation: none; /* the SplitText words carry the entrance instead */
+}
+
+html[data-motion='vivid'] .home-assemble__parallax {
+  display: block;
+}
+
+html[data-motion='vivid'] .home-assemble__drag {
+  display: block;
+  width: 100%;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+html[data-motion='vivid'] .home-assemble__drag:active {
+  cursor: grabbing;
+}
+
+/* A slow idle bob on the SVG itself (the `rotate` / `translate` properties
+   compose with the transforms GSAP and motion write on the wrappers). */
+html[data-motion='vivid'] .home-assemble__drag svg {
+  animation: home-motif-float 5.5s ease-in-out var(--float-delay, 0s) infinite;
+}
+
+@keyframes home-motif-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  50% {
+    translate: 0 -10%;
+    rotate: 9deg;
+  }
+}
+
+html[data-motion='vivid'] .home-assemble--vivid .home-assemble__headline {
+  line-height: 1.04;
+}
+
+html[data-motion='vivid'] .home-assemble__hint {
+  position: absolute;
+  left: 50%;
+  bottom: max(104px, 11vh); /* clears the floating theme switcher */
+  translate: -50% 0;
+  z-index: 2;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--oat);
+  color: var(--ink);
+  font-size: var(--type-ui);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+html[data-motion='vivid'] .home-assemble__hint::after {
+  content: '↓';
+  display: inline-block;
+  margin-left: var(--space-2);
+  animation: home-hint-bounce 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+@keyframes home-hint-bounce {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+@media (max-width: 767px) {
+  html[data-motion='vivid'] .home-assemble__hint {
+    display: none;
+  }
+}

@@ -278,3 +278,157 @@
   position: relative;
   z-index: 1;
 }
+/* ==========================================================================
+   Vivid theme — only under html[data-motion='vivid']
+   ========================================================================== */
+html[data-motion='vivid'] .navbar {
+  transition:
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 300ms ease;
+}
+
+html[data-motion='vivid'] .navbar--hidden {
+  transform: translateY(-110%);
+}
+
+html[data-motion='vivid'] .navbar__logo-wiggle {
+  display: inline-flex;
+  transform-origin: 50% 70%;
+}
+
+/* One oat track; a sliding hover blob and a springy ink pill move inside it */
+html[data-motion='vivid'] .navbar__list {
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background-color: var(--oat);
+}
+
+html[data-motion='vivid'] .navbar__link,
+html[data-motion='vivid'] .navbar__link:hover,
+html[data-motion='vivid'] .navbar__link--active,
+html[data-motion='vivid'] .navbar__link--active:hover {
+  position: relative;
+  background-color: transparent;
+  color: var(--ink);
+  min-height: 36px;
+}
+
+html[data-motion='vivid'] .navbar__link--active,
+html[data-motion='vivid'] .navbar__link--active:hover {
+  color: var(--paper);
+}
+
+html[data-motion='vivid'] .navbar__blob {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+}
+
+html[data-motion='vivid'] .navbar__blob--hover {
+  background-color: var(--sand);
+}
+
+html[data-motion='vivid'] .navbar__blob--active {
+  background-color: var(--ink);
+}
+
+html[data-motion='vivid'] .navbar__link-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* Text roll: the label slides up and an identical copy rolls in from below */
+html[data-motion='vivid'] .navbar__roll {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.2;
+  vertical-align: middle;
+}
+
+html[data-motion='vivid'] .navbar__roll > span,
+html[data-motion='vivid'] .navbar__roll::after {
+  display: block;
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .navbar__roll::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+html[data-motion='vivid'] :is(.navbar__link, .navbar__cta):hover .navbar__roll > span,
+html[data-motion='vivid'] :is(.navbar__link, .navbar__cta):hover .navbar__roll::after {
+  transform: translateY(-100%);
+}
+
+html[data-motion='vivid'] .navbar__cta {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .navbar__cta:hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+/* Mobile menu: masked lines that spring up, numbered */
+html[data-motion='vivid'] .navbar__mobile-mask {
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+html[data-motion='vivid'] .navbar__mobile-link {
+  gap: 0.3em;
+  align-items: baseline;
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .navbar__mobile-link:hover {
+  transform: translateX(0.15em);
+}
+
+html[data-motion='vivid'] .navbar__mobile-index {
+  font-size: var(--type-ui);
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+
+html[data-motion='vivid'] .mobile-overlay__motif .brand-shape {
+  width: 100%;
+}
+
+html[data-motion='vivid'] .mobile-overlay__pop {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+html[data-motion='vivid'] .mobile-overlay__pop .brand-shape {
+  width: 100%;
+}
+
+html[data-motion='vivid'] .mobile-overlay__pop--star {
+  width: 72px;
+  right: 18%;
+  top: 22%;
+  color: var(--nav-motif);
+}
+
+html[data-motion='vivid'] .mobile-overlay__pop--heart {
+  width: 88px;
+  left: 8%;
+  bottom: 14%;
+  color: var(--nav-cta-bg);
+}
+
+html[data-motion='vivid'] .mobile-overlay__pop--clover {
+  width: 56px;
+  right: 40%;
+  bottom: 30%;
+  color: var(--ink);
+}
