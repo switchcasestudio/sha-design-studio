@@ -589,3 +589,169 @@
     padding-block: var(--space-2);
   }
 }
+
+/* ==========================================================================
+   Vivid theme (html[data-motion='vivid']) — the animated exploration.
+   Breaks "nothing moves" on purpose: wipes, springs, a scroll marquee.
+   ========================================================================== */
+@keyframes pd-hl-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+html[data-motion='vivid'] .project-detail__title .hl::before {
+  transform-origin: left center;
+  animation: pd-hl-wipe 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+html[data-motion='vivid'] .project-detail__category {
+  display: inline-block;
+}
+
+html[data-motion='vivid'] .pd-hero__media {
+  will-change: transform, clip-path;
+  transform-origin: 70% 30%;
+}
+
+html[data-motion='vivid'] .pd-hero__media img {
+  will-change: transform;
+}
+
+/* Giant project name drifting between the hero and the story panel */
+html[data-motion='vivid'] .pd-marquee {
+  margin-block: calc(var(--space-6) * -1) var(--space-10);
+  --hd: var(--paper);
+  --hl-bg: var(--ink);
+}
+
+html[data-motion='vivid'] .pd-story {
+  transform-origin: center top;
+  will-change: transform;
+}
+
+/* Pills: springy, with the arrow nudging the way it points */
+html[data-motion='vivid'] .pd-pill {
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .pd-pill svg {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .pd-pill--back:hover svg {
+  transform: translateX(-5px);
+}
+
+html[data-motion='vivid'] .pd-pill--next:hover svg {
+  transform: translateX(6px) scale(1.2);
+}
+
+html[data-motion='vivid'] .pd-pill:active {
+  transform: scale(0.94);
+}
+
+/* The forward step gets star billing: a bigger pill */
+html[data-motion='vivid'] .pd-pill--next {
+  min-height: 64px;
+  padding-inline: var(--space-8) var(--space-6);
+  font-size: var(--type-lead);
+}
+
+/* Collection swatches bounce up; the thumb spins a little */
+html[data-motion='vivid'] .project-detail__swatch {
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .project-detail__swatch:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+html[data-motion='vivid'] .project-detail__swatch:active {
+  transform: scale(0.95);
+}
+
+html[data-motion='vivid'] .project-detail__swatch-thumb {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .project-detail__swatch:hover .project-detail__swatch-thumb,
+html[data-motion='vivid'] .project-detail__swatch[aria-pressed='true'] .project-detail__swatch-thumb {
+  transform: rotate(-12deg) scale(1.1);
+}
+
+/* Tags wobble when touched */
+html[data-motion='vivid'] .project-detail__tag {
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+html[data-motion='vivid'] .project-detail__tag:hover {
+  background-color: var(--yolk);
+  animation: pd-wobble 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pd-wobble {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: -6deg;
+  }
+  60% {
+    rotate: 4deg;
+  }
+}
+
+/* Process numbers spin into place when the step lands */
+html[data-motion='vivid'] .pd-process__step {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .pd-process__step:hover {
+  transform: translateY(-8px) rotate(-1.5deg);
+}
+
+html[data-motion='vivid'] .pd-process__num {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .pd-process__step:hover .pd-process__num {
+  transform: rotate(-12deg) scale(1.2);
+}
+
+/* Sketch frames zoom their image on hover */
+html[data-motion='vivid'] .pd-sketches__image {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-motion='vivid'] .pd-sketches__frame--button:hover .pd-sketches__image {
+  transform: scale(1.06);
+}
+
+@media (max-width: 640px) {
+  html[data-motion='vivid'] .pd-pill--next {
+    min-height: 56px;
+    font-size: var(--type-body);
+  }
+
+  html[data-motion='vivid'] .pd-marquee {
+    margin-block: calc(var(--space-4) * -1) var(--space-6);
+  }
+}
+
+/* Entrances and the marquee slide sideways — never let them widen the page */
+html[data-motion='vivid'] .project-detail {
+  overflow-x: clip;
+}

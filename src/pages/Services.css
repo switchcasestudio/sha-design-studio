@@ -326,3 +326,112 @@
     padding: var(--space-3) var(--space-6);
   }
 }
+
+/* ==========================================================================
+   Vivid theme — only rendered/applied with html[data-motion='vivid'].
+   Stacking deck of service cards, scroll-spun motifs, wiggly chips, a
+   marquee of expertise. Regular rules above stay untouched.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  /* The highlight block sweeps in from the left behind the words */
+  html[data-motion='vivid'] .v-hl-sweep::before {
+    transform-origin: left center;
+    animation: v-hl-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  }
+
+  @keyframes v-hl-sweep {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  html[data-motion='vivid'] .services-stack {
+    gap: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  /* The deck: each card sticks a little lower than the one before, and the
+     big gap gives every card a beat on screen before the next slides over. */
+  html[data-motion='vivid'] .services-stack--on {
+    gap: 22vh;
+  }
+
+  html[data-motion='vivid'] .services-stack--on .services-stack__item {
+    position: sticky;
+    top: calc(104px + var(--stack-i) * 28px);
+  }
+
+  html[data-motion='vivid'] .service-block--vivid {
+    /* Separate the stacked cards so the deck edges read */
+    box-shadow: 0 -12px 40px #000f421f;
+    transform-style: preserve-3d;
+  }
+
+  html[data-motion='vivid'] .service-block__motif-wrap {
+    position: absolute;
+    bottom: calc(var(--motif-size) * -0.5);
+    left: calc(-1 * var(--space-8));
+    width: var(--motif-size);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  html[data-motion='vivid'] .service-block__motif-wrap .service-block__motif {
+    position: static;
+    width: 100%;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html[data-motion='vivid'] .service-block--vivid:hover .service-block__motif {
+    transform: scale(1.18);
+  }
+
+  html[data-motion='vivid'] .service-block__index-total {
+    opacity: 0.55;
+  }
+
+  html[data-motion='vivid'] .service-block--vivid .service-block__chip {
+    cursor: default;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  html[data-motion='vivid'] .service-block--vivid .service-block__chip:hover {
+    background-color: var(--hl-bg);
+    color: var(--hl-fg);
+  }
+
+  /* Expertise: marquee strip, then pills that jump on hover */
+  html[data-motion='vivid'] .services-page__expertise--vivid {
+    padding-top: var(--space-16);
+  }
+
+  html[data-motion='vivid'] .services-page__expertise--vivid .services-page__expertise-inner {
+    padding-top: var(--space-12);
+  }
+
+  html[data-motion='vivid'] .services-page__expertise--vivid .services-page__expertise-item {
+    cursor: default;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  html[data-motion='vivid'] .services-page__expertise--vivid .services-page__expertise-item:hover {
+    background-color: var(--pool);
+    color: var(--paper);
+  }
+
+  @media (max-width: 768px) {
+    html[data-motion='vivid'] .service-block__motif-wrap {
+      width: clamp(120px, 34vw, 175px);
+      left: auto;
+      right: calc(-1 * var(--space-8));
+      bottom: calc(-1 * var(--space-10));
+    }
+  }
+}

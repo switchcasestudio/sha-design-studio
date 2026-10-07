@@ -4,6 +4,10 @@ import { Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import BrandShape from '@/components/ui/BrandShape';
 import { rise, stagger } from '@/lib/motion';
+import { useTheme } from '@/theme/ThemeContext';
+import { spring } from '@/theme/vivid/motion';
+import Magnetic from '@/theme/vivid/Magnetic';
+import SplitText from '@/theme/vivid/SplitText';
 import './ContactForm.css';
 
 // Animatable motif for the thank-you.
@@ -21,6 +25,23 @@ const SUCCESS_MOTIFS = [
   { shape: 'clover', color: 'var(--pool)', x: -170, y: -76 },
   { shape: 'tulip', color: 'var(--yolk)', x: 160, y: 100 },
 ];
+
+// Vivid thank-you confetti: brand shapes fired out of the centre in a ring,
+// then drifting down. Deterministic spread so renders stay pure.
+const CONFETTI_SHAPES = ['heart', 'star', 'clover', 'daisy', 'flower2', 'tulip'];
+const CONFETTI_COLORS = ['var(--yolk)', 'var(--pool)', 'var(--tomato)'];
+const CONFETTI = Array.from({ length: 22 }, (_, i) => {
+  const angle = (i / 22) * Math.PI * 2 + (i % 3) * 0.35;
+  const dist = 140 + ((i * 47) % 120);
+  return {
+    shape: CONFETTI_SHAPES[i % CONFETTI_SHAPES.length],
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    x: Math.cos(angle) * dist * 1.4,
+    y: Math.sin(angle) * dist,
+    rotate: ((i * 83) % 360) - 180,
+    size: 14 + ((i * 7) % 16),
+  };
+});
 
 // Required fields and how to validate them. Keeping this declarative lets the
 // markup, error rendering and submit-time checks share one source of truth.
@@ -41,6 +62,9 @@ const FIELDS = [
 
 function ContactForm() {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
+  // Vivid: bumps on each failed submit so the invalid fields shake again
+  const [shake, setShake] = useState(0);
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -77,6 +101,7 @@ function ContactForm() {
     const found = validateAll();
     if (Object.keys(found).length > 0) {
       setErrors(found);
+      if (isVivid) setShake((n) => n + 1);
       // Move focus to the first invalid field so keyboard/SR users land on it
       const firstInvalid = FIELDS.find((f) => found[f.name]);
       formRef.current
@@ -124,6 +149,29 @@ function ContactForm() {
     'aria-describedby': errors[name] ? `${name}-error` : undefined,
   });
 
+  // Vivid: a little check pops in beside a label once its field is valid
+  const renderOk = (name) => {
+    if (!isVivid) return null;
+    const field = FIELDS.find((f) => f.name === name);
+    const ok = form[name].trim() && !field.validate(form[name]);
+    return (
+      <AnimatePresence>
+        {ok && (
+          <motion.span
+            className="contact-form__ok"
+            aria-hidden="true"
+            initial={{ scale: 0, rotate: -120 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 90 }}
+            transition={spring.bouncy}
+          >
+            <Check size={12} strokeWidth={3} />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    );
+  };
+
   const renderError = (name) =>
     errors[name] && (
       <span id={`${name}-error`} className="contact-form__field-error" role="alert">
@@ -141,6 +189,55 @@ function ContactForm() {
       window.matchMedia('(max-width: 600px)').matches
         ? 0.74
         : 1;
+    if (isVivid) {
+      return (
+        <div className="contact-form contact-form--done contact-form--vivid">
+          <div className="contact-form__success" role="status">
+            <div className="contact-form__motifs" aria-hidden="true">
+              {CONFETTI.map((c, i) => (
+                <MotionShape
+                  key={`c-${i}`}
+                  shape={c.shape}
+                  className="contact-form__confetti"
+                  style={{ color: c.color, '--size': `${c.size}px` }}
+                  initial={{ opacity: 1, x: 0, y: 0, scale: 0, rotate: 0 }}
+                  animate={{
+                    opacity: [1, 1, 0],
+                    x: c.x * k,
+                    y: [0, c.y * k, c.y * k + 160],
+                    scale: [0, 1.2, 0.8],
+                    rotate: c.rotate * 2,
+                  }}
+                  transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1], times: [0, 0.35, 1] }}
+                />
+              ))}
+              {SUCCESS_MOTIFS.map((m, i) => (
+                <MotionShape
+                  key={m.shape}
+                  shape={m.shape}
+                  className="contact-form__motif contact-form__motif--vivid"
+                  style={{ color: m.color }}
+                  initial={{ opacity: 0, x: 0, y: 0, scale: 0, rotate: -180 }}
+                  animate={{ opacity: 1, x: m.x * k, y: m.y * k, scale: 1, rotate: 0 }}
+                  transition={{ ...spring.bouncy, delay: 0.25 + i * 0.08 }}
+                />
+              ))}
+            </div>
+
+            <motion.p
+              className="contact-form__success-title"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ ...spring.bouncy, delay: 0.1 }}
+            >
+              <span className="hl">Thanks</span>,{' '}
+              <SplitText text="Shiran will be in touch soon." trigger="mount" delay={0.35} />
+            </motion.p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="contact-form contact-form--done">
         <motion.div
@@ -177,9 +274,10 @@ function ContactForm() {
   return (
     <form
       ref={formRef}
-      className="contact-form"
+      className={`contact-form${isVivid ? ' contact-form--vivid' : ''}`}
       onSubmit={handleSubmit}
       noValidate
+      data-shake={isVivid && shake ? (shake % 2 ? 'a' : 'b') : undefined}
     >
       {/* One legend instead of repeating "(required)" on every field */}
       <p className="contact-form__legend">
@@ -206,6 +304,7 @@ function ContactForm() {
             <span className="contact-form__req-mark" aria-hidden="true">
               *
             </span>
+            {renderOk('name')}
           </label>
           <input
             id="name"
@@ -227,6 +326,7 @@ function ContactForm() {
             <span className="contact-form__req-mark" aria-hidden="true">
               *
             </span>
+            {renderOk('phone')}
           </label>
           <input
             id="phone"
@@ -249,6 +349,7 @@ function ContactForm() {
           <span className="contact-form__req-mark" aria-hidden="true">
             *
           </span>
+          {renderOk('email')}
         </label>
         <input
           id="email"
@@ -270,6 +371,7 @@ function ContactForm() {
           <span className="contact-form__req-mark" aria-hidden="true">
             *
           </span>
+          {renderOk('message')}
         </label>
         <textarea
           id="message"
@@ -302,15 +404,32 @@ function ContactForm() {
 
         {/* Field + action: oat fields, one ink pill. No spinner — the label
             swap is the progress cue (nothing loops). */}
-        <Button
-          type="submit"
-          variant="dark"
-          size="md"
-          className="contact-form__submit"
-          disabled={status === 'submitting'}
-        >
-          {status === 'submitting' ? 'Sending…' : 'Send away'}
-        </Button>
+        {isVivid ? (
+          <Magnetic strength={0.35} className="contact-form__submit-wrap">
+            <Button
+              type="submit"
+              variant="dark"
+              size="md"
+              className="contact-form__submit"
+              disabled={status === 'submitting'}
+            >
+              {status === 'submitting' && (
+                <BrandShape shape="flower2" className="contact-form__spinner" />
+              )}
+              {status === 'submitting' ? 'Sending…' : 'Send away'}
+            </Button>
+          </Magnetic>
+        ) : (
+          <Button
+            type="submit"
+            variant="dark"
+            size="md"
+            className="contact-form__submit"
+            disabled={status === 'submitting'}
+          >
+            {status === 'submitting' ? 'Sending…' : 'Send away'}
+          </Button>
+        )}
       </div>
 
       <AnimatePresence mode="wait">

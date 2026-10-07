@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Vivid home — shared bits. Scoped to html[data-motion='vivid'] and only
+   triggered by attributes the vivid components render.
+   ========================================================================== */
+
+/* Marker-stroke wipe for the .hl block in a <WipeHeading>. Until the block
+   lands, its letters wear the headline colour so they never vanish. */
+html[data-motion='vivid'] [data-hl-wipe] .hl::before {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+html[data-motion='vivid'] [data-hl-wipe] .hl {
+  color: var(--hd);
+  transition: color 0.3s ease 0.45s;
+}
+
+html[data-motion='vivid'] [data-hl-wipe='in'] .hl::before {
+  transform: scaleX(1);
+}
+
+html[data-motion='vivid'] [data-hl-wipe='in'] .hl {
+  color: var(--hl-fg);
+}

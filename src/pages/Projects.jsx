@@ -11,6 +11,12 @@ import gardenCover from '@/assets/images/projects/products/garden-collection-cov
 import woodenCoverMobile from '@/assets/images/projects/products/wooden-collection-cover-mobile.webp';
 import gardenCoverMobile from '@/assets/images/projects/products/garden-collection-cover-mobile.webp';
 import shapeSorterCover from '@/assets/images/projects/products/shape-sorter/11-Tiny-Rockers-Shape-Sorter-15.webp';
+import { useTheme } from '@/theme/ThemeContext';
+import SplitText from '@/theme/vivid/SplitText';
+import { spring } from '@/theme/vivid/motion';
+import { useTilt } from '@/theme/vivid/work/useTilt';
+import ParallaxImg from '@/theme/vivid/work/ParallaxImg';
+import ScrollMarquee from '@/theme/vivid/work/ScrollMarquee';
 import './Projects.css';
 
 // Tiles that span the full row in the overview grid — each carries a long
@@ -65,19 +71,51 @@ const DAISY = inlineSvg(daisyRaw);
 // "2-in-1" must not wrap at its hyphens — swap in U+2011 non-breaking hyphens
 const noBreakHyphens = (text) => text.replace(/-/g, '\u2011');
 
+// Vivid theme: cards drop in on scroll with a springy overshoot, tipping in
+// from alternating sides (left column one way, right column the other).
+const cardPop = (idx) => ({
+  hidden: { opacity: 0, y: 140, scale: 0.86, rotate: idx % 2 ? 6 : -6 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    transition: { ...spring.bouncy, delay: (idx % 2) * 0.1 },
+  },
+});
+
 // Each card is a paper frame around the photo with the title beneath. Hover
 // is a single 220ms colour swap (paper → yolk frame); nothing lifts or zooms.
-function OverviewCard({ project, idx, reduce }) {
+// In the vivid theme the card tilts toward the pointer, the photo drifts
+// with scroll and zooms on hover, and a "View case study" tab slides up.
+function OverviewCard({ project, idx, reduce, isVivid }) {
   const image =
     COVER_OVERRIDES[project.id] ?? project.heroImage ?? project.images[0];
   const isWide = WIDE_PROJECT_IDS.has(project.id);
+  const tilt = useTilt(isWide ? 3 : 7);
+
+  const enterProps = isVivid
+    ? {
+        initial: 'hidden',
+        whileInView: 'show',
+        viewport: { once: true, amount: 0.15 },
+        variants: cardPop(idx),
+        style: tilt.style,
+        ...tilt.handlers,
+        'data-cursor': 'View',
+      }
+    : {
+        initial: reduce ? false : { opacity: 0, y: 16 },
+        animate: { opacity: 1, y: 0 },
+        transition: { ...rise, delay: 0.2 + idx * 0.06 },
+      };
+
+  const ImgTag = isVivid ? ParallaxImg : 'img';
 
   return (
     <motion.li
       className={`overview-card${isWide ? ' overview-card--wide' : ''}`}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ ...rise, delay: 0.2 + idx * 0.06 }}
+      {...enterProps}
     >
       <Link to={`/projects/${project.id}`} className="overview-card__link">
         <div className="overview-card__media">
@@ -86,13 +124,32 @@ function OverviewCard({ project, idx, reduce }) {
               {image.mobileSrc && (
                 <source media="(max-width: 560px)" srcSet={image.mobileSrc} />
               )}
-              <img
+              <ImgTag
                 className="overview-card__image"
                 src={image.src}
                 alt={image.alt}
                 loading={idx < 3 ? 'eager' : 'lazy'}
+                {...(isVivid
+                  ? // Wide covers are full lineups — barely over-scale them
+                    // so no product gets cropped off the ends.
+                    isWide
+                    ? { distance: 2.5, scale: 1.06 }
+                    : { distance: 9 }
+                  : {})}
               />
             </picture>
+          )}
+          {isVivid && (
+            <>
+              <span className="overview-card__glare" aria-hidden="true" />
+              <span className="overview-card__num" aria-hidden="true">
+                {String(idx + 1).padStart(2, '0')}
+              </span>
+              <span className="overview-card__peek" aria-hidden="true">
+                View case study
+                <ArrowUpRight size={18} strokeWidth={2} />
+              </span>
+            </>
           )}
           <CloudBadge className="overview-card__badge">
             {BADGE_LABELS[project.id] ?? project.category}
@@ -119,6 +176,7 @@ function OverviewCard({ project, idx, reduce }) {
 
 function Projects() {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
   const enter = (delay) => ({
     initial: reduce ? false : { opacity: 0, y: 16 },
     animate: { opacity: 1, y: 0 },
@@ -130,8 +188,14 @@ function Projects() {
       <section className="projects-page__hero">
         <div className="container projects-page__hero-inner">
           <div className="projects-page__title-row">
-            <motion.h1 className="projects-page__title" {...enter(0.05)}>
-              Selected <span className="hl">work</span>
+            <motion.h1
+              className="projects-page__title"
+              {...(isVivid ? {} : enter(0.05))}
+            >
+              <SplitText text="Selected" by="chars" trigger="mount" />{' '}
+              <span className="hl">
+                <SplitText text="work" by="chars" trigger="mount" delay={0.35} />
+              </span>
             </motion.h1>
             <span
               className="projects-page__motif"
@@ -140,7 +204,16 @@ function Projects() {
             />
           </div>
 
-          <motion.p className="projects-page__intro" {...enter(0.12)}>
+          <motion.p
+            className="projects-page__intro"
+            {...(isVivid
+              ? {
+                  initial: { opacity: 0, x: 60 },
+                  animate: { opacity: 1, x: 0 },
+                  transition: { ...spring.soft, delay: 0.45 },
+                }
+              : enter(0.12))}
+          >
             <span className="projects-page__intro-key">
               Toys, baby gear and the boxes they arrive in
             </span>{' '}
@@ -149,6 +222,13 @@ function Projects() {
           </motion.p>
 
         </div>
+
+        {isVivid && (
+          <ScrollMarquee
+            className="projects-page__marquee"
+            text="Designed for little hands"
+          />
+        )}
 
         {/* Overview grid — a clickable glimpse of every project, jumping
             straight to each case study. */}
@@ -160,6 +240,7 @@ function Projects() {
                 project={project}
                 idx={idx}
                 reduce={reduce}
+                isVivid={isVivid}
               />
             ))}
           </ul>

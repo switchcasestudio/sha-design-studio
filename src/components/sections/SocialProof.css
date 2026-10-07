@@ -42,3 +42,57 @@
   -webkit-mask: var(--logo) center / contain no-repeat;
   mask: var(--logo) center / contain no-repeat;
 }
+
+/* ==========================================================================
+   Vivid theme — endless marquee, big logos, colour pop on hover.
+   ========================================================================== */
+html[data-motion='vivid'] .social-proof__marquee {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+html[data-motion='vivid'] .social-proof__track {
+  display: flex;
+  width: max-content;
+  animation: social-proof-scroll 28s linear infinite;
+}
+
+html[data-motion='vivid'] .social-proof__marquee:hover .social-proof__track {
+  animation-play-state: paused;
+}
+
+html[data-motion='vivid'] .social-proof__run {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--space-12), 7vw, var(--space-24));
+  padding-right: clamp(var(--space-12), 7vw, var(--space-24));
+}
+
+html[data-motion='vivid'] .social-proof--vivid .social-proof__sizer {
+  height: clamp(28px, 3.2vw, 44px);
+}
+
+html[data-motion='vivid'] .social-proof--vivid .social-proof__logo {
+  transition:
+    background-color 0.25s ease,
+    scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .social-proof--vivid .social-proof__item:hover .social-proof__logo {
+  background-color: var(--tomato);
+  scale: 1.18;
+  rotate: -4deg;
+}
+
+html[data-motion='vivid'] .social-proof--vivid .social-proof__item:nth-child(3n + 2):hover .social-proof__logo {
+  background-color: var(--pool);
+  rotate: 4deg;
+}
+
+@keyframes social-proof-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}

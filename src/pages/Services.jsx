@@ -1,6 +1,13 @@
-import { Fragment, useId } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { Fragment, useId, useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { rise } from '@/lib/motion';
+import { useTheme } from '@/theme/ThemeContext';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { spring } from '@/theme/vivid/motion';
+import Reveal from '@/theme/vivid/Reveal';
+import SplitText from '@/theme/vivid/SplitText';
+import Tilt from '@/theme/vivid/pages/Tilt';
+import Marquee from '@/theme/vivid/pages/Marquee';
 import CtaBand from '@/components/sections/CtaBand';
 import BrandShape from '@/components/ui/BrandShape';
 import './Services.css';
@@ -189,13 +196,188 @@ function ServiceBlock({ service }) {
   );
 }
 
-function Services() {
-  const reduce = useReducedMotion();
+/* ---------- Vivid theme: stacking cards ----------
+   Each card sticks under the nav as you scroll and the next one slides over
+   it; the cards beneath shrink back into a deck. The motif spins with scroll,
+   the chips pop in one by one and wiggle on hover, and the card tilts toward
+   the pointer. Desktop only for the stack — on phones the cards are taller
+   than the screen, so they just pop in. */
+function VividServiceBlock({ service, i, total, progress, stacked }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const motifRotate = useTransform(scrollYProgress, [0, 1], [-60, 120]);
+  const motifY = useTransform(scrollYProgress, [0, 1], ['18%', '-12%']);
+  const scale = useTransform(
+    progress,
+    [i / total, 1],
+    [1, stacked ? 1 - (total - 1 - i) * 0.05 : 1]
+  );
 
   return (
-    <div className="services-page ground-yolk">
+    <div
+      ref={ref}
+      className="services-stack__item"
+      style={{ '--stack-i': i }}
+    >
+      <motion.div style={{ scale, transformOrigin: 'top center' }}>
+        <Reveal preset="rise" amount={0.15}>
+          <Tilt max={3}>
+            <article
+              className={`service-block service-block--vivid service-block--${service.ground} ground-${service.ground}`}
+            >
+              <motion.span
+                className="service-block__motif-wrap"
+                style={{ rotate: motifRotate, y: motifY }}
+              >
+                <BrandShape shape={service.motif} className="service-block__motif" />
+              </motion.span>
+
+              <div className="service-block__left">
+                <span className="service-block__index">
+                  {service.index}
+                  <span className="service-block__index-total"> / 0{total}</span>
+                </span>
+                <h2 className="service-block__title">
+                  <SplitText text={service.title} />
+                </h2>
+              </div>
+
+              <div className="service-block__right">
+                <p className="service-block__description">{service.description}</p>
+
+                <div className="service-block__includes">
+                  <span className="service-block__includes-label">Includes</span>
+                  <motion.ul
+                    className="service-block__chips"
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{ staggerChildren: 0.05, delayChildren: 0.2 }}
+                  >
+                    {service.includes.map((item, ci) => (
+                      <motion.li
+                        key={item}
+                        className="service-block__chip"
+                        variants={{
+                          hidden: { opacity: 0, scale: 0.4, y: 20 },
+                          show: { opacity: 1, scale: 1, y: 0, transition: spring.bouncy },
+                        }}
+                        whileHover={{
+                          rotate: ci % 2 ? 4 : -4,
+                          y: -4,
+                          scale: 1.08,
+                          transition: spring.wobbly,
+                        }}
+                      >
+                        {item}
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </div>
+              </div>
+            </article>
+          </Tilt>
+        </Reveal>
+      </motion.div>
+    </div>
+  );
+}
+
+function VividServiceStack() {
+  const ref = useRef(null);
+  const stacked = useMediaQuery('(min-width: 900px) and (min-height: 700px)');
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end end'],
+  });
+
+  return (
+    <div
+      ref={ref}
+      className={`container services-page__list services-stack${stacked ? ' services-stack--on' : ''}`}
+    >
+      {services.map((service, i) => (
+        <VividServiceBlock
+          key={service.id}
+          service={service}
+          i={i}
+          total={services.length}
+          progress={scrollYProgress}
+          stacked={stacked}
+        />
+      ))}
+    </div>
+  );
+}
+
+function VividExpertise() {
+  return (
+    <section className="services-page__expertise services-page__expertise--vivid">
+      <Marquee items={expertise} shapes={['daisy', 'star', 'clover']} />
+      <div className="container">
+        <div className="services-page__expertise-inner">
+          <h2 className="services-page__expertise-title">
+            <SplitText text="Areas of" />{' '}
+            <span className="hl v-hl-sweep">
+              <SplitText text="expertise" delay={0.15} />
+            </span>
+          </h2>
+
+          <motion.ul
+            className="services-page__expertise-list"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ staggerChildren: 0.12 }}
+          >
+            {expertise.map((area, i) => (
+              <motion.li
+                key={area}
+                className="services-page__expertise-item"
+                variants={{
+                  hidden: { opacity: 0, y: 60, rotate: i % 2 ? 10 : -10 },
+                  show: { opacity: 1, y: 0, rotate: 0, transition: spring.bouncy },
+                }}
+                whileHover={{ y: -10, rotate: i % 2 ? -3 : 3, transition: spring.wobbly }}
+              >
+                {area}
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Services() {
+  const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
+
+  return (
+    <div className={`services-page ground-yolk${isVivid ? ' services-page--vivid' : ''}`}>
       <section className="services-page__hero">
         <div className="container services-page__hero-inner">
+          {isVivid ? (
+            <>
+              <h1 className="services-page__title">
+                <SplitText text="Design" trigger="mount" />{' '}
+                <span className="hl v-hl-sweep">
+                  <SplitText text="services" trigger="mount" delay={0.15} />
+                </span>
+              </h1>
+              <Reveal as="p" className="services-page__intro" preset="slideLeft" delay={0.35}>
+                I help brands, startups and entrepreneurs turn ideas into meaningful
+                products — guiding each project from research and concept
+                development through product design, 3D visualization and
+                development support.
+              </Reveal>
+            </>
+          ) : (
+          <>
           <motion.h1
             className="services-page__title"
             {...riseIn(reduce, 0.05)}
@@ -214,9 +396,14 @@ function Services() {
             development through product design, 3D visualization and
             development support.
           </motion.p>
+          </>
+          )}
         </div>
       </section>
 
+      {isVivid ? (
+        <VividServiceStack />
+      ) : (
       <div className="container services-page__list">
         {services.map((service, i) => (
           <Fragment key={service.id}>
@@ -226,7 +413,11 @@ function Services() {
           </Fragment>
         ))}
       </div>
+      )}
 
+      {isVivid ? (
+        <VividExpertise />
+      ) : (
       <section className="services-page__expertise">
         <div className="container">
           <motion.div
@@ -249,6 +440,7 @@ function Services() {
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* Closing beat — don't dead-end the highest-intent page before Inquire */}
       <CtaBand

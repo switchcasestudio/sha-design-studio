@@ -14,7 +14,10 @@
   font-family: var(--font-sans);
   font-size: var(--type-ui);
   font-weight: var(--weight-medium);
-  box-shadow: 0 10px 30px #000f4240;
+  /* Paper ring keeps it visible over the navy footer */
+  box-shadow:
+    0 0 0 2px var(--paper),
+    0 10px 30px #000f4240;
   max-width: calc(100vw - 32px);
 }
 

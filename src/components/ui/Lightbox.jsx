@@ -1,7 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { duration, ease, rise } from '@/lib/motion';
+import { useTheme } from '@/theme/ThemeContext';
+import { spring } from '@/theme/vivid/motion';
 import './Lightbox.css';
 
 /**
@@ -12,8 +14,23 @@ import './Lightbox.css';
  */
 function Lightbox({ images, index, onClose, onNavigate }) {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
   const image = index != null ? images[index] : null;
   const count = images.length;
+
+  // Vivid: remember the last index so a new photo slides in from the side
+  // you navigated toward.
+  const lastIndex = useRef(index);
+  const dir =
+    lastIndex.current == null || index == null || index === lastIndex.current
+      ? 0
+      : (index > lastIndex.current && !(lastIndex.current === 0 && index === count - 1)) ||
+          (lastIndex.current === count - 1 && index === 0)
+        ? 1
+        : -1;
+  useEffect(() => {
+    lastIndex.current = index;
+  }, [index]);
 
   const prev = useCallback(
     () => onNavigate((index - 1 + count) % count),
@@ -95,9 +112,20 @@ function Lightbox({ images, index, onClose, onNavigate }) {
           <motion.figure
             key={image.src}
             className="lightbox__figure"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={rise}
+            {...(isVivid
+              ? {
+                  initial:
+                    dir === 0
+                      ? { opacity: 0, scale: 0.7, rotate: -4, y: 60 }
+                      : { opacity: 0, x: dir * 220, rotate: dir * 6, scale: 0.9 },
+                  animate: { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 },
+                  transition: spring.snappy,
+                }
+              : {
+                  initial: reduce ? { opacity: 0 } : { opacity: 0, y: 16 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: rise,
+                })}
             onClick={(e) => e.stopPropagation()}
           >
             <img src={image.src} alt={image.alt} />

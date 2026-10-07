@@ -233,3 +233,76 @@
     right: -36px;
   }
 }
+
+/* ==========================================================================
+   Vivid theme — only applies with html[data-motion='vivid'] and motion
+   allowed. Canvas shapes float and drift against the pointer, step shapes
+   spin on hover, the form card's flower turns. Regular stays untouched.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion='vivid'] .inquire-page--vivid {
+    --px: 0;
+    --py: 0;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__motif {
+    transform: translate(
+      calc(var(--px) * var(--depth, 40) * 1px),
+      calc(var(--py) * var(--depth, 40) * 1px)
+    );
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__motif svg {
+    animation: v-inq-float 7s ease-in-out infinite;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__motif--star svg {
+    animation: v-inq-spin 9s linear infinite;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__motif--clover svg {
+    animation-delay: -3s;
+    animation-duration: 5.5s;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__form {
+    box-shadow: 0 30px 70px #00195924;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__form-flower svg {
+    animation: v-inq-spin 12s linear infinite;
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__step {
+    transition: padding-left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__step:hover {
+    padding-left: var(--space-3);
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__step-shape svg {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html[data-motion='vivid'] .inquire-page--vivid .inquire-page__step:hover .inquire-page__step-shape svg {
+    transform: rotate(180deg) scale(1.35);
+  }
+
+  @keyframes v-inq-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-18px) rotate(10deg);
+    }
+  }
+
+  @keyframes v-inq-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

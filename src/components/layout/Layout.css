@@ -24,3 +24,49 @@
 .layout--pool {
   background-color: var(--pool);
 }
+
+/* ---------- Vivid theme: page curtain + scroll progress ---------- */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-modal) + 5);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.page-curtain__panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+}
+
+.page-curtain__panel--yolk {
+  background-color: var(--yolk);
+}
+
+.page-curtain__panel--tomato {
+  background-color: var(--tomato);
+}
+
+.page-curtain__panel--pool {
+  background-color: var(--pool);
+}
+
+.page-curtain__mark {
+  width: clamp(120px, 16vw, 220px);
+  height: auto;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: calc(var(--z-nav) + 1);
+  background-color: var(--ink);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}

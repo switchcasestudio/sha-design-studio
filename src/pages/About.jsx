@@ -6,6 +6,12 @@ import Button from '@/components/ui/Button';
 import BrandShape from '@/components/ui/BrandShape';
 import CtaBand from '@/components/sections/CtaBand';
 import { rise, stagger } from '@/lib/motion';
+import { useTheme } from '@/theme/ThemeContext';
+import { spring } from '@/theme/vivid/motion';
+import Reveal from '@/theme/vivid/Reveal';
+import SplitText from '@/theme/vivid/SplitText';
+import Magnetic from '@/theme/vivid/Magnetic';
+import Tilt from '@/theme/vivid/pages/Tilt';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 
@@ -42,8 +48,78 @@ const offers = [
   },
 ];
 
+/* ---------- Vivid theme: portrait ----------
+   The photo opens through a growing circle while it zooms back to size, the
+   frame tilts toward the pointer, the Hello flower spins and can be dragged
+   (it springs home), and the heart beats. */
+function VividPortrait() {
+  return (
+    <motion.div
+      className="about-bio__photo"
+      initial={{ opacity: 0, y: 80, rotate: 4 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{ ...spring.soft, delay: 0.2 }}
+    >
+      <Tilt max={5} className="about-bio__photo-frame about-bio__photo-frame--vivid">
+        <motion.div
+          className="about-bio__photo-img"
+          initial={{ clipPath: 'circle(0% at 50% 40%)' }}
+          animate={{ clipPath: 'circle(120% at 50% 40%)' }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+        >
+          <motion.img
+            src={shiranBar}
+            alt="Shiran Bar"
+            initial={{ scale: 1.35 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+          />
+        </motion.div>
+
+        <motion.div
+          className="about-bio__hello about-bio__hello--vivid"
+          drag
+          dragSnapToOrigin
+          dragElastic={0.7}
+          dragTransition={{ bounceStiffness: 300, bounceDamping: 12 }}
+          whileHover={{ scale: 1.08 }}
+          whileDrag={{ scale: 1.2, rotate: -12 }}
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ ...spring.bouncy, delay: 1 }}
+          title="Drag me"
+        >
+          <BrandShape shape="flower2" className="about-bio__hello-shape" />
+          <span className="about-bio__hello-text">Hello</span>
+        </motion.div>
+
+        <motion.div
+          className="about-bio__heart about-bio__heart--vivid"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ ...spring.bouncy, delay: 1.2 }}
+        >
+          <BrandShape shape="heart" />
+        </motion.div>
+      </Tilt>
+    </motion.div>
+  );
+}
+
+// Bio paragraph: a plain <p> in regular, its own scroll-in rise in vivid.
+function P({ children }) {
+  const { isVivid } = useTheme();
+  if (!isVivid) return <p>{children}</p>;
+  return (
+    <Reveal as="p" preset="rise" amount={0.6}>
+      {children}
+    </Reveal>
+  );
+}
+
 function About() {
   const reduce = useReducedMotion();
+  const { isVivid } = useTheme();
   const [openIdx, setOpenIdx] = useState(null);
 
   // Quick, then still: every reveal is the one 16px rise. Reduced motion
@@ -61,66 +137,108 @@ function About() {
   });
 
   return (
-    <div className="about-page ground-pool">
+    <div className={`about-page ground-pool${isVivid ? ' about-page--vivid' : ''}`}>
       {/* ---------- Bio section ---------- */}
       <section className="about-bio">
         <div className="container about-bio__inner">
-          <motion.div className="about-bio__copy" {...riseIn(0.1)}>
+          <motion.div
+            className="about-bio__copy"
+            {...(isVivid ? {} : riseIn(0.1))}
+          >
             <h1 className="about-bio__title">
-              About <span className="hl">me</span>
+              {isVivid ? (
+                <>
+                  <SplitText text="About" by="chars" trigger="mount" />{' '}
+                  <span className="hl v-hl-sweep">
+                    <SplitText text="me" by="chars" trigger="mount" delay={0.2} />
+                  </span>
+                </>
+              ) : (
+                <>
+                  About <span className="hl">me</span>
+                </>
+              )}
             </h1>
 
             <div className="about-bio__text">
-              <p>
+              <P>
                 Hi there, I&apos;m Shiran Bar, an industrial designer
                 specializing in toys and baby products.
-              </p>
+              </P>
 
-              <p>
+              <P>
                 I graduated from{' '}
                 <span className="about-chip">Shenkar College</span>, interned
                 at <span className="about-chip">HAPE</span> in China, and
                 worked at <span className="about-chip">Tiny Love</span>{' '}
                 designing a wide range of baby products, from soft toys to
                 electronic developmental items.
-              </p>
+              </P>
 
-              <p>
+              <P>
                 I&apos;m inspired by the beautiful simplicity of babies: their
                 curiosity, instinct to play, and unfiltered reactions. This
                 drives me to create designs that are both intuitive and
                 emotionally engaging.
-              </p>
+              </P>
 
-              <p>
+              <P>
                 My process is guided by sensitivity, precision, and a love for
                 surprising details, the small things that turn a good product
                 into an exceptional one.
-              </p>
+              </P>
 
-              <p>
+              <P>
                 I create toys that inspire, empower, and spark joy. Skilled in
                 concept development and hands-on product design, I&apos;m open
                 to freelance projects, creative collaborations, and contracting
                 opportunities.
-              </p>
+              </P>
             </div>
 
             <p className="about-bio__signoff">
-              Simple, smart, and full of <span className="hl">wonder</span>
+              {isVivid ? (
+                <>
+                  <SplitText text="Simple, smart, and full of" />{' '}
+                  <span className="hl v-hl-sweep">
+                    <SplitText text="wonder" delay={0.3} />
+                  </span>
+                </>
+              ) : (
+                <>
+                  Simple, smart, and full of <span className="hl">wonder</span>
+                </>
+              )}
             </p>
 
-            <Button
-              as={Link}
-              to="/inquire"
-              variant="yellow"
-              size="md"
-              className="about-bio__cta"
-            >
-              Let&apos;s chat
-            </Button>
+            {isVivid ? (
+              <Magnetic strength={0.4}>
+                <Button
+                  as={Link}
+                  to="/inquire"
+                  variant="yellow"
+                  size="md"
+                  className="about-bio__cta"
+                >
+                  Let&apos;s chat
+                </Button>
+              </Magnetic>
+            ) : (
+              <Button
+                as={Link}
+                to="/inquire"
+                variant="yellow"
+                size="md"
+                className="about-bio__cta"
+              >
+                Let&apos;s chat
+              </Button>
+            )}
           </motion.div>
 
+          {isVivid ? (
+            <VividPortrait />
+          ) : (
           <motion.div className="about-bio__photo" {...riseIn(0.2)}>
             <div className="about-bio__photo-frame">
               <div className="about-bio__photo-img">
@@ -140,6 +258,7 @@ function About() {
               </motion.div>
             </div>
           </motion.div>
+          )}
         </div>
       </section>
 
@@ -148,11 +267,29 @@ function About() {
         <div className="container">
           <motion.div
             className="about-offer__panel ground-yolk"
-            {...riseInView()}
+            {...(isVivid
+              ? {
+                  initial: { clipPath: 'inset(12% 8% 12% 8% round 48px)', opacity: 0 },
+                  whileInView: { clipPath: 'inset(0% 0% 0% 0% round 24px)', opacity: 1 },
+                  viewport: { once: true, amount: 0.2 },
+                  transition: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+                }
+              : riseInView())}
           >
             <div className="about-offer__intro">
               <h2 className="about-offer__title">
-                My <span className="hl">approach</span>
+                {isVivid ? (
+                  <>
+                    <SplitText text="My" />{' '}
+                    <span className="hl v-hl-sweep">
+                      <SplitText text="approach" delay={0.1} />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    My <span className="hl">approach</span>
+                  </>
+                )}
               </h2>
 
               <p className="about-offer__text">
@@ -177,7 +314,14 @@ function About() {
                   <motion.li
                     key={offer.title}
                     className="about-offer__item"
-                    {...riseInView(0.1 + idx * stagger)}
+                    {...(isVivid
+                      ? {
+                          initial: { opacity: 0, x: 80 },
+                          whileInView: { opacity: 1, x: 0 },
+                          viewport: { once: true, margin: '-60px' },
+                          transition: { ...spring.soft, delay: 0.2 + idx * 0.1 },
+                        }
+                      : riseInView(0.1 + idx * stagger))}
                   >
                     <button
                       type="button"
@@ -187,17 +331,36 @@ function About() {
                       aria-controls={`about-offer-${idx}`}
                     >
                       <span className="about-offer__row-label">
-                        <span
-                          className="about-offer__bullet"
-                          style={{ color: offer.tint }}
-                        >
-                          <BrandShape shape={offer.shape} />
-                        </span>
+                        {isVivid ? (
+                          <motion.span
+                            className="about-offer__bullet"
+                            style={{ color: offer.tint }}
+                            animate={{ rotate: open ? 180 : 0, scale: open ? 1.3 : 1 }}
+                            transition={spring.bouncy}
+                          >
+                            <BrandShape shape={offer.shape} />
+                          </motion.span>
+                        ) : (
+                          <span
+                            className="about-offer__bullet"
+                            style={{ color: offer.tint }}
+                          >
+                            <BrandShape shape={offer.shape} />
+                          </span>
+                        )}
                         <span>{offer.title}</span>
                       </span>
 
                       <span className="about-offer__toggle" aria-hidden="true">
-                        {open ? (
+                        {isVivid ? (
+                          <motion.span
+                            style={{ display: 'inline-flex' }}
+                            animate={{ rotate: open ? 135 : 0 }}
+                            transition={spring.bouncy}
+                          >
+                            <Plus size={20} strokeWidth={2} />
+                          </motion.span>
+                        ) : open ? (
                           <Minus size={20} strokeWidth={2} />
                         ) : (
                           <Plus size={20} strokeWidth={2} />
@@ -217,7 +380,7 @@ function About() {
                               ? { opacity: 0, transition: { duration: 0 } }
                               : { height: 0, opacity: 0 }
                           }
-                          transition={rise}
+                          transition={isVivid ? spring.soft : rise}
                         >
                           <p className="about-offer__detail">
                             {offer.description}

@@ -243,3 +243,170 @@
     padding: var(--space-1) var(--space-2) var(--space-2);
   }
 }
+
+/* ==========================================================================
+   Vivid theme (html[data-motion='vivid']) — the animated exploration.
+   Breaks the kit's "quick, then still" on purpose: tilt, zoom, loops.
+   ========================================================================== */
+@keyframes projects-hl-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes projects-motif-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html[data-motion='vivid'] .projects-page__title .hl::before {
+  transform-origin: left center;
+  animation: projects-hl-wipe 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+html[data-motion='vivid'] .projects-page__motif {
+  animation: projects-motif-spin 14s linear infinite;
+  pointer-events: auto;
+  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .projects-page__motif:hover {
+  scale: 1.35;
+  animation-duration: 2.5s;
+}
+
+html[data-motion='vivid'] .projects-page__marquee {
+  margin-top: var(--space-12);
+  --hd: var(--paper);
+  --hl-bg: var(--ink);
+}
+
+html[data-motion='vivid'] .projects-overview {
+  perspective: 1400px;
+}
+
+html[data-motion='vivid'] .overview-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+html[data-motion='vivid'] .overview-card__link {
+  transition:
+    background-color 0.35s var(--ease-out),
+    border-radius 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover {
+  border-radius: 32px;
+}
+
+/* Photo zooms on hover — on the <picture>, since the <img> transform is
+   owned by the scroll parallax */
+html[data-motion='vivid'] .overview-card__media picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__media picture {
+  transform: scale(1.08);
+}
+
+/* Soft light that follows the pointer (--mx / --my come from useTilt) */
+html[data-motion='vivid'] .overview-card__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    #fefcf866,
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__glare {
+  opacity: 1;
+}
+
+/* Big index number in the photo's top-right corner */
+html[data-motion='vivid'] .overview-card__num {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-4);
+  z-index: 2;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--tomato);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__num {
+  transform: translateY(-4px) rotate(-8deg) scale(1.15);
+}
+
+/* "View case study" tab slides up from the photo's bottom edge */
+html[data-motion='vivid'] .overview-card__peek {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-4) 0 var(--space-5);
+  border-radius: var(--radius-pill);
+  background-color: var(--ink);
+  color: var(--paper);
+  font-size: var(--type-ui);
+  font-weight: var(--weight-medium);
+  transform: translateY(calc(100% + var(--space-4)));
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__peek,
+html[data-motion='vivid'] .overview-card__link:focus-visible .overview-card__peek {
+  transform: translateY(0);
+}
+
+/* Arrow pill spins a quarter turn and pops */
+html[data-motion='vivid'] .overview-card__go {
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__go {
+  transform: rotate(45deg) scale(1.2);
+}
+
+html[data-motion='vivid'] .overview-card__badge {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-motion='vivid'] .overview-card__link:hover .overview-card__badge {
+  transform: translateY(-2px) rotate(-4deg) scale(1.06);
+}
+
+/* Touch screens: there's no hover, so the peek tab just stays hidden */
+@media (hover: none) {
+  html[data-motion='vivid'] .overview-card__peek {
+    display: none;
+  }
+}
+
+/* Entrances slide in from the side — never let them widen the page */
+html[data-motion='vivid'] .projects-page {
+  overflow-x: clip;
+}

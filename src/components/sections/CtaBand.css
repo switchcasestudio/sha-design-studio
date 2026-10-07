@@ -94,3 +94,54 @@
     width: 48px;
   }
 }
+
+/* ==========================================================================
+   Vivid theme — pointer-parallax motifs that spin, click-to-burst shapes.
+   Only applies with html[data-motion='vivid'].
+   ========================================================================== */
+html[data-motion='vivid'] .cta-band__panel--vivid {
+  cursor: pointer;
+  user-select: none;
+}
+
+html[data-motion='vivid'] .cta-band__panel--vivid .cta-band__text {
+  user-select: text;
+}
+
+html[data-motion='vivid'] .cta-band__float {
+  display: block;
+}
+
+html[data-motion='vivid'] .cta-band__spin {
+  display: block;
+  width: 100%;
+  animation: cta-spin 18s linear infinite;
+}
+
+html[data-motion='vivid'] .cta-band__motif--clover .cta-band__spin {
+  animation-direction: reverse;
+  animation-duration: 12s;
+}
+
+html[data-motion='vivid'] .cta-band__panel--vivid:hover .cta-band__spin {
+  animation-duration: 4s;
+}
+
+html[data-motion='vivid'] .cta-band__burst {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+}
+
+@keyframes cta-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (max-width: 600px) {
+  html[data-motion='vivid'] .cta-band__float.cta-band__motif--flower {
+    display: none; /* same as regular: keep it off the headline on phones */
+  }
+}
