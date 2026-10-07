@@ -1,0 +1,5 @@
+/* ==========================================================================
+   Vivid theme — global styles. Every rule here MUST be scoped under
+   html[data-motion='vivid'] so the regular theme is untouched.
+   Page/component vivid styles live next to their component, same scoping.
+   ========================================================================== */
