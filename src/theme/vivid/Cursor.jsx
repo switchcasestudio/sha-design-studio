@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'motion/react';
 import { useTheme } from '../ThemeContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -25,6 +26,8 @@ function Cursor() {
   const { isVivid } = useTheme();
   const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)');
   const active = isVivid && finePointer;
+  const { pathname } = useLocation();
+  const last = useRef(null); // last pointer position, to re-check what's under it
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -45,20 +48,30 @@ function Cursor() {
       if (e.pointerType && e.pointerType !== 'mouse') return;
       x.set(e.clientX);
       y.set(e.clientY);
+      last.current = [e.clientX, e.clientY];
       setVisible(true);
-      const el = e.target instanceof Element ? e.target : null;
-      const labelled = el?.closest('[data-cursor]');
+      resolve(e.target instanceof Element ? e.target : null);
+    };
+    // Content moves under a still pointer on scroll, so re-check it there too
+    const onScroll = () => {
+      if (last.current) resolve(document.elementFromPoint(...last.current));
+    };
+    function resolve(el) {
+      const interactive = el?.closest(INTERACTIVE);
+      let labelled = el?.closest('[data-cursor]');
+      // A button inside a labelled panel gets the button cursor, not the label
+      if (labelled && interactive && !interactive.contains(labelled)) labelled = null;
       if (el?.closest(TEXTY)) {
         setMode('text');
       } else if (labelled) {
         setMode('label');
         setLabel(labelled.getAttribute('data-cursor'));
-      } else if (el?.closest(INTERACTIVE)) {
+      } else if (interactive) {
         setMode('hover');
       } else {
         setMode('default');
       }
-    };
+    }
     const onLeave = () => setVisible(false);
     const onDown = () => setDown(true);
     const onUp = () => setDown(false);
@@ -68,7 +81,9 @@ function Cursor() {
     window.addEventListener('blur', onLeave);
     window.addEventListener('pointerdown', onDown);
     window.addEventListener('pointerup', onUp);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
+      window.removeEventListener('scroll', onScroll);
       root.classList.remove('has-vivid-cursor');
       window.removeEventListener('pointermove', onMove);
       document.removeEventListener('pointerleave', onLeave);
@@ -77,6 +92,12 @@ function Cursor() {
       window.removeEventListener('pointerup', onUp);
     };
   }, [active, x, y]);
+
+  // A route change swaps the page under a still pointer: drop any label
+  // (e.g. "View" from the card that was clicked) until the pointer moves.
+  useEffect(() => {
+    setMode('default');
+  }, [pathname]);
 
   if (!active) return null;
 

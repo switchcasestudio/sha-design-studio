@@ -5,7 +5,7 @@
 
 export const siteConfig = {
   name: 'Sha Design Studio',
-  tagline: 'Designing Playful Thoughtful Products',
+  tagline: 'Designing Thoughtful Products',
   description:
     'Industrial design for toys and baby products by Shiran Bar. Simple, smart, and full of wonder.',
   designer: 'Shiran Bar',

@@ -238,7 +238,15 @@ function ProjectSketches({ sketches, onOpen }) {
         {split('From the', 0, 'words', 'view')}{' '}
         <span className="hl">{split('sketchbook', 0.15, 'words', 'view')}</span>
       </h2>
-      <div className="pd-sketches__grid">
+      {/* Vivid: the grid (not each figure) watches the viewport. A figure that
+          starts fully clipped never registers as on-screen, so it would never
+          trigger its own reveal. */}
+      <motion.div
+        className="pd-sketches__grid"
+        {...(isVivid
+          ? { initial: 'hidden', whileInView: 'show', viewport: { once: true, amount: 0.1 } }
+          : {})}
+      >
         {sketches.map((sketch, i) => {
           const interactive = Boolean(sketch.src && onOpen);
           if (sketch.src) lightboxIndex += 1;
@@ -264,10 +272,14 @@ function ProjectSketches({ sketches, onOpen }) {
               className="pd-sketches__item"
               {...(isVivid
                 ? {
-                    initial: { clipPath: 'inset(0% 0% 100% 0%)', y: 60 },
-                    whileInView: { clipPath: 'inset(0% 0% 0% 0%)', y: 0 },
-                    viewport: { once: true, amount: 0.2 },
-                    transition: { duration: 1.1, ease: vEase.expoOut, delay: i * 0.12 },
+                    variants: {
+                      hidden: { clipPath: 'inset(0% 0% 100% 0%)', y: 60 },
+                      show: {
+                        clipPath: 'inset(0% 0% 0% 0%)',
+                        y: 0,
+                        transition: { duration: 1.1, ease: vEase.expoOut, delay: i * 0.12 },
+                      },
+                    },
                   }
                 : {})}
             >
@@ -299,7 +311,7 @@ function ProjectSketches({ sketches, onOpen }) {
             </motion.figure>
           );
         })}
-      </div>
+      </motion.div>
     </motion.section>
   );
 }

@@ -21,11 +21,9 @@ function Reveal({
 
   const MotionTag = motion[as] ?? motion.div;
   const variants = reveal[preset] ?? reveal.rise;
-  return (
+  const animated = (
     <MotionTag
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once, amount }}
+      {...(preset === 'clip' ? {} : { initial: 'hidden', whileInView: 'show', viewport: { once, amount } })}
       variants={{
         hidden: variants.hidden,
         show: {
@@ -37,6 +35,15 @@ function Reveal({
     >
       {children}
     </MotionTag>
+  );
+  if (preset !== 'clip') return animated;
+
+  // A fully clipped element never counts as on-screen, so an unclipped
+  // wrapper watches the viewport and passes the state down.
+  return (
+    <motion.div initial="hidden" whileInView="show" viewport={{ once, amount }}>
+      {animated}
+    </motion.div>
   );
 }
 
