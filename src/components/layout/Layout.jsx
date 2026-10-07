@@ -3,6 +3,8 @@ import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import ThemeSwitcher from '@/theme/ThemeSwitcher';
+import { useTheme } from '@/theme/ThemeContext';
 import './Layout.css';
 
 /* Jump to the top when the route changes. Explicitly instant so the
@@ -39,6 +41,7 @@ const GROUNDS = [
 
 function Layout() {
   const { pathname } = useLocation();
+  const { theme } = useTheme();
   const ground =
     GROUNDS.find(([pattern]) => pattern.test(pathname))?.[1] ?? 'cream';
 
@@ -49,7 +52,8 @@ function Layout() {
       <main className="layout__main">
         <AnimatePresence mode="wait">
           <motion.div
-            key={pathname}
+            /* Keyed on theme too, so switching replays the page's entrance */
+            key={`${pathname}:${theme}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             /* Quick tweens, not springs: with mode="wait" the main area
@@ -65,6 +69,7 @@ function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
+      <ThemeSwitcher />
     </div>
   );
 }
