@@ -22,11 +22,13 @@ study and sends the inquiry form.
 
 ## Brand Personality
 
-Warm, confident, playful-not-cute. "The Playroom" direction: playful
-editorial. Cream canvas, orange heartbeat, yellow warmth, blue quiet
-confidence, ink for type. Chunky rounded display face (Bagel Fat One) +
-Fredoka body. Soft intentional motion — wobbles and blooms, never showy.
-"Way cool!" is the upper bound; never baby-talk.
+Warm, confident, calm. Brand kit v3 (October 2026, source in the local
+`Sha-Brand-Kit/` folder; tokens in `src/styles/tokens.css`). Cream canvas with
+three primaries: pool blue, yolk yellow, tomato orange. Ink navy for all
+running text, never black. Inter Tight only: 500 for headlines and UI, 400 for
+text, no bold. Headlines are in colour with exactly one phrase in a solid
+highlight block (`.hl`). Flat everywhere: no shadows, no gradients, every
+clickable thing is a pill. Never baby-talk.
 
 ## Anti-references
 
@@ -41,17 +43,18 @@ Fredoka body. Soft intentional motion — wobbles and blooms, never showy.
 1. **The work is the hero.** Real shipped products, photographed, one click
    from their case study.
 2. **One dominant accent per section.** Each beat is unmistakably cream,
-   orange, yellow, blue, or ink — never piled up.
-3. **Toys on a shelf, not files in a drawer.** Slight tilts, asymmetric
-   grids, varied section geometry; avoid identical repeated containers.
+   tomato, yolk, pool, or night — never piled up.
+3. **Calm, not flamboyant.** No tilts, wobbles or decorative clutter; the
+   client asked for a cleaner, quieter site.
 4. **Playful means specific.** Curiosity, giggles, factory floors — concrete
    details over generic delight.
-5. **Soft, intentional motion.** Bloom/settle easings, reduced-motion
-   fallbacks always.
+5. **Quick, then still.** Colour swaps over 220 ms, cards rise 16 px over
+   600 ms, the home hero's shapes snap in on scroll. Nothing bounces, loops or
+   overshoots. Reduced motion drops the rise and keeps the colour swaps.
 
 ## Accessibility & Inclusion
 
-WCAG AA for all text pairs (documented per-token in `tokens.css`). Brand
-orange/blue are large-text-only mid-tones; body text sits on deep shades or
-cream/ink. 44px touch targets, visible focus rings themed per route,
+WCAG AA for all text pairs (documented per-token in `tokens.css`). Ink on
+tomato and yolk, paper on pool; never tomato letters on yolk or yolk letters
+on tomato. 44px touch targets, visible focus rings themed per route,
 `prefers-reduced-motion` honored on every animation.

@@ -220,7 +220,6 @@ function HeadlineMorph({ text, className = '', excludeColors = [] }) {
   return (
     <span className={`hm ${className}`.trim()} aria-label={text} role="img">
       {words.map((letters, wi) => (
-        // eslint-disable-next-line react/no-array-index-key
         <span key={`w-${wi}`}>
           {wi > 0 && <span className="hm__space"> </span>}
           <span className="hm__word">

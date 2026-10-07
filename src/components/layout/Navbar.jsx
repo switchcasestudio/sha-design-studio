@@ -53,6 +53,7 @@ function Navbar() {
     if (!mobileOpen) return undefined;
 
     const { body } = document;
+    const toggle = toggleRef.current;
     const prevOverflow = body.style.overflow;
     body.style.overflow = 'hidden';
 
@@ -94,7 +95,7 @@ function Navbar() {
       body.style.overflow = prevOverflow; // restore exactly what was there
       document.removeEventListener('keydown', onKeyDown);
       // Return focus to the trigger (standard dialog pattern)
-      toggleRef.current?.focus();
+      toggle?.focus();
     };
   }, [mobileOpen]);
 
@@ -130,11 +131,7 @@ function Navbar() {
                     `navbar__link${isActive ? ' navbar__link--active' : ''}`
                   }
                 >
-                  {({ isActive }) => (
-                    <>
-                      <span className="navbar__link-label">{item.label}</span>
-                    </>
-                  )}
+                  <span className="navbar__link-label">{item.label}</span>
                 </NavLink>
               </li>
             ))}

@@ -20,6 +20,7 @@ import './BrandShape.css';
 // Keyed by shape, colour-agnostic: `inlineSvg` strips each file's baked fill so
 // the path renders in `currentColor` and a wrapper's CSS `color` tints it.
 // (blob1/2/3 are three distinct blob paths; splat1/2 and flower1/2 likewise.)
+// eslint-disable-next-line react-refresh/only-export-components
 export const GEO = {
   blob1: inlineSvg(blob1Raw),
   blob2: inlineSvg(blob2Raw),
