@@ -7,7 +7,7 @@ import HomeWorkGrid from '@/components/sections/HomeWorkGrid';
 import JourneyPath from '@/components/sections/JourneyPath';
 import SocialProof from '@/components/sections/SocialProof';
 import CtaBand from '@/components/sections/CtaBand';
-import { reducedReveal, slideUp } from '@/lib/motion';
+import { reducedReveal, rise, slideUp } from '@/lib/motion';
 import { siteConfig } from '@/utils/siteConfig';
 import { testimonials } from '@/data/testimonials';
 import shiranAtWork from '@/assets/images/shiran-in-photoshooting.png';
@@ -55,12 +55,14 @@ function Home() {
         <JourneyPath />
       </section>
 
-      {/* ---------- "What I Do" — the one classic yellow panel ---------- */}
+      {/* ---------- "What I do" — the yolk panel ---------- */}
       <ColorWorld className="home-what">
         <div className="container">
-          <div className="home-what__panel">
+          <div className="home-what__panel ground-yolk">
             <div className="home-what__copy">
-              <h2 className="home-what__title">What I Do</h2>
+              <h2 className="home-what__title">
+                What I <span className="hl">do</span>
+              </h2>
 
               {/* Teaser copy — deliberately distinct from the Services-page
                   intro (which lays out the full process). Home hints; Services
@@ -70,8 +72,8 @@ function Home() {
                 — from first sketch to production.
               </p>
 
-              <Button as={Link} to="/services" variant="outline" size="md">
-                Explore My Services
+              <Button as={Link} to="/services" variant="dark" size="md">
+                Explore my services
               </Button>
             </div>
 
@@ -87,11 +89,13 @@ function Home() {
         </div>
       </ColorWorld>
 
-      {/* ---------- Kind Words — one blue card holding every quote ---------- */}
+      {/* ---------- Kind words — one pool panel holding every quote ---------- */}
       <ColorWorld className="home-words">
         <div className="container">
-          <div className="home-words__card">
-            <h2 className="home-words__title">Kind Words</h2>
+          <div className="home-words__card ground-pool">
+            <h2 className="home-words__title">
+              Kind <span className="hl">words</span>
+            </h2>
 
             {/* TODO: verify testimonial attribution — the only quote is credited
                 to "Jaya Dixon" but its text refers to "Channing" and to interior
@@ -102,10 +106,10 @@ function Home() {
               <motion.figure
                 key={testimonial.id}
                 className="home-words__item"
-                initial={reduce ? false : { opacity: 0, y: 20 }}
+                initial={reduce ? false : { opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ type: 'spring', stiffness: 200, damping: 24, delay: index * 0.1 }}
+                transition={{ ...rise, delay: index * 0.08 }}
               >
                 <blockquote className="home-words__quote">
                   <p>&ldquo;{testimonial.comment}&rdquo;</p>
@@ -137,14 +141,11 @@ function Home() {
         </div>
       </ColorWorld>
 
-      {/* ---------- Orange finale: full-bleed CTA band, the page's loudest
-          beat and its last word before the footer. ---------- */}
+      {/* ---------- Closing panel: the page's last word before the footer ---------- */}
       <CtaBand
         title={
           <>
-            Got an idea?
-            <br />
-            Let&apos;s make it real.
+            Got an idea? Let&apos;s make it <span className="hl">real</span>
           </>
         }
         text="From first sketch to final product, let's create it together."

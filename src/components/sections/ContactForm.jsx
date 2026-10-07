@@ -3,24 +3,23 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import BrandShape from '@/components/ui/BrandShape';
+import { rise, stagger } from '@/lib/motion';
 import './ContactForm.css';
 
-// Animatable motif — the success burst pops these out from behind the message.
+// Animatable motif for the thank-you.
 const MotionShape = motion.create(BrandShape);
 
-// The confetti-of-stickers that lands around the thank-you on a successful send.
-// Each piece springs from the centre (0,0) out to its resting {x,y} — a
-// handful of stickers settling, not a physics firework. Offsets frame a
-// centred two-line message; overflow is clipped by the panel so nothing
-// escapes the card on narrow screens.
-const SUCCESS_BURST = [
-  { shape: 'flower2', color: 'var(--color-yellow-deep)', x: 0, y: -104, delay: 0 },
-  { shape: 'daisy', color: 'var(--color-yellow)', x: -150, y: -64, delay: 0.05 },
-  { shape: 'star', color: 'var(--color-orange)', x: 156, y: -56, delay: 0.09 },
-  { shape: 'heart', color: 'var(--color-orange-soft)', x: -168, y: 60, delay: 0.13 },
-  { shape: 'clover', color: 'var(--color-blue)', x: 146, y: 74, delay: 0.11 },
-  { shape: 'tulip', color: 'var(--color-orange)', x: -104, y: 108, delay: 0.17 },
-  { shape: 'ring', color: 'var(--color-blue-soft)', x: 118, y: 116, delay: 0.19 },
+// A few still brand motifs around the thank-you on a successful send. Each one
+// does the single 16px rise into its resting {x,y} — nothing springs, nothing
+// bursts. Full-strength fills that read on the paper card (yolk, pool and
+// tomato are all fine on paper). Offsets frame a centred two-line message;
+// overflow is clipped by the panel so nothing escapes on narrow screens.
+const SUCCESS_MOTIFS = [
+  { shape: 'flower2', color: 'var(--yolk)', x: 0, y: -118 },
+  { shape: 'star', color: 'var(--pool)', x: 190, y: -72 },
+  { shape: 'heart', color: 'var(--tomato)', x: -190, y: 52 },
+  { shape: 'clover', color: 'var(--pool)', x: -170, y: -76 },
+  { shape: 'tulip', color: 'var(--yolk)', x: 160, y: 100 },
 ];
 
 // Required fields and how to validate them. Keeping this declarative lets the
@@ -133,42 +132,42 @@ function ContactForm() {
     );
 
   // On success the whole form is replaced (not appended to) so completing it
-  // reads as finishing — a display-face thank-you with a burst of brand
-  // stickers landing around it. Reduced motion: the stickers appear in their
-  // resting spots with no travel.
+  // reads as finishing — a headline thank-you (one block) with a few still
+  // motifs around it. Reduced motion: everything appears in place.
   if (status === 'success') {
+    // Pull the motifs in on narrow cards so none are clipped by the edge.
+    const k =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 600px)').matches
+        ? 0.74
+        : 1;
     return (
       <div className="contact-form contact-form--done">
         <motion.div
           className="contact-form__success"
           role="status"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={rise}
         >
-          <div className="contact-form__burst" aria-hidden="true">
-            {SUCCESS_BURST.map((b) => {
-              const rest = { scale: 1, x: b.x, y: b.y, opacity: 1 };
-              return (
-                <MotionShape
-                  key={b.shape}
-                  shape={b.shape}
-                  className="contact-form__burst-shape"
-                  style={{ color: b.color }}
-                  initial={reduce ? rest : { scale: 0, x: 0, y: 0, opacity: 0 }}
-                  animate={rest}
-                  transition={
-                    reduce
-                      ? { duration: 0 }
-                      : { type: 'spring', stiffness: 260, damping: 15, delay: 0.1 + b.delay }
-                  }
-                />
-              );
-            })}
+          <div className="contact-form__motifs" aria-hidden="true">
+            {SUCCESS_MOTIFS.map((m, i) => (
+              <MotionShape
+                key={m.shape}
+                shape={m.shape}
+                className="contact-form__motif"
+                style={{ color: m.color }}
+                initial={
+                  reduce ? false : { opacity: 0, x: m.x * k, y: m.y * k + 16 }
+                }
+                animate={{ opacity: 1, x: m.x * k, y: m.y * k }}
+                transition={{ ...rise, delay: 0.15 + i * stagger }}
+              />
+            ))}
           </div>
 
           <p className="contact-form__success-title">
-            Thanks — Shiran will be in touch soon!
+            <span className="hl">Thanks</span>, Shiran will be in touch soon.
           </p>
         </motion.div>
       </div>
@@ -286,45 +285,33 @@ function ContactForm() {
         {renderError('message')}
       </div>
 
-      <label className="contact-form__checkbox">
-        <input
-          type="checkbox"
-          name="newsletter"
-          className="contact-form__checkbox-input"
-          checked={form.newsletter}
-          onChange={handleChange}
-        />
-        <span className="contact-form__checkbox-box" aria-hidden="true">
-          <Check size={16} strokeWidth={3} />
-        </span>
-        <span>Sign up for news and updates</span>
-      </label>
+      <div className="contact-form__actions">
+        <label className="contact-form__checkbox">
+          <input
+            type="checkbox"
+            name="newsletter"
+            className="contact-form__checkbox-input"
+            checked={form.newsletter}
+            onChange={handleChange}
+          />
+          <span className="contact-form__checkbox-box" aria-hidden="true">
+            <Check size={16} strokeWidth={2} />
+          </span>
+          <span>Sign up for news and updates</span>
+        </label>
 
-      <Button
-        type="submit"
-        variant="primary"
-        size="md"
-        className="contact-form__submit"
-        disabled={status === 'submitting'}
-      >
-        {status === 'submitting' ? (
-          <>
-            <MotionShape
-              shape="daisy"
-              className="contact-form__submit-spinner"
-              animate={reduce ? undefined : { rotate: 360 }}
-              transition={
-                reduce
-                  ? undefined
-                  : { repeat: Infinity, ease: 'linear', duration: 1.1 }
-              }
-            />
-            Sending…
-          </>
-        ) : (
-          'Send Away'
-        )}
-      </Button>
+        {/* Field + action: oat fields, one ink pill. No spinner — the label
+            swap is the progress cue (nothing loops). */}
+        <Button
+          type="submit"
+          variant="dark"
+          size="md"
+          className="contact-form__submit"
+          disabled={status === 'submitting'}
+        >
+          {status === 'submitting' ? 'Sending…' : 'Send away'}
+        </Button>
+      </div>
 
       <AnimatePresence mode="wait">
         {status === 'error' && (
@@ -332,10 +319,10 @@ function ContactForm() {
             key="error"
             className="contact-form__msg contact-form__msg--error"
             role="alert"
-            initial={{ opacity: 0, y: 8 }}
+            initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            exit={{ opacity: 0 }}
+            transition={rise}
           >
             Something went wrong. Please try again or email directly.
           </motion.p>

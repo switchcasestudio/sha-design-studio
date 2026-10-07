@@ -1,7 +1,16 @@
-import { motion } from 'motion/react';
 import { cn } from '@/utils/cn';
 import './Button.css';
 
+/**
+ * Everything you click is a pill. Hover is a 220ms fill swap — no scale, no
+ * bounce. Variants:
+ *  - capsule  the one big call to action per section (yolk → pool)
+ *  - primary  tomato pill (→ ink)
+ *  - yellow   yolk pill (→ pool)
+ *  - outline  oat pill, the quiet default (→ ink)
+ *  - dark     ink pill (→ pool)
+ *  - ghost    no fill until hover
+ */
 function Button({
   as: Component = 'button',
   variant = 'primary',
@@ -10,23 +19,13 @@ function Button({
   children,
   ...props
 }) {
-  const MotionComponent = motion.create(Component);
-
   return (
-    <MotionComponent
-      className={cn(
-        'btn',
-        `btn--${variant}`,
-        `btn--${size}`,
-        className
-      )}
-      whileHover={{ scale: 1.04, y: -1 }}
-      whileTap={{ scale: 0.96 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+    <Component
+      className={cn('btn', `btn--${variant}`, `btn--${size}`, className)}
       {...props}
     >
       {children}
-    </MotionComponent>
+    </Component>
   );
 }
 

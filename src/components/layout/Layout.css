@@ -8,3 +8,19 @@
 .layout__main {
   flex: 1;
 }
+
+.layout--cream {
+  background-color: var(--cream);
+}
+
+.layout--tomato {
+  background-color: var(--tomato);
+}
+
+.layout--yolk {
+  background-color: var(--yolk);
+}
+
+.layout--pool {
+  background-color: var(--pool);
+}

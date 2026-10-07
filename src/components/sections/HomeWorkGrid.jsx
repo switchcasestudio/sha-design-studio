@@ -105,7 +105,9 @@ function HomeWorkGrid() {
   return (
     <div className="container">
       <div className="home-work__head">
-        <h2 className="home-work__title">Fresh from the studio</h2>
+        <h2 className="home-work__title">
+          Fresh from the <span className="hl">studio</span>
+        </h2>
         <Button as={Link} to="/projects" variant="outline" size="md">
           All projects
         </Button>

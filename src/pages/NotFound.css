@@ -2,6 +2,8 @@
   min-height: 60vh;
   display: flex;
   align-items: center;
+  padding-block: var(--space-16);
+  color: var(--fg);
 }
 
 .notfound__inner {
@@ -12,22 +14,35 @@
   gap: var(--space-4);
 }
 
+/* Hero-size headline: tomato digits, the zero in the one pool block. */
 .notfound__code {
-  font-size: clamp(var(--text-6xl), 14vw, 10rem);
-  color: var(--color-orange);
-  line-height: 0.9;
+  font-size: clamp(96px, 16vw, 200px);
+  line-height: 1;
+  letter-spacing: var(--tracking-hero);
+  color: var(--hd);
 }
 
 .notfound__title {
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
-  color: var(--color-ink);
-  margin-top: var(--space-4);
+  font-size: var(--type-h3);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h3);
+  font-weight: var(--weight-medium);
+  color: var(--fg);
 }
 
 .notfound__text {
-  font-size: var(--text-base);
-  color: var(--text-secondary);
+  color: var(--fg);
   max-width: 42ch;
   margin-bottom: var(--space-4);
+}
+
+/* Give the blocked zero a little air from the tightly tracked fours */
+.notfound__code .hl {
+  margin-inline: 0.04em;
+}
+
+/* Digits have no descenders: trim the block's descender room so it sits
+   evenly around the zero instead of hanging below the baseline. */
+.notfound__code .hl::before {
+  bottom: 0.18em;
 }

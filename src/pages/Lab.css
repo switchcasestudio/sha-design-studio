@@ -1,6 +1,6 @@
 .lab-page {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
+  background-color: var(--cream);
+  color: var(--ink);
   min-height: calc(100vh - 80px);
   padding-block: var(--space-12) var(--space-24);
 }
@@ -11,12 +11,12 @@
 
 .lab-page__title {
   font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
-  color: var(--color-orange);
+  color: var(--tomato);
 }
 
 .lab-page__sub {
   font-size: var(--text-lg);
-  color: var(--text-secondary);
+  color: var(--slate);
   margin-top: var(--space-2);
 }
 
@@ -32,12 +32,12 @@
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--slate);
 }
 
 .lab-block__note {
   font-size: var(--text-sm);
-  color: var(--text-secondary);
+  color: var(--slate);
   max-width: 60ch;
 }
 
@@ -46,14 +46,13 @@
   height: clamp(220px, 34vw, 420px);
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
 }
 
 .lab-stage--cream {
-  background-color: var(--color-cream-soft);
+  background-color: var(--paper);
 }
 .lab-stage--ink {
-  background-color: var(--color-ink);
+  background-color: var(--ink);
 }
 
 .lab-stage--center {
@@ -64,9 +63,9 @@
 }
 
 .lab-headline {
-  font-family: var(--font-hero);
+  font-family: var(--font-display);
   font-size: clamp(var(--text-4xl), 7vw, var(--text-6xl));
   line-height: 1.1;
-  color: var(--color-orange);
+  color: var(--tomato);
   text-align: center;
 }

@@ -1,66 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'motion/react';
+import { useMemo } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { rise, stagger } from '@/lib/motion';
 import './PhotoGallery.css';
 
 /**
- * Interactive fanned photo stack, adapted from a Next.js/Tailwind
- * "PhotoGallery" component to this project's Vite + vanilla-CSS stack.
+ * Fanned photo stack: up to `max` images (normalized {src, alt}) laid out in
+ * an overlapping horizontal fan, each in a paper frame. Quick, then still —
+ * the photos rise 16px into place once, and hover is a colour swap (paper →
+ * yolk frame) that also brings the photo to the front. No springs, no drag,
+ * no scale. Below 720px the fan becomes a horizontal scroll strip.
  *
- * Takes up to `max` images (normalized {src, alt} from the data module):
- * they start as a centered pile, then spring out into a horizontal fan.
- * Each photo lifts on hover and can be dragged — snapping back when released.
- * Frames stay square to the page: the fan reads through offset, not rotation.
+ * Fan geometry lives in CSS custom properties (--x, --y, --z) so the layout
+ * can switch at breakpoints without fighting Framer Motion's transforms.
  */
 
 const Y_OFFSETS = [16, 36, 8, 24, 48];
-const STEP = 205; // horizontal distance between photo centers, px
-
-const containerVariants = {
-  hidden: { opacity: 1 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
-  },
-};
-
-const photoVariants = {
-  hidden: { x: 0, y: 0, scale: 1 },
-  visible: (custom) => ({
-    x: custom.x,
-    y: custom.y,
-    scale: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 70,
-      damping: 12,
-      mass: 1,
-      delay: custom.order * 0.15,
-    },
-  }),
-};
-
-function Photo({ src, alt, onTap }) {
-  return (
-    <motion.div
-      className="photo-fan__photo"
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      whileTap={{ scale: 1.2, zIndex: 9999 }}
-      whileHover={{ scale: 1.1, zIndex: 9999 }}
-      whileDrag={{ scale: 1.1, zIndex: 9999 }}
-      /* onTap only fires for clicks/taps, not after a real drag */
-      onTap={onTap}
-    >
-      <img src={src} alt={alt} draggable={false} />
-    </motion.div>
-  );
-}
+const STEP = 205; // horizontal distance between photo centres, px
 
 function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const reduce = useReducedMotion();
 
-  // Spread the first `max` images into fan positions around the center
   const photos = useMemo(() => {
     const picked = images.slice(0, max);
     const mid = (picked.length - 1) / 2;
@@ -69,67 +28,49 @@ function PhotoGallery({ images, max = 5, animationDelay = 0.3, onPhotoTap }) {
       order: i,
       x: (i - mid) * STEP,
       y: Y_OFFSETS[i % Y_OFFSETS.length],
-      zIndex: 50 - i * 10, // left-most on top, like the original
+      zIndex: 50 - i * 10, // left-most on top
     }));
   }, [images, max]);
 
-  useEffect(() => {
-    // Fade the stage in first, then fan the photos out
-    const visibilityTimer = setTimeout(
-      () => setIsVisible(true),
-      animationDelay * 1000
-    );
-    const animationTimer = setTimeout(
-      () => setIsLoaded(true),
-      (animationDelay + 0.4) * 1000
-    );
-
-    return () => {
-      clearTimeout(visibilityTimer);
-      clearTimeout(animationTimer);
-    };
-  }, [animationDelay]);
-
   return (
     <div className="photo-fan">
-      {/* Plain (non-motion) wrapper owns the responsive scale — Framer Motion
-          manages `transform` on the stage, so the scale can't live there. */}
-      <div className="photo-fan__scaler">
-        <motion.div
-          className="photo-fan__stage"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isVisible ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-        <motion.div
-          className="photo-fan__stack"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isLoaded ? 'visible' : 'hidden'}
-        >
-          <div className="photo-fan__anchor">
-            {/* Reverse render order so higher z-index photos come later in the DOM */}
-            {[...photos].reverse().map((photo) => (
-              <motion.div
-                key={photo.src}
-                className="photo-fan__item"
-                style={{ zIndex: photo.zIndex }}
-                variants={photoVariants}
-                custom={{ x: photo.x, y: photo.y, order: photo.order }}
-              >
-                <Photo
-                  src={photo.src}
-                  alt={photo.alt}
-                  onTap={
-                    onPhotoTap ? () => onPhotoTap(photo.order) : undefined
-                  }
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-        </motion.div>
-      </div>
+      <ul className="photo-fan__track">
+        {photos.map((photo) => {
+          const style = {
+            '--x': `${photo.x}px`,
+            '--y': `${photo.y}px`,
+            '--z': photo.zIndex,
+          };
+          const img = <img src={photo.src} alt={photo.alt} draggable={false} />;
+
+          return (
+            <motion.li
+              key={photo.src}
+              className="photo-fan__item"
+              style={style}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                ...rise,
+                delay: animationDelay + photo.order * stagger,
+              }}
+            >
+              {onPhotoTap ? (
+                <button
+                  type="button"
+                  className="photo-fan__photo"
+                  onClick={() => onPhotoTap(photo.order)}
+                  aria-label={`Open photo: ${photo.alt}`}
+                >
+                  {img}
+                </button>
+              ) : (
+                <div className="photo-fan__photo">{img}</div>
+              )}
+            </motion.li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

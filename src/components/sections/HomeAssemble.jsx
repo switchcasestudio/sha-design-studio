@@ -7,12 +7,16 @@ import './HomeAssemble.css';
 // The hero the client chose (a quieter take on the June "assemble" hero): a
 // centred headline framed by a light ring of brand motifs resting in the side
 // margins. On desktop the section pins and scrolling pops the motifs in from
-// off-frame; scrolling back up sends them out again. No tilt anywhere.
+// off-frame; scrolling back up sends them out again. No tilt anywhere, no
+// overshoot: the motifs snap into place on power3.out.
 //
 // x / y = centre in % of the hero, size = width in vw, pull = how far out (% of
 // the viewport) a motif starts. Corners start close so they peek on the first
 // frame. The centre column is kept clear for the headline. mobile:true = one of
 // the four corner shapes kept on phones.
+// Motif colour names → brand tokens. All three primaries sit on cream.
+const TINT = { blue: 'var(--pool)', yellow: 'var(--yolk)', orange: 'var(--tomato)' };
+
 const MOTIFS = [
   // Corners — peek on the first frame.
   { shape: 'blob1', color: 'blue', x: 7, y: 20, size: 10, pull: 10, mobile: true },
@@ -66,7 +70,7 @@ function HomeAssemble() {
           tl.fromTo(
             el,
             { x: pullOffset(m, 'x'), y: pullOffset(m, 'y'), scale: 0.5 },
-            { x: 0, y: 0, scale: 1, duration: 1, ease: 'back.out(1.4)' },
+            { x: 0, y: 0, scale: 1, duration: 1, ease: 'power3.out' },
             i * 0.04
           );
         });
@@ -80,7 +84,7 @@ function HomeAssemble() {
           stagger: 0.08,
           duration: 0.6,
           delay: 0.2,
-          ease: 'back.out(1.6)',
+          ease: 'power3.out',
         });
       });
 
@@ -102,7 +106,7 @@ function HomeAssemble() {
           style={{
             left: `${m.x}%`,
             top: `${m.y}%`,
-            color: `var(--color-${m.color})`,
+            color: TINT[m.color],
             '--motif-size': `${m.size}vw`,
           }}
         />
@@ -110,7 +114,9 @@ function HomeAssemble() {
 
       <div className="home-assemble__inner">
         <p className="home-assemble__brand">{siteConfig.name}</p>
-        <h1 className="home-assemble__headline">Designing Thoughtful Products</h1>
+        <h1 className="home-assemble__headline">
+          Designing <span className="hl">thoughtful</span> products
+        </h1>
       </div>
     </section>
   );

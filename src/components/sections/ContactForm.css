@@ -1,7 +1,12 @@
+/* ==========================================================================
+   ContactForm — oat fields, radius 16, 14px ink labels, one ink pill.
+   Focus is an ink ring; layers separate by colour alone (no shadows).
+   ========================================================================== */
+
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 /* Honeypot — visually gone but still in the DOM for bots to trip on */
@@ -30,70 +35,80 @@
 
 /* One legend for the whole form (replaces per-field "(required)" noise) */
 .contact-form__legend {
-  font-size: var(--text-sm);
-  color: var(--color-ink-soft);
-  margin-bottom: var(--space-1);
+  font-size: var(--type-caption);
+  line-height: 1.45;
+  color: var(--slate);
 }
 
 .contact-form__req-mark {
   color: var(--color-error);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-medium);
 }
 
 .contact-form__label {
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  color: var(--color-ink);
+  font-size: var(--type-ui);
+  font-weight: var(--weight-medium);
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 /* Per-field validation message, rendered next to its input */
 .contact-form__field-error {
-  font-size: var(--text-sm);
+  font-size: var(--type-caption);
   font-weight: var(--weight-medium);
   color: var(--color-error);
 }
 
+/* Oat fill, no decorative border. A transparent 2px border is reserved so the
+   invalid state can show without the field shifting. */
 .contact-form__input,
 .contact-form__textarea {
   width: 100%;
-  /* Tighter vertical padding so fields read less bulky; min-height keeps the
-     44px tap target. */
-  padding: var(--space-2) var(--space-4);
-  background-color: var(--color-white);
-  color: var(--color-ink);
-  /* Clearer 2px boundary so the input edge is visible on any card colour */
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  min-height: 44px;
-  transition:
-    border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--oat);
+  color: var(--ink);
+  border: 2px solid transparent;
+  border-radius: var(--radius-frame);
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  transition: border-color var(--dur-hover) var(--ease-out);
 }
 
-/* Invalid state: red border + ring so it's not colour-only at a glance */
+.contact-form__input::placeholder,
+.contact-form__textarea::placeholder {
+  color: var(--slate);
+  opacity: 1;
+}
+
+/* Invalid state: error-coloured edge + the message beneath, so it's not
+   colour-only. */
 .contact-form__input[aria-invalid='true'],
 .contact-form__textarea[aria-invalid='true'] {
   border-color: var(--color-error);
 }
 
 .contact-form__textarea {
-  border-radius: var(--radius-lg);
   resize: vertical;
-  min-height: 92px;
+  min-height: 120px;
 }
 
-.contact-form__input:hover,
-.contact-form__textarea:hover {
-  border-color: var(--color-orange-soft);
-}
-
-.contact-form__input:focus-visible,
-.contact-form__textarea:focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-orange);
+/* Ink focus ring on every focus (fields show it for pointer users too). */
+.contact-form__input:focus,
+.contact-form__textarea:focus {
+  outline: var(--focus-ring-width) solid var(--ink);
   outline-offset: var(--focus-ring-offset);
-  border-color: var(--color-orange);
+}
+
+/* Checkbox + submit share one row: the "field + action" footer */
+.contact-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
 }
 
 .contact-form__checkbox {
@@ -103,8 +118,8 @@
   gap: var(--space-3);
   /* Pad the row to a 44px tap target while the visual box stays 24px */
   min-height: 44px;
-  font-size: var(--text-sm);
-  color: var(--color-ink);
+  font-size: var(--type-ui);
+  color: var(--ink);
   cursor: pointer;
 }
 
@@ -122,6 +137,8 @@
   cursor: pointer;
 }
 
+/* Functional 2px ink edge so the unchecked box is identifiable (3:1 rule);
+   ticked, it fills ink with a paper check — ink when active. */
 .contact-form__checkbox-box {
   flex: none;
   width: 24px;
@@ -129,48 +146,42 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-ink);
-  background-color: var(--color-white);
-  border: 2px solid var(--color-ink);
+  color: var(--paper);
+  background-color: var(--oat);
+  border: 2px solid var(--ink);
   border-radius: var(--radius-sm);
-  transition:
-    background-color var(--duration-base) var(--ease-out),
-    border-color var(--duration-base) var(--ease-out);
+  transition: background-color var(--dur-hover) var(--ease-out);
 }
 
-/* Check springs in with a gentle overshoot when the box is ticked */
 .contact-form__checkbox-box svg {
-  transform: scale(0);
-  transition: transform var(--duration-base) cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-out);
 }
 
 .contact-form__checkbox-input:checked ~ .contact-form__checkbox-box {
-  /* Ink check on yellow = 10.97:1 */
-  background-color: var(--color-yellow);
-  border-color: var(--color-yellow);
+  background-color: var(--ink);
 }
 
 .contact-form__checkbox-input:checked ~ .contact-form__checkbox-box svg {
-  transform: scale(1);
+  opacity: 1;
 }
 
 .contact-form__checkbox-input:focus-visible ~ .contact-form__checkbox-box {
-  outline: var(--focus-ring-width) solid var(--color-orange);
+  outline: var(--focus-ring-width) solid var(--ink);
   outline-offset: 2px;
 }
 
 .contact-form__submit {
-  width: 100%;
-  margin-top: var(--space-2);
+  min-width: 160px;
 }
 
-/* Spinning daisy shown beside "Sending…" — currentColor = the button's cream */
-.contact-form__submit-spinner {
-  width: 18px;
-  height: 18px;
+@media (max-width: 600px) {
+  .contact-form__submit {
+    width: 100%;
+  }
 }
 
-/* ---------- Success state — the form is replaced by a sticker-burst thank-you */
+/* ---------- Success state — the form is replaced by a headline thank-you */
 .contact-form--done {
   /* Roughly hold the form's height so the card doesn't jump on submit */
   min-height: 360px;
@@ -182,52 +193,61 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 260px;
+  min-height: 300px;
   padding: var(--space-8) 0;
   text-align: center;
-  /* Clip any sticker that reaches past the card edge on narrow screens */
+  /* Clip any motif that reaches past the card edge on narrow screens */
   overflow: hidden;
 }
 
-.contact-form__burst {
+.contact-form__motifs {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.contact-form__burst-shape {
+.contact-form__motif {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(30px, 7vw, 46px);
-  height: clamp(30px, 7vw, 46px);
-  /* Centre the shape on the anchor before it translates out */
-  margin: calc(clamp(30px, 7vw, 46px) / -2);
-  will-change: transform;
+  width: clamp(32px, 7vw, 48px);
+  height: clamp(32px, 7vw, 48px);
+  /* Centre the shape on the anchor before it translates to its spot */
+  margin: calc(clamp(32px, 7vw, 48px) / -2);
 }
 
+.contact-form__motif svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A headline: the ground's headline colour with one .hl block. On the paper
+   card that's pool words + a tomato block with ink letters. */
 .contact-form__success-title {
   position: relative;
   z-index: 1;
-  max-width: 18ch;
-  font-family: var(--font-display);
-  /* ≥24px display type — orange on white clears the 3:1 large-text bar */
-  font-size: clamp(var(--text-2xl), 4.5vw, var(--text-4xl));
-  line-height: 1.15;
-  color: var(--color-orange);
+  max-width: 15ch;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h3);
+  font-weight: var(--weight-medium);
+  color: var(--hd);
+  text-wrap: balance;
+}
+
+@media (max-width: 600px) {
+  .contact-form__success-title {
+    max-width: 11ch;
+  }
 }
 
 .contact-form__msg {
-  font-size: var(--text-sm);
+  font-size: var(--type-ui);
   padding: var(--space-2) 0;
-}
-
-.contact-form__msg--success {
-  color: var(--color-success);
-  font-weight: var(--weight-semibold);
 }
 
 .contact-form__msg--error {
   color: var(--color-error);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-medium);
 }

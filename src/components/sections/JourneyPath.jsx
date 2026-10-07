@@ -78,7 +78,9 @@ function JourneyPath() {
 
   return (
     <div className="container">
-      <h2 className="journey__title">How I got here</h2>
+      <h2 className="journey__title">
+        How I <span className="hl">got here</span>
+      </h2>
 
       <motion.ol
         className="journey__path"

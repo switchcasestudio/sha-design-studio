@@ -218,6 +218,9 @@ export function getCaseStudy(id) {
   return {
     brief,
     process,
+    // The shared DEFAULT_PROCESS is a fallback, not this project's story — the
+    // page only shows a process section when a project has its own steps.
+    hasOwnProcess: Boolean(study.process?.length),
     sketches: sketches.map((sketch) => ({
       ...sketch,
       src: resolveSketch(sketch.assetPath),

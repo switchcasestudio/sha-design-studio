@@ -12,11 +12,10 @@
   margin-bottom: clamp(var(--space-8), 4vw, var(--space-12));
 }
 
-/* Blue display heading — this section's dominant accent is blue (client
-   call). 3:1+ on cream is legal for display sizes; this clamps ≥ 40px. */
+/* Cream recipe: tomato words, one pool block. */
 .home-work__title {
-  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  color: var(--color-blue);
+  font-size: var(--type-h2);
+  color: var(--tomato);
 }
 
 .home-work__collage {
@@ -41,10 +40,19 @@
   position: relative;
 }
 
+/* Project frame: the image sits in a yolk frame that swaps to pool on hover
+   (a 220ms colour swap — no zoom, no lift). */
 .home-work__link {
   display: block;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
+  padding: var(--gap-grid);
+  border-radius: var(--radius-card);
+  background-color: var(--yolk);
+  transition: background-color var(--dur-hover) var(--ease-out);
+}
+
+.home-work__link:hover,
+.home-work__link:focus-visible {
+  background-color: var(--pool);
 }
 
 .home-work__image {
@@ -52,19 +60,14 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  transition: transform var(--duration-slow, 0.4s) var(--ease-out, ease-out);
-}
-
-.home-work__link:hover .home-work__image,
-.home-work__link:focus-visible .home-work__image {
-  transform: scale(1.04);
+  border-radius: calc(var(--radius-card) - var(--gap-grid) + 2px);
 }
 
 /* Badge overhangs the frame's top edge. pointer-events: none keeps it from
    stealing the click that belongs to the frame beneath it. */
 .home-work__badge {
   position: absolute;
-  top: calc(var(--space-3) * -1);
+  top: calc(var(--space-3) * -0.5);
   z-index: var(--z-base);
   pointer-events: none;
 }
@@ -82,18 +85,18 @@
 }
 
 .home-work__caption-link {
-  font-size: clamp(var(--text-sm), 1.15vw, var(--text-base));
-  line-height: var(--leading-snug);
-  color: var(--color-ink);
-  transition: color var(--duration-fast) var(--ease-out);
+  font-size: var(--type-body);
+  line-height: 1.35;
+  color: var(--ink);
+  transition: color var(--dur-hover) var(--ease-out);
 }
 
 .home-work__caption-link:hover {
-  color: var(--color-orange);
+  color: var(--pool);
 }
 
 .home-work__client {
-  color: var(--color-ink-soft);
+  color: var(--slate);
 }
 
 .home-work__name {

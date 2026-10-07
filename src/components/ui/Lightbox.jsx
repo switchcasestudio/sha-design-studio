@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { duration, ease, rise } from '@/lib/motion';
 import './Lightbox.css';
 
 /**
@@ -10,6 +11,7 @@ import './Lightbox.css';
  * Esc closes; arrow keys / on-screen chevrons cycle; backdrop click closes.
  */
 function Lightbox({ images, index, onClose, onNavigate }) {
+  const reduce = useReducedMotion();
   const image = index != null ? images[index] : null;
   const count = images.length;
 
@@ -51,7 +53,7 @@ function Lightbox({ images, index, onClose, onNavigate }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          transition={{ duration: duration.micro, ease: ease.settle }}
           onClick={onClose}
         >
           <button
@@ -60,7 +62,7 @@ function Lightbox({ images, index, onClose, onNavigate }) {
             aria-label="Close image"
             onClick={onClose}
           >
-            <X size={26} />
+            <X size={24} strokeWidth={2} />
           </button>
 
           {count > 1 && (
@@ -74,7 +76,7 @@ function Lightbox({ images, index, onClose, onNavigate }) {
                   prev();
                 }}
               >
-                <ChevronLeft size={30} />
+                <ChevronLeft size={24} strokeWidth={2} />
               </button>
               <button
                 type="button"
@@ -85,7 +87,7 @@ function Lightbox({ images, index, onClose, onNavigate }) {
                   next();
                 }}
               >
-                <ChevronRight size={30} />
+                <ChevronRight size={24} strokeWidth={2} />
               </button>
             </>
           )}
@@ -93,9 +95,9 @@ function Lightbox({ images, index, onClose, onNavigate }) {
           <motion.figure
             key={image.src}
             className="lightbox__figure"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={rise}
             onClick={(e) => e.stopPropagation()}
           >
             <img src={image.src} alt={image.alt} />

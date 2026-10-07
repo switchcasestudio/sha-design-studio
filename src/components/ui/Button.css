@@ -3,23 +3,18 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: -0.01em;
   border-radius: var(--radius-pill);
-  border: 2px solid transparent;
+  border: 0;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
   transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
-}
-
-.btn:active {
-  transform: scale(0.96);
-  opacity: 0.92;
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
 }
 
 .btn:focus-visible {
@@ -34,89 +29,79 @@
 
 /* ----- Sizes ----- */
 .btn--sm {
-  padding: var(--space-2) var(--space-5);
-  font-size: var(--text-sm);
+  padding: 0 var(--space-5);
+  font-size: var(--type-ui);
   min-height: 36px;
 }
 
 .btn--md {
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--text-base);
+  padding: 0 var(--space-6);
+  font-size: var(--type-ui);
   min-height: 44px;
 }
 
+/* The capsule: one big call to action per section */
 .btn--lg {
-  padding: var(--space-4) var(--space-8);
-  font-size: var(--text-lg);
-  min-height: 52px;
+  padding: 0 var(--space-10);
+  font-size: var(--type-lead);
+  letter-spacing: -0.015em;
+  min-height: 64px;
 }
 
-/* Slimmer buttons on phones — the desktop sizes read as too bulky at mobile
-   width. Vertical padding + min-height come down (still ≥44px touch target);
-   the large size also drops to base type so CTAs aren't chunky. */
 @media (max-width: 768px) {
-  .btn--md {
-    padding: var(--space-2) var(--space-5);
-    min-height: 44px;
-  }
-
   .btn--lg {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--text-base);
-    min-height: 46px;
+    padding: 0 var(--space-8);
+    min-height: 54px;
   }
 }
 
 /* ----- Variants ----- */
+.btn--capsule,
+.btn--yellow {
+  background-color: var(--yolk);
+  color: var(--ink);
+}
+
+.btn--capsule:hover,
+.btn--yellow:hover {
+  background-color: var(--pool);
+  color: var(--paper);
+}
+
 .btn--primary {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
-  border-color: var(--color-orange);
+  background-color: var(--tomato);
+  color: var(--ink);
 }
 
 .btn--primary:hover {
-  background-color: var(--color-orange-deep);
-  border-color: var(--color-orange-deep);
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 .btn--outline {
-  background-color: transparent;
-  color: var(--color-orange);
-  border-color: var(--color-orange);
+  background-color: var(--oat);
+  color: var(--ink);
 }
 
 .btn--outline:hover {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 .btn--ghost {
   background-color: transparent;
-  color: var(--color-ink);
-  border-color: transparent;
+  color: var(--ink);
 }
 
 .btn--ghost:hover {
-  background-color: var(--color-cream-soft);
+  background-color: var(--oat);
 }
 
 .btn--dark {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-  border-color: var(--color-ink);
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 .btn--dark:hover {
-  background-color: var(--color-ink-soft);
-}
-
-.btn--yellow {
-  background-color: var(--color-yellow);
-  color: var(--color-ink);
-  border-color: var(--color-yellow);
-}
-
-.btn--yellow:hover {
-  background-color: var(--color-yellow-deep);
-  border-color: var(--color-yellow-deep);
+  background-color: var(--pool);
 }

@@ -1,6 +1,12 @@
+/* ==========================================================================
+   Work (/projects) — tomato ground.
+   Recipe: paper headline words + pool block; running text in ink (paper only
+   for ≥24px headlines). Cards are paper frames that swap to yolk on hover.
+   ========================================================================== */
+
 .projects-page {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
+  /* .ground-tomato (in the markup) sets the background + recipe vars */
+  color: var(--fg);
   min-height: calc(100vh - 80px);
   padding-bottom: var(--space-24);
 }
@@ -11,53 +17,70 @@
 
 .projects-page__hero-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-12);
-  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gap-block) var(--space-12);
+  align-items: end;
 }
 
 .projects-page__title {
-  /* Same clamp as the Services/About page headings so all page titles match */
-  font-size: clamp(var(--text-6xl), 13vw, var(--text-7xl));
-  text-align: center;
-  color: var(--color-cream);
+  white-space: nowrap;
+  font-size: var(--type-display);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  color: var(--hd);
 }
 
-/* Lead paragraph: matched to the Services/About intro size for a consistent
-   page-header rhythm across the app. */
+/* Lead: 22/1.3/500, two-tone. On tomato slate fails contrast, so both
+   tones are ink — the key phrase keeps the medium weight, the rest is 400. */
 .projects-page__intro {
-  font-size: var(--text-lg);
+  font-size: var(--type-lead);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   font-weight: var(--weight-regular);
-  line-height: var(--leading-relaxed);
-  max-width: 46ch;
+  color: var(--fg);
+  max-width: 34ch;
   justify-self: end;
 }
 
-/* ---------- Overview grid (clickable glimpse of all projects) ----------
-   Scrapbook treatment: every card sits at a slight tilt like snapshots laid
-   on a table, straightens when you reach for it, and a second photo peeks in
-   on hover. Brand motifs hide behind the card corners. */
+.projects-page__intro-key {
+  font-weight: var(--weight-medium);
+}
+
+/* One flat paper motif beside the headline — still, no loop. Paper is the
+   only shape colour that may sit on a tomato ground. */
+.projects-page__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.projects-page__motif {
+  flex: none;
+  width: clamp(48px, 5.5vw, 84px);
+  color: var(--paper);
+  pointer-events: none;
+}
+
+.projects-page__motif svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Overview grid ---------- */
 .projects-overview {
-  position: relative;
   list-style: none;
-  margin: var(--space-16) 0 0;
+  margin: var(--space-12) 0 0;
   padding: 0;
   display: grid;
   /* minmax(0, 1fr) — not a bare 1fr — so long titles can't widen one column
-     past its neighbor (which would also make its image taller). Keeps columns,
-     and therefore every image, exactly equal. */
+     past its neighbour (which would also make its image taller). */
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Equal row + column gaps so the spacing between tiles reads the same in
-     both directions. */
-  gap: var(--space-6);
+  gap: var(--gap-grid);
 }
 
 .overview-card {
   margin: 0;
-  /* Stacking context for the tile; the decorative motifs sit above these
-     (higher z-index) so they float over the photo corners. */
-  position: relative;
-  z-index: 1;
 }
 
 /* Feature tiles span the full row and carry a long landscape cover photo,
@@ -66,41 +89,40 @@
   grid-column: 1 / -1;
 }
 
-.overview-card--wide .overview-card__media {
-  aspect-ratio: 3 / 1;
-}
-
+/* The frame: a paper card with a 10px inset around the photo. Hover swaps
+   the frame to yolk — the brand's project-frame colour — and nothing else. */
 .overview-card__link {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  color: inherit;
+  gap: var(--gap-grid);
+  height: 100%;
+  padding: var(--gap-grid);
+  border-radius: var(--radius-card);
+  background-color: var(--paper);
+  color: var(--ink);
+  transition: background-color var(--dur-hover) var(--ease-out);
+}
+
+.overview-card__link:hover {
+  background-color: var(--yolk);
 }
 
 .overview-card__link:focus-visible {
-  outline: 3px solid var(--color-cream);
-  outline-offset: 4px;
-  border-radius: var(--radius-xl);
+  outline: var(--focus-ring-width) solid var(--ink);
+  outline-offset: 3px;
+  border-radius: var(--radius-card);
 }
 
 .overview-card__media {
   position: relative;
   aspect-ratio: 3 / 2;
-  border-radius: var(--radius-xl);
+  border-radius: calc(var(--radius-card) - var(--gap-grid));
   overflow: hidden;
-  background-color: var(--color-white);
-  box-shadow: var(--shadow-md);
-  /* Lifts on hover — never tilts; every edge stays square to the page. */
-  /* Overshooting bezier — the card springs up with a small bounce. */
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow var(--duration-base) var(--ease-out);
+  background-color: var(--paper);
 }
 
-.overview-card__link:hover .overview-card__media,
-.overview-card__link:focus-visible .overview-card__media {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
+.overview-card--wide .overview-card__media {
+  aspect-ratio: 3 / 1;
 }
 
 .overview-card__image {
@@ -110,216 +132,114 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform var(--duration-slow) var(--ease-out);
 }
 
-.overview-card__link:hover .overview-card__image,
-.overview-card__link:focus-visible .overview-card__image {
-  transform: scale(1.05);
-}
-
-/* Second frame that cross-fades in over the cover on hover/focus. It only
-   mounts on first hover (see Projects.jsx), so there's no upfront cost. */
-.overview-card__image--peek {
-  opacity: 0;
-  transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
-}
-
-.overview-card__link:hover .overview-card__image--peek,
-.overview-card__link:focus-visible .overview-card__image--peek {
-  opacity: 1;
-}
-
-/* Scrim: clear at the top, deepening only in a shallow band at the very bottom
-   so the client + title stay readable while the product photo shows through as
-   much as possible. Sits above the images, below the text. */
-.overview-card__media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(26, 26, 26, 0.7) 0%,
-    rgba(26, 26, 26, 0.34) 14%,
-    rgba(26, 26, 26, 0) 34%
-  );
-  pointer-events: none;
-}
-
-/* Cloud badge rides the top-left corner of the photo, like on the home grid.
+/* Badge rides the top-left corner of the photo, like on the home grid.
    Visuals come from the shared CloudBadge — this only places it. */
 .overview-card__badge {
   position: absolute;
-  top: var(--space-4);
-  left: var(--space-4);
+  top: var(--space-3);
+  left: var(--space-3);
   z-index: 1;
+  /* The packshots are shot on white, so a paper pill would vanish on them —
+     oat keeps the label legible (ink on oat) without adding a colour. */
+  background-color: var(--oat);
+  color: var(--ink);
 }
 
-/* Client kicker + title overlaid at the bottom of the image, above the scrim */
+/* Client label + title beneath the photo, with the arrow pill on the right */
 .overview-card__body {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+
+.overview-card__text {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-1);
-  padding: var(--space-5);
+  gap: var(--space-2);
+  min-width: 0;
 }
 
+/* Label: 12px caps +6%, 500. Ink so it reads on both paper and yolk. */
 .overview-card__client {
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: 0.08em;
+  font-size: var(--type-label);
+  line-height: 1.3;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--color-cream);
-  opacity: 0.75;
+  color: var(--ink);
 }
 
 .overview-card__title {
-  /* Reading face, not the display face — long product titles stay legible. */
-  font-family: var(--font-body);
+  font-size: var(--type-h3);
   font-weight: var(--weight-medium);
-  font-size: var(--text-xl);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-normal);
-  color: var(--color-cream);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h3);
+  color: var(--ink);
   text-wrap: balance;
 }
 
-/* ---------- Motifs floating over the cards ----------
-   Decorative brand shapes that sit ON TOP of the tiles (z-index above the
-   cards' z-index: 1), overlapping the photo corners like stickers, with a slow
-   wobble. pointer-events: none so they never block a card's click/hover. */
-.projects-overview__motif {
-  position: absolute;
-  z-index: 3;
-  pointer-events: none;
-  animation: overview-wobble 9s ease-in-out infinite;
+/* Arrow pill: oat by default, ink when the card is hovered */
+.overview-card__go {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background-color: var(--oat);
+  color: var(--ink);
+  transition:
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
 }
 
-.projects-overview__motif svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Peeks over the top of the first row, kept left of the centre seam so it never
-   overlaps the right card's top-left tag. */
-.projects-overview__motif--daisy {
-  width: clamp(64px, 7vw, 110px);
-  top: -3%;
-  left: 40%;
-  color: var(--color-yellow);
-}
-
-/* Off the right edge of the first wide tile */
-.projects-overview__motif--clover {
-  width: clamp(52px, 6vw, 96px);
-  top: 34%;
-  right: -1.5%;
-  color: var(--color-blue-soft);
-  animation-delay: -3s;
-}
-
-/* Off the left edge, between the second pair of tiles. Solid cream (no opacity
-   — a see-through flower read as a mistake). */
-.projects-overview__motif--flower {
-  width: clamp(44px, 5vw, 80px);
-  top: 62%;
-  left: -2%;
-  color: var(--color-cream);
-  animation-delay: -6s;
-}
-
-/* Off the right edge of the bottom wide tile. The -1.5% stays within the
-   container's side padding so there's no horizontal scroll. */
-.projects-overview__motif--star {
-  width: clamp(40px, 4.5vw, 72px);
-  top: 80%;
-  right: -1.5%;
-  color: var(--color-blue-soft);
-  animation-delay: -1.5s;
-}
-
-@keyframes overview-wobble {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+.overview-card__link:hover .overview-card__go,
+.overview-card__link:focus-visible .overview-card__go {
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .projects-page__hero-inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    align-items: start;
+  .projects-page__hero {
+    padding-top: var(--space-8);
   }
 
-  /* Mobile keeps the heading left-aligned */
-  .projects-page__title {
-    text-align: left;
+  .projects-page__hero-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: start;
   }
 
   .projects-page__intro {
     justify-self: start;
   }
 
+  .projects-page__title {
+    white-space: normal;
+  }
+
   .projects-overview {
-    margin-top: var(--space-12);
-  }
-
-  /* Only the daisy survives small screens — the edge motifs would collide
-     with the viewport rather than peek from a gutter. */
-  .projects-overview__motif--clover,
-  .projects-overview__motif--flower,
-  .projects-overview__motif--star {
-    display: none;
-  }
-
-  .projects-overview__motif--daisy {
-    width: 56px;
+    margin-top: var(--space-10);
   }
 }
 
 @media (max-width: 560px) {
   .projects-overview {
     grid-template-columns: 1fr;
-    gap: var(--space-8);
   }
 
-  /* Once stacked single-column, the wide cover would be a thin band — give it
-     a taller crop. 16:9 (not 4:3) so the collection-lineup covers keep more
-     than one product in frame when object-fit crops the sides. */
+  /* Stacked single-column: the wide tiles swap to their 4:3 two-row cover
+     (see `mobileSrc`), so the frame matches it and every product shows whole. */
   .overview-card--wide .overview-card__media {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
   }
 
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .projects-overview__motif {
-    animation: none;
-  }
-
-  /* Drop the springy tilt + cross-fade; cards stay flat with just a shadow
-     change for hover feedback. */
-  .overview-card__media,
-  .overview-card__image,
-  .overview-card__image--peek {
-    transition: none;
-  }
-
-  .overview-card__link:hover .overview-card__media,
-  .overview-card__link:focus-visible .overview-card__media {
-    transform: none;
+  .overview-card__body {
+    padding: var(--space-1) var(--space-2) var(--space-2);
   }
 }

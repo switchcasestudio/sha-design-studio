@@ -1,61 +1,62 @@
+/* Fanned photo stack. Geometry comes from --x / --y / --z (set inline per
+   photo) multiplied by --fan-scale, so the fan shrinks at breakpoints without
+   a CSS transform (Framer Motion owns each item's transform for the rise). */
 .photo-fan {
-  /* The fan footprint is ~1100px (fixed motion offsets), so it's scaled down at
-     breakpoints to fit narrower screens. Height tracks the same scale so the
-     empty band above PROCESS shrinks with the fan. */
   --fan-scale: 1;
+  --photo: calc(280px * var(--fan-scale));
   position: relative;
-  /* Reserve only what the fan actually occupies (~328px of photos) so it
-     doesn't leave a dead band before the next section. */
-  height: calc(340px * var(--fan-scale));
   margin-block: var(--space-6) var(--space-10);
-  /* Photos fan beyond the container — don't clip the drag/hover play */
-  overflow: visible;
 }
 
-/* Non-motion wrapper carries the scale (Framer Motion owns the stage's transform) */
-.photo-fan__scaler {
-  height: 340px;
-  transform: scale(var(--fan-scale));
-  transform-origin: top center;
-}
-
-.photo-fan__stage {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.photo-fan__stack {
+.photo-fan__track {
   position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.photo-fan__anchor {
-  position: relative;
-  width: 280px;
-  height: 280px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Reserve the photo size + the deepest vertical offset (48px) */
+  height: calc(var(--photo) + 48px * var(--fan-scale));
 }
 
 .photo-fan__item {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: calc(var(--y) * var(--fan-scale));
+  left: calc(50% + var(--x) * var(--fan-scale) - var(--photo) / 2);
+  z-index: var(--z);
+  width: var(--photo);
+  height: var(--photo);
 }
 
+/* Hovered / focused photo comes to the front — an instant change, no motion */
+.photo-fan__item:hover,
+.photo-fan__item:focus-within {
+  z-index: 60;
+}
+
+/* Paper frame with an 8px inset; swaps to yolk on hover */
 .photo-fan__photo {
-  width: 280px;
-  height: 280px;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background-color: var(--paper);
+  transition: background-color var(--dur-hover) var(--ease-out);
 }
 
-.photo-fan__photo:active {
-  cursor: grabbing;
+button.photo-fan__photo {
+  cursor: zoom-in;
+  appearance: none;
+}
+
+.photo-fan__photo:hover {
+  background-color: var(--yolk);
+}
+
+.photo-fan__photo:focus-visible {
+  outline: var(--focus-ring-width) solid var(--ink);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-card);
 }
 
 .photo-fan__photo img {
@@ -63,14 +64,13 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius-lg);
-  background-color: var(--color-cream);
-  box-shadow: var(--shadow-lg);
-  pointer-events: none;
+  border-radius: calc(var(--radius-card) - 8px);
+  background-color: var(--paper);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-/* Scale the fan to fit each width (set on .photo-fan; inherited by the scaler
-   for the transform and used by the height calc). */
+/* Scale the fan (~1100px wide at full size) to fit narrower screens */
 @media (max-width: 1180px) {
   .photo-fan {
     --fan-scale: 0.82;
@@ -85,28 +85,43 @@
 
 @media (max-width: 860px) {
   .photo-fan {
-    --fan-scale: 0.58;
+    --fan-scale: 0.6;
   }
 }
 
+/* Phones: the fan would be postage-stamp sized, so it becomes a horizontal
+   scroll strip of full-size frames that bleeds to the screen edge. */
 @media (max-width: 720px) {
   .photo-fan {
-    --fan-scale: 0.5;
     margin-block: var(--space-4) var(--space-8);
+    margin-inline: calc(var(--gutter) * -1);
   }
-}
 
-@media (max-width: 600px) {
-  .photo-fan {
-    --fan-scale: 0.42;
-    /* Safety net on the smallest phones: keep any residual fan bleed from
-       pushing a horizontal page scrollbar. */
-    overflow: clip;
+  .photo-fan__track {
+    display: flex;
+    gap: var(--gap-grid);
+    height: auto;
+    overflow-x: auto;
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
   }
-}
 
-@media (max-width: 480px) {
-  .photo-fan {
-    --fan-scale: 0.36;
+  .photo-fan__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .photo-fan__item {
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: auto;
+    flex: none;
+    width: min(72vw, 300px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    scroll-snap-align: start;
   }
 }

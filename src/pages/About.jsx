@@ -5,80 +5,88 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import Button from '@/components/ui/Button';
 import BrandShape from '@/components/ui/BrandShape';
 import CtaBand from '@/components/sections/CtaBand';
-import yellowFlower from '@/assets/svg/flower-yellow.svg';
+import { rise, stagger } from '@/lib/motion';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 
-// Each offer carries a brand-shape bullet (the four-shape ramp from the journey
-// stops) and a tint that reads on the yellow panel — never yellow-on-yellow.
+// Each offer carries a brand-shape bullet and a full-strength tint that reads
+// on the yolk panel — pool and tomato only, never yolk on yolk.
 const offers = [
   {
     shape: 'daisy',
-    tint: 'var(--color-orange)',
-    title: 'Research & Concept Development',
+    tint: 'var(--tomato)',
+    title: 'Research & concept development',
     description:
       'Transforming early-stage ideas into clear product directions through research, exploration and concept development.',
   },
   {
     shape: 'clover',
-    tint: 'var(--color-blue)',
-    title: 'Product Design & Development',
+    tint: 'var(--pool)',
+    title: 'Product design & development',
     description:
       'Developing concepts into thoughtful, functional and engaging products.',
   },
   {
     shape: 'heart',
-    tint: 'var(--color-orange-deep)',
-    title: '3D Development & Product Visualization',
+    tint: 'var(--tomato)',
+    title: '3D development & product visualization',
     description:
       'Bringing concepts to life through 3D modeling and visual communication.',
   },
   {
     shape: 'star',
-    tint: 'var(--color-blue-deep)',
-    title: 'Product Documentation & Development Support',
+    tint: 'var(--pool)',
+    title: 'Product documentation & development support',
     description:
       'Preparing products for development and supporting the process through implementation.',
   },
 ];
 
-const spring = { type: 'spring', stiffness: 200, damping: 22 };
-
 function About() {
   const reduce = useReducedMotion();
   const [openIdx, setOpenIdx] = useState(null);
 
+  // Quick, then still: every reveal is the one 16px rise. Reduced motion
+  // renders in place.
+  const riseIn = (delay = 0) => ({
+    initial: reduce ? false : { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { ...rise, delay },
+  });
+  const riseInView = (delay = 0) => ({
+    initial: reduce ? false : { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-80px' },
+    transition: { ...rise, delay },
+  });
+
   return (
-    <div className="about-page">
+    <div className="about-page ground-pool">
       {/* ---------- Bio section ---------- */}
       <section className="about-bio">
         <div className="container about-bio__inner">
-          <motion.div
-            className="about-bio__copy"
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ ...spring, delay: 0.15 }}
-          >
-            <h1 className="about-bio__title">About Me</h1>
+          <motion.div className="about-bio__copy" {...riseIn(0.1)}>
+            <h1 className="about-bio__title">
+              About <span className="hl">me</span>
+            </h1>
 
             <div className="about-bio__text">
               <p>
-                Hi there, I'm Shiran Bar, an industrial designer specializing in
-                toys and baby products.
+                Hi there, I&apos;m Shiran Bar, an industrial designer
+                specializing in toys and baby products.
               </p>
 
               <p>
                 I graduated from{' '}
-                <span className="about-chip about-chip--a">Shenkar College</span>,
-                interned at <span className="about-chip about-chip--b">HAPE</span>{' '}
-                in China, and worked at{' '}
-                <span className="about-chip about-chip--c">Tiny Love</span>{' '}
+                <span className="about-chip">Shenkar College</span>, interned
+                at <span className="about-chip">HAPE</span> in China, and
+                worked at <span className="about-chip">Tiny Love</span>{' '}
                 designing a wide range of baby products, from soft toys to
                 electronic developmental items.
               </p>
 
               <p>
-                I'm inspired by the beautiful simplicity of babies: their
+                I&apos;m inspired by the beautiful simplicity of babies: their
                 curiosity, instinct to play, and unfiltered reactions. This
                 drives me to create designs that are both intuitive and
                 emotionally engaging.
@@ -92,21 +100,15 @@ function About() {
 
               <p>
                 I create toys that inspire, empower, and spark joy. Skilled in
-                concept development and hands-on product design, I'm open to
-                freelance projects, creative collaborations, and contracting
+                concept development and hands-on product design, I&apos;m open
+                to freelance projects, creative collaborations, and contracting
                 opportunities.
               </p>
-
-              <p className="about-bio__signoff">
-                Simple, smart, and full of{' '}
-                {/* Keep the star glued to the last word so it never orphans on
-                    its own line as the column narrows. */}
-                <span className="about-bio__signoff-last">
-                  wonder
-                  <BrandShape shape="star" className="about-bio__signoff-star" />
-                </span>
-              </p>
             </div>
+
+            <p className="about-bio__signoff">
+              Simple, smart, and full of <span className="hl">wonder</span>
+            </p>
 
             <Button
               as={Link}
@@ -115,65 +117,25 @@ function About() {
               size="md"
               className="about-bio__cta"
             >
-              Let's Chat
+              Let&apos;s chat
             </Button>
           </motion.div>
 
-          <motion.div
-            className="about-bio__photo"
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ ...spring, delay: 0.3 }}
-          >
+          <motion.div className="about-bio__photo" {...riseIn(0.2)}>
             <div className="about-bio__photo-frame">
-              <div className="about-bio__photo-placeholder">
+              <div className="about-bio__photo-img">
                 <img src={shiranBar} alt="Shiran Bar" />
               </div>
 
-              <motion.div
-                className="about-bio__hello"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 12,
-                  delay: 0.6,
-                }}
-                /* Playful pop on hover, like the hero motifs */
-                whileHover={{
-                  scale: 1.12,
-                  transition: { type: 'spring', stiffness: 300, damping: 14 },
-                }}
-                whileTap={{ scale: 1.04 }}
-              >
-                <img
-                  src={yellowFlower}
-                  alt=""
-                  className="about-bio__hello-shape"
-                  aria-hidden="true"
-                />
-                <span className="about-bio__hello-text">Hello!</span>
+              {/* Two still motifs keep the portrait company — a yolk flower
+                  carrying the greeting and a yolk heart. Yolk on pool and on
+                  the paper frame, never on its own colour. */}
+              <motion.div className="about-bio__hello" {...riseIn(0.45)}>
+                <BrandShape shape="flower2" className="about-bio__hello-shape" />
+                <span className="about-bio__hello-text">Hello</span>
               </motion.div>
 
-              {/* A coral heart keeps the "Hello!" flower company — two badges,
-                  no more, so the frame stays a photo not a sticker sheet. */}
-              <motion.div
-                className="about-bio__heart"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400,
-                  damping: 12,
-                  delay: 0.75,
-                }}
-                whileHover={{
-                  scale: 1.12,
-                  transition: { type: 'spring', stiffness: 300, damping: 14 },
-                }}
-                whileTap={{ scale: 1.04 }}
-              >
+              <motion.div className="about-bio__heart" {...riseIn(0.55)}>
                 <BrandShape shape="heart" />
               </motion.div>
             </div>
@@ -181,24 +143,17 @@ function About() {
         </div>
       </section>
 
-      {/* ---------- What I Offer ---------- */}
-      <motion.section
-        className="about-offer"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ ...spring }}
-      >
+      {/* ---------- My approach — one yolk panel inside the pool page ---------- */}
+      <section className="about-offer">
         <div className="container">
-          <div className="about-offer__panel">
-            <motion.div
-              className="about-offer__intro"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ ...spring, delay: 0.15 }}
-            >
-              <h2 className="about-offer__title">My Approach</h2>
+          <motion.div
+            className="about-offer__panel ground-yolk"
+            {...riseInView()}
+          >
+            <div className="about-offer__intro">
+              <h2 className="about-offer__title">
+                My <span className="hl">approach</span>
+              </h2>
 
               <p className="about-offer__text">
                 I help brands, startups and entrepreneurs transform ideas into
@@ -211,91 +166,82 @@ function About() {
               </p>
 
               <Button as={Link} to="/services" variant="primary" size="md">
-                Explore My Services
+                Explore my services
               </Button>
-            </motion.div>
+            </div>
 
             <ul className="about-offer__list">
-              {offers.map((offer, idx) => (
-                <motion.li
-                  key={idx}
-                  className="about-offer__item"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ ...spring, delay: 0.1 + idx * 0.08 }}
-                >
-                  <motion.button
-                    className="about-offer__row"
-                    onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-                    aria-expanded={openIdx === idx}
-                    whileTap={{ scale: 0.98 }}
+              {offers.map((offer, idx) => {
+                const open = openIdx === idx;
+                return (
+                  <motion.li
+                    key={offer.title}
+                    className="about-offer__item"
+                    {...riseInView(0.1 + idx * stagger)}
                   >
-                    <span className="about-offer__row-label">
-                      {/* Shape bullet — celebratory spin when its row opens */}
-                      <motion.span
-                        className="about-offer__bullet"
-                        style={{ color: offer.tint }}
-                        animate={{
-                          rotate: openIdx === idx && !reduce ? 360 : 0,
-                        }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 200,
-                          damping: 16,
-                        }}
-                      >
-                        <BrandShape shape={offer.shape} />
-                      </motion.span>
-                      <span>{offer.title}</span>
-                    </span>
-
-                    <motion.span
-                      className="about-offer__toggle"
-                      animate={{ rotate: openIdx === idx ? 180 : 0 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 20,
-                      }}
+                    <button
+                      type="button"
+                      className="about-offer__row"
+                      onClick={() => setOpenIdx(open ? null : idx)}
+                      aria-expanded={open}
+                      aria-controls={`about-offer-${idx}`}
                     >
-                      {openIdx === idx ? (
-                        <Minus size={20} />
-                      ) : (
-                        <Plus size={20} />
+                      <span className="about-offer__row-label">
+                        <span
+                          className="about-offer__bullet"
+                          style={{ color: offer.tint }}
+                        >
+                          <BrandShape shape={offer.shape} />
+                        </span>
+                        <span>{offer.title}</span>
+                      </span>
+
+                      <span className="about-offer__toggle" aria-hidden="true">
+                        {open ? (
+                          <Minus size={20} strokeWidth={2} />
+                        ) : (
+                          <Plus size={20} strokeWidth={2} />
+                        )}
+                      </span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {open && (
+                        <motion.div
+                          id={`about-offer-${idx}`}
+                          className="about-offer__detail-wrap"
+                          initial={reduce ? false : { height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={
+                            reduce
+                              ? { opacity: 0, transition: { duration: 0 } }
+                              : { height: 0, opacity: 0 }
+                          }
+                          transition={rise}
+                        >
+                          <p className="about-offer__detail">
+                            {offer.description}
+                          </p>
+                        </motion.div>
                       )}
-                    </motion.span>
-                  </motion.button>
-
-                  <AnimatePresence>
-                    {openIdx === idx && (
-                      <motion.p
-                        className="about-offer__detail"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 300,
-                          damping: 28,
-                        }}
-                      >
-                        {offer.description}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </motion.li>
-              ))}
+                    </AnimatePresence>
+                  </motion.li>
+                );
+              })}
             </ul>
-          </div>
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* Give the page a destination — blue page into the orange closing beat */}
+      {/* Give the page a destination — the shared sand closing panel */}
       <CtaBand
-        title="Let's make something wonder-full"
+        title={
+          <>
+            Let&apos;s make something <span className="hl">wonder-full</span>
+          </>
+        }
         text="If it's playful, tactile and made for small hands, I'd love to hear about it."
-        buttonLabel="Let's Chat"
+        buttonLabel="Let's chat"
       />
     </div>
   );

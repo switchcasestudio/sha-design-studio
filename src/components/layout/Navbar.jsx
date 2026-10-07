@@ -11,11 +11,12 @@ import './Navbar.css';
 // The open-menu items = the primary nav + the Inquire route, as one list.
 const MOBILE_MENU = [...navigation, { href: '/inquire', label: 'Inquire' }];
 
+// Each route's ground colour; the mark swaps to the coat made for that ground.
 const THEMES = {
-  '/projects': { route: 'navbar--projects', logo: 'white' },
-  '/services': { route: 'navbar--services', logo: 'orange' },
-  '/about':    { route: 'navbar--about',    logo: 'yellow' },
-  '/inquire':  { route: 'navbar--inquire',  logo: 'orange' },
+  '/projects': { route: 'navbar--projects', logo: 'tomato' },
+  '/services': { route: 'navbar--services', logo: 'yolk' },
+  '/about':    { route: 'navbar--about',    logo: 'pool' },
+  '/inquire':  { route: 'navbar--inquire',  logo: 'cream' },
 };
 
 function Navbar() {
@@ -39,7 +40,7 @@ function Navbar() {
   const themeKey = Object.keys(THEMES).find((path) =>
     pathname.startsWith(path)
   );
-  const theme = THEMES[themeKey] || { route: 'navbar--home', logo: 'orange' };
+  const theme = THEMES[themeKey] || { route: 'navbar--home', logo: 'cream' };
   const closeMobile = () => setMobileOpen(false);
 
   // ---- Open-menu side effects: scroll lock + focus management ----
@@ -97,28 +98,13 @@ function Navbar() {
     };
   }, [mobileOpen]);
 
-  // Cross-fade + subtle scale, growing from the hamburger (transform-origin set
-  // on the element below). Enter ~200ms ease-out; exit faster (~140ms). Reduced
-  // motion collapses to an instant opacity swap with no scale.
-  const overlayMotion = reduce
-    ? {
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0 } },
-        exit: { opacity: 0, transition: { duration: 0 } },
-      }
-    : {
-        initial: { opacity: 0, scale: 0.97 },
-        animate: {
-          opacity: 1,
-          scale: 1,
-          transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-        },
-        exit: {
-          opacity: 0,
-          scale: 0.97,
-          transition: { duration: 0.14, ease: [0.65, 0, 0.35, 1] },
-        },
-      };
+  // Panels swap colour in one cut: the overlay appears instantly, then the
+  // links make a single short rise. Reduced motion drops the rise.
+  const overlayMotion = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0 } },
+    exit: { opacity: 0, transition: { duration: 0 } },
+  };
 
   return (
     <header
@@ -131,13 +117,7 @@ function Navbar() {
           onClick={closeMobile}
           aria-label="Sha Design Studio — Home"
         >
-          <motion.div
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-          >
-            <Logo size={48} variant={theme.logo} />
-          </motion.div>
+          <Logo size={58} ground={theme.logo} />
         </Link>
 
         <nav className="navbar__nav" aria-label="Primary">
@@ -152,14 +132,6 @@ function Navbar() {
                 >
                   {({ isActive }) => (
                     <>
-                      {/* Shared-layout pill springs between links on route change */}
-                      {isActive && (
-                        <motion.span
-                          layoutId="navbar-active-pill"
-                          className="navbar__pill"
-                          transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                        />
-                      )}
                       <span className="navbar__link-label">{item.label}</span>
                     </>
                   )}
@@ -170,24 +142,18 @@ function Navbar() {
         </nav>
 
         <div className="navbar__actions">
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          {/* Dedicated contact route; active when you're on it */}
+          <NavLink
+            to="/inquire"
+            className={({ isActive }) =>
+              `navbar__cta${isActive ? ' navbar__cta--active' : ''}`
+            }
           >
-            {/* Dedicated contact route; active when you're on it */}
-            <NavLink
-              to="/inquire"
-              className={({ isActive }) =>
-                `navbar__cta${isActive ? ' navbar__cta--active' : ''}`
-              }
-            >
-              Inquire Now
-            </NavLink>
-          </motion.div>
+            Inquire
+          </NavLink>
         </div>
 
-        <motion.button
+        <button
           ref={toggleRef}
           type="button"
           className="navbar__toggle"
@@ -195,11 +161,9 @@ function Navbar() {
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
           aria-label="Open menu"
-          whileTap={{ scale: 0.9, rotate: 90 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 15 }}
         >
-          <Menu size={24} />
-        </motion.button>
+          <Menu size={22} strokeWidth={2} />
+        </button>
       </div>
 
       {/* ---- Full-screen overlay menu ----
@@ -218,7 +182,6 @@ function Navbar() {
               role="dialog"
               aria-modal="true"
               aria-label="Main menu"
-              style={{ transformOrigin: 'top right' }}
               initial={overlayMotion.initial}
               animate={overlayMotion.animate}
               exit={overlayMotion.exit}
@@ -230,7 +193,7 @@ function Navbar() {
                   onClick={closeMobile}
                   aria-label="Sha Design Studio — Home"
                 >
-                  <Logo size={48} variant={theme.logo} />
+                  <Logo size={58} ground={theme.logo} />
                 </Link>
 
                 <button
@@ -240,7 +203,7 @@ function Navbar() {
                   onClick={closeMobile}
                   aria-label="Close menu"
                 >
-                  <X size={24} />
+                  <X size={22} strokeWidth={2} />
                 </button>
               </div>
 
@@ -251,7 +214,7 @@ function Navbar() {
                   animate={reduce ? false : 'show'}
                   variants={{
                     show: {
-                      transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+                      transition: { staggerChildren: 0.05, delayChildren: 0 },
                     },
                   }}
                 >
@@ -259,11 +222,11 @@ function Navbar() {
                     <motion.li
                       key={item.href}
                       variants={{
-                        hidden: { opacity: 0, y: 20 },
+                        hidden: { opacity: 0, y: 16 },
                         show: {
                           opacity: 1,
                           y: 0,
-                          transition: { type: 'spring', stiffness: 300, damping: 26 },
+                          transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
                         },
                       }}
                     >

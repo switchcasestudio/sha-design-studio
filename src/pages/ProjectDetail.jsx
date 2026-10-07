@@ -1,26 +1,40 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
-import { ZoomIn } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ZoomIn } from 'lucide-react';
 import { projects, getProjectById } from '@/data';
 import { getCaseStudy } from '@/data/caseStudies';
 import { getContentForProject } from '@/data/projectContent';
 import { siteConfig } from '@/utils/siteConfig';
 import PhotoGallery from '@/components/ui/PhotoGallery';
 import Lightbox from '@/components/ui/Lightbox';
+import { rise } from '@/lib/motion';
 import './ProjectDetail.css';
 
-const spring = { type: 'spring', stiffness: 200, damping: 22 };
+// The one phrase per project title that sits in the highlight block. Kept to
+// 1–3 words (the block never wraps). Falls back to the title's last word.
+const TITLE_HIGHLIGHT = {
+  'here-i-grow-activity-center': 'Here I Grow',
+  'treasure-the-ocean-gymini': 'Treasure the Ocean',
+  'wooden-toy-design': 'Wooden Toy',
+  'garden-of-adventures-packaging': 'Adventures',
+  'tiny-rockers-shape-sorter': 'Sorter',
+  'mobile-character-design': 'Mobiles',
+};
 
-// Tags reveal in a staggered cascade, then each pops on hover.
-const tagsContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06, delayChildren: 0.25 } },
-};
-const tagItem = {
-  hidden: { opacity: 0, y: 8, scale: 0.92 },
-  show: { opacity: 1, y: 0, scale: 1, transition: spring },
-};
+// Split a title around its highlight phrase → [before, phrase, after]
+function splitTitle(id, title) {
+  const words = title.trim().split(/\s+/);
+  const phrase = TITLE_HIGHLIGHT[id] ?? words[words.length - 1];
+  const at = title.indexOf(phrase);
+  if (at === -1) {
+    return [words.slice(0, -1).join(' '), words[words.length - 1], ''];
+  }
+  return [title.slice(0, at), phrase, title.slice(at + phrase.length)];
+}
+
+// "2-in-1" must not wrap at its hyphens — swap in U+2011 non-breaking hyphens
+const noBreakHyphens = (text) => text.replace(/-/g, '\u2011');
 
 // Process steps cascade in one after another as the section scrolls into view.
 const processTrack = {
@@ -28,8 +42,8 @@ const processTrack = {
   show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 };
 const processStep = {
-  hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: spring },
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: rise },
 };
 
 // How a project's multiple collections relate to each other. Kept app-side
@@ -77,10 +91,10 @@ function useReveal() {
   const reduce = useReducedMotion();
   if (reduce) return {};
   return {
-    initial: { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 16 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: '-80px' },
-    transition: { ...spring, delay: 0.05 },
+    transition: { ...rise, delay: 0.05 },
   };
 }
 
@@ -93,15 +107,19 @@ function ProjectOverview({ entries }) {
   const multi = entries.length > 1;
   return (
     <motion.section className="pd-overview" aria-label="Overview" {...reveal}>
-      <span className="pd-eyebrow">Overview</span>
       <div className="pd-overview__body">
-        {entries.map((entry) => (
+        {entries.map((entry, e) => (
           <div key={entry.id} className="pd-overview__entry">
             {multi && (
               <h3 className="pd-overview__entry-title">{entry.title}</h3>
             )}
             {entry.overview.map((paragraph, i) => (
-              <p key={i} className="pd-overview__para">
+              <p
+                key={i}
+                className={`pd-overview__para${
+                  e === 0 && i === 0 ? ' pd-overview__para--lead' : ''
+                }`}
+              >
                 {paragraph}
               </p>
             ))}
@@ -116,8 +134,10 @@ function ProjectOverview({ entries }) {
 function ProjectTimeline({ steps }) {
   const reduce = useReducedMotion();
   return (
-    <section className="pd-process" aria-label="Design process">
-      <span className="pd-eyebrow">Process</span>
+    <section className="pd-process" aria-labelledby="pd-process-title">
+      <h2 id="pd-process-title" className="pd-heading">
+        How it <span className="hl">took shape</span>
+      </h2>
       <motion.ol
         className="pd-process__track"
         variants={reduce ? undefined : processTrack}
@@ -130,8 +150,6 @@ function ProjectTimeline({ steps }) {
             key={step.n}
             className="pd-process__step"
             variants={reduce ? undefined : processStep}
-            whileHover={reduce ? undefined : { y: -8 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 22 }}
           >
             <span className="pd-process__num">{step.n}</span>
             <h3 className="pd-process__step-title">{step.title}</h3>
@@ -150,8 +168,14 @@ function ProjectSketches({ sketches, onOpen }) {
   let lightboxIndex = -1;
 
   return (
-    <motion.section className="pd-sketches" aria-label="Sketches" {...reveal}>
-      <span className="pd-eyebrow">Sketches</span>
+    <motion.section
+      className="pd-sketches"
+      aria-labelledby="pd-sketches-title"
+      {...reveal}
+    >
+      <h2 id="pd-sketches-title" className="pd-heading">
+        From the <span className="hl">sketchbook</span>
+      </h2>
       <div className="pd-sketches__grid">
         {sketches.map((sketch, i) => {
           const interactive = Boolean(sketch.src && onOpen);
@@ -181,13 +205,17 @@ function ProjectSketches({ sketches, onOpen }) {
                   onClick={() => onOpen(at)}
                   aria-label={`Open sketch: ${sketch.alt}`}
                 >
-                  {media}
-                  <span className="pd-sketches__zoom" aria-hidden="true">
-                    <ZoomIn size={20} />
+                  <span className="pd-sketches__media">
+                    {media}
+                    <span className="pd-sketches__zoom" aria-hidden="true">
+                      <ZoomIn size={20} strokeWidth={2} />
+                    </span>
                   </span>
                 </button>
               ) : (
-                <div className="pd-sketches__frame">{media}</div>
+                <div className="pd-sketches__frame">
+                  <div className="pd-sketches__media">{media}</div>
+                </div>
               )}
 
               {sketch.caption && (
@@ -205,6 +233,7 @@ function ProjectSketches({ sketches, onOpen }) {
 
 function ProjectDetail() {
   const { projectId } = useParams();
+  const reduceMotion = useReducedMotion();
   const project = getProjectById(projectId);
   const caseStudy = getCaseStudy(projectId);
   // Index into the active image set currently open in the lightbox (null = closed)
@@ -253,14 +282,12 @@ function ProjectDetail() {
   // Multi-collection projects show a switcher; selecting one swaps every
   // displayed image set to that collection. Single-collection projects fall
   // back to the flat image list. A "family" is distinct products that share a
-  // style (shown as larger product cards); the default is a colorway set.
+  // style; the default is a colorway set.
   const collections = project.collections ?? [];
   const hasCollections = collections.length > 1;
   const collectionKind = COLLECTION_KIND[project.id];
   const isFamily = collectionKind === 'family';
   const isMixed = collectionKind === 'mixed';
-  // Both families and mixed sets read better as larger, name-forward cards.
-  const useCards = isFamily || isMixed;
   const collectionsHeading = isMixed
     ? 'In this project'
     : isFamily
@@ -280,145 +307,165 @@ function ProjectDetail() {
   // Real (non-placeholder) sketches, for the sketch lightbox
   const sketchImages = (caseStudy?.sketches ?? []).filter((s) => s.src);
 
+  const [titleBefore, titleHl, titleAfter] = splitTitle(
+    project.id,
+    project.title
+  ).map(noBreakHyphens);
+
   const selectCollection = (i) => {
     setCollectionIndex(i);
     setLightboxIndex(null);
   };
 
-  return (
-    <div className="project-detail">
-      <div className="container">
-        {/* ---------- Header: identity left, reference meta right ---------- */}
-        <motion.header
-          className="project-detail__header"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...spring, delay: 0.05 }}
-        >
-          <Link to="/projects" className="project-detail__back">
-            ← All Projects
-          </Link>
+  const hero = project.heroImage ?? project.images[0];
 
-          <div className="project-detail__header-grid">
-            <div className="project-detail__intro">
+  return (
+    <div className="project-detail ground-tomato">
+      {/* ---------- Hero: identity + the product, straight on the tomato page ---------- */}
+      <motion.header
+        className="pd-hero"
+        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...rise, delay: 0.05 }}
+      >
+        <div className="container pd-hero__grid">
+          <div className="pd-hero__copy">
+            <Link to="/projects" className="pd-pill pd-pill--back">
+              <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
+              All projects
+            </Link>
+
+            <div className="pd-hero__identity">
               <span className="project-detail__category">
                 {project.category}
               </span>
-              <h1 className="project-detail__title">{project.title}</h1>
-
-              {overviewEntries.length > 0 && (
-                <ProjectOverview entries={overviewEntries} />
-              )}
-
-              <motion.ul
-                className="project-detail__tags"
-                variants={tagsContainer}
-                initial="hidden"
-                animate="show"
-              >
-                {project.tags.map((tag) => (
-                  <motion.li
-                    key={tag}
-                    className="project-detail__tag"
-                    variants={tagItem}
-                    whileHover={{ scale: 1.07, y: -2 }}
-                    whileTap={{ scale: 0.96 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                  >
-                    {tag}
-                  </motion.li>
-                ))}
-              </motion.ul>
+              <h1 className="project-detail__title">
+                {titleBefore}
+                <span className="hl">{titleHl}</span>
+                {titleAfter}
+              </h1>
             </div>
+          </div>
 
-            <aside className="project-detail__aside">
-              <dl className="project-detail__meta">
-                <div className="project-detail__meta-item">
-                  <dt>Client</dt>
-                  <dd>{project.client}</dd>
-                </div>
+          {hero && (
+            <figure className="pd-hero__media">
+              <img
+                src={hero.src}
+                alt={hero.alt}
+                fetchpriority="high"
+                decoding="async"
+              />
+            </figure>
+          )}
+        </div>
+      </motion.header>
 
+      {/* ---------- Story left, reference card right — one cream panel, so
+          the long read sits ink on cream rather than on tomato ---------- */}
+      <section className="pd-story panel ground-cream" aria-label="About the project">
+        <div className="container project-detail__header-grid">
+          <div className="project-detail__intro">
+            {overviewEntries.length > 0 && (
+              <ProjectOverview entries={overviewEntries} />
+            )}
+
+            <ul className="project-detail__tags" aria-label="Disciplines">
+              {project.tags.map((tag) => (
+                <li key={tag} className="project-detail__tag">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <aside className="project-detail__aside">
+            <dl className="project-detail__meta">
+              <div className="project-detail__meta-item">
+                <dt>Client</dt>
+                <dd>{project.client}</dd>
+              </div>
+
+              <div className="project-detail__meta-item">
+                <dt>Role</dt>
+                <dd>
+                  <ul className="project-detail__roles">
+                    {project.role.map((role) => (
+                      <li key={role}>{role}</li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+
+              {caseStudy?.brief?.goals?.length > 0 && (
                 <div className="project-detail__meta-item">
-                  <dt>Role</dt>
+                  <dt>Goals</dt>
                   <dd>
                     <ul className="project-detail__roles">
-                      {project.role.map((role) => (
-                        <li key={role}>{role}</li>
+                      {caseStudy.brief.goals.map((goal) => (
+                        <li key={goal}>{goal}</li>
                       ))}
                     </ul>
                   </dd>
                 </div>
-
-                {caseStudy?.brief?.goals?.length > 0 && (
-                  <div className="project-detail__meta-item">
-                    <dt>Goals</dt>
-                    <dd>
-                      <ul className="project-detail__roles">
-                        {caseStudy.brief.goals.map((goal) => (
-                          <li key={goal}>{goal}</li>
-                        ))}
-                      </ul>
-                    </dd>
-                  </div>
-                )}
-              </dl>
-
-              {/* Collection switcher lives in the aside so it fills the right
-                  column beside the overview; selecting one swaps the gallery. */}
-              {hasCollections && (
-                <div
-                  className={`project-detail__collections project-detail__collections--aside${
-                    useCards ? ' project-detail__collections--cards' : ''
-                  }`}
-                  role="group"
-                  aria-label={collectionsHeading}
-                >
-                  <span className="project-detail__collections-label">
-                    {collectionsHeading}
-                    {isFamily && (
-                      <span className="project-detail__collections-count">
-                        {' · '}
-                        {collections.length}
-                      </span>
-                    )}
-                  </span>
-                  <ul className="project-detail__swatches">
-                    {collections.map((collection, i) => (
-                      <li key={collection.slug}>
-                        <button
-                          type="button"
-                          className="project-detail__swatch"
-                          aria-pressed={i === collectionIndex}
-                          onClick={() => selectCollection(i)}
-                        >
-                          <span className="project-detail__swatch-thumb">
-                            <img
-                              src={collection.images[0].src}
-                              alt=""
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          </span>
-                          <span className="project-detail__swatch-name">
-                            {collectionLabels[i]}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               )}
-            </aside>
-          </div>
-        </motion.header>
+            </dl>
+          </aside>
+        </div>
+      </section>
 
-        {/* ---------- Fanned photo stack ---------- */}
-        <PhotoGallery
-          key={activeCollection ? activeCollection.slug : 'all'}
-          images={fanImages}
-          max={FAN_COUNT}
-          onPhotoTap={setLightboxIndex}
-        />
+      <div className="container">
+        {/* ---------- Gallery, with the collection switcher right above the
+            photos it swaps ---------- */}
+        <section className="pd-gallery" aria-label="Product photos">
+          {hasCollections && (
+            <div
+              className="project-detail__collections"
+              role="group"
+              aria-label={collectionsHeading}
+            >
+              <span className="project-detail__collections-label">
+                {collectionsHeading}
+                {isFamily && (
+                  <span className="project-detail__collections-count">
+                    {' · '}
+                    {collections.length}
+                  </span>
+                )}
+              </span>
+              <ul className="project-detail__swatches">
+                {collections.map((collection, i) => (
+                  <li key={collection.slug}>
+                    <button
+                      type="button"
+                      className="project-detail__swatch"
+                      aria-pressed={i === collectionIndex}
+                      onClick={() => selectCollection(i)}
+                    >
+                      <span className="project-detail__swatch-thumb">
+                        <img
+                          src={collection.images[0].src}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                      <span className="project-detail__swatch-name">
+                        {collectionLabels[i]}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <PhotoGallery
+            key={activeCollection ? activeCollection.slug : 'all'}
+            images={fanImages}
+            max={FAN_COUNT}
+            onPhotoTap={setLightboxIndex}
+          />
+        </section>
 
         <Lightbox
           images={fanImages}
@@ -428,7 +475,7 @@ function ProjectDetail() {
         />
 
         {/* ---------- Case study: process · sketches ---------- */}
-        {caseStudy?.process?.length > 0 && (
+        {caseStudy?.hasOwnProcess && (
           <ProjectTimeline steps={caseStudy.process} />
         )}
         {caseStudy?.sketches?.length > 0 && (
@@ -447,19 +494,26 @@ function ProjectDetail() {
 
         {/* ---------- Footer nav ---------- */}
         <nav className="project-detail__nav" aria-label="Project navigation">
-          <Link to="/projects" className="project-detail__back">
-            ← All Projects
+          <Link to="/projects" className="pd-pill pd-pill--back">
+            <ArrowLeft size={20} strokeWidth={2} aria-hidden="true" />
+            All projects
           </Link>
 
-          <Link
-            to={`/projects/${nextProject.id}`}
-            className="project-detail__next"
-          >
-            <span className="project-detail__next-label">Next Project</span>
-            <span className="project-detail__next-title">
-              {nextProject.title} →
+          <div className="project-detail__next">
+            <span className="project-detail__next-label" id="pd-next-label">
+              Next project
             </span>
-          </Link>
+            <Link
+              to={`/projects/${nextProject.id}`}
+              className="pd-pill pd-pill--next"
+              aria-describedby="pd-next-label"
+            >
+              <span className="project-detail__next-title">
+                {noBreakHyphens(nextProject.title)}
+              </span>
+              <ArrowRight size={20} strokeWidth={2} aria-hidden="true" />
+            </Link>
+          </div>
         </nav>
       </div>
     </div>

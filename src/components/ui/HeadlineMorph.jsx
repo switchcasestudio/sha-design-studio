@@ -10,9 +10,9 @@ import './HeadlineMorph.css';
 // Brand tints. `excludeColors` (e.g. ['red'] in the hero) drops a tint so the
 // shapes never blend into the red wordmark.
 const PALETTE = {
-  red: 'var(--color-orange)',
-  blue: 'var(--color-blue)',
-  yellow: 'var(--color-yellow)',
+  red: 'var(--tomato)',
+  blue: 'var(--pool)',
+  yellow: 'var(--yolk)',
 };
 
 // Each letter morphs only into geometry that loosely echoes its silhouette, so

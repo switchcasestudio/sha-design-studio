@@ -1,33 +1,25 @@
 /* ==========================================================================
    Navbar — per-page color theme
-   Each route sets three custom properties: --nav-bg, --nav-fg, --nav-accent.
+   Each route sets its ground (--nav-bg), text, Inquire pill and motif colour.
    Everything inside the navbar reads from these variables.
    ========================================================================== */
 
 .navbar {
-  /* Defaults (Home) — brand orange logo, links, and CTA on cream */
-  --nav-bg: var(--color-cream);
-  --nav-fg: var(--color-orange);
-  --nav-accent: var(--color-orange);
-  /* Focus ring contrasts the cream bar */
-  --focus-ring: var(--color-ink);
+  /* Defaults (Home) — cream ground */
+  --nav-bg: var(--cream);
+  --nav-fg: var(--ink);
+  --nav-cta-bg: var(--tomato);
+  --nav-cta-fg: var(--ink);
+  --nav-motif: var(--yolk);
+  --focus-ring: var(--ink);
 
   position: sticky;
   top: 0;
   z-index: var(--z-nav);
-  /* Slightly translucent + blur: page content glows through when it slides under */
-  background-color: color-mix(in srgb, var(--nav-bg) 90%, transparent);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  /* No bar of its own: the bar is the page's ground, so the mark always sits on
+     the colour its coat was made for. Solid, no blur, no shadow. */
+  background-color: var(--nav-bg);
   color: var(--nav-fg);
-  transition:
-    background-color var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
-}
-
-/* Elevation cue once content scrolls underneath */
-.navbar--scrolled {
-  box-shadow: 0 4px 24px color-mix(in srgb, var(--color-ink) 10%, transparent);
 }
 
 .navbar--scrolled .navbar__inner {
@@ -38,41 +30,42 @@
    the route classes (.navbar--projects, …), applied to the overlay too, win on
    source order. The overlay's layout lives further down. */
 .mobile-overlay {
-  --nav-bg: var(--color-cream);
-  --nav-fg: var(--color-orange);
-  --nav-accent: var(--color-orange);
-  --focus-ring: var(--color-ink);
+  --nav-bg: var(--cream);
+  --nav-fg: var(--ink);
+  --nav-cta-bg: var(--tomato);
+  --nav-cta-fg: var(--ink);
+  --nav-motif: var(--yolk);
+  --focus-ring: var(--ink);
 }
 
+/* Work — tomato ground; Inquire flips to yolk so it doesn't vanish */
 .navbar--projects {
-  --nav-bg: var(--color-orange);
-  --nav-fg: var(--color-cream);
-  --nav-accent: var(--color-white);
-  --focus-ring: var(--color-cream);
+  --nav-bg: var(--tomato);
+  --nav-fg: var(--ink);
+  --nav-cta-bg: var(--yolk);
+  --nav-cta-fg: var(--ink);
+  --nav-motif: var(--paper);
+  --focus-ring: var(--ink);
 }
 
 .navbar--services {
-  --nav-bg: var(--color-yellow);
-  --nav-fg: var(--color-ink);
-  /* Accent was orange (2.46:1 on yellow — fails). Ink reads at 10.97:1; the
-     active link stays distinct via the pill + heavier weight below. */
-  --nav-accent: var(--color-ink);
-  --focus-ring: var(--color-ink);
+  --nav-bg: var(--yolk);
+  --nav-fg: var(--ink);
+  --nav-motif: var(--pool);
+  --focus-ring: var(--ink);
 }
 
 .navbar--about {
-  --nav-bg: var(--color-blue);
-  --nav-fg: var(--color-cream);
-  --nav-accent: var(--color-yellow);
-  --focus-ring: var(--color-cream);
+  --nav-bg: var(--pool);
+  --nav-fg: var(--paper);
+  --nav-motif: var(--yolk);
+  --focus-ring: var(--paper);
 }
 
-/* Inquire — cream bar like Home (orange logo/links on cream) */
 .navbar--inquire {
-  --nav-bg: var(--color-cream);
-  --nav-fg: var(--color-orange);
-  --nav-accent: var(--color-orange);
-  --focus-ring: var(--color-ink);
+  --nav-bg: var(--cream);
+  --nav-fg: var(--ink);
+  --focus-ring: var(--ink);
 }
 
 /* ── Layout ── */
@@ -82,7 +75,7 @@
   justify-content: space-between;
   gap: var(--space-6);
   padding-block: var(--space-4);
-  transition: padding var(--duration-base) var(--ease-out);
+  transition: padding var(--dur-hover) var(--ease-out);
 }
 
 .navbar__logo {
@@ -94,7 +87,7 @@
 .navbar__logo img {
   display: block;
   width: auto;
-  max-height: 48px;
+  height: 40px;
 }
 
 .navbar__nav {
@@ -106,58 +99,42 @@
 .navbar__list {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--gap-pill);
 }
 
-/* ── Links ── */
-.navbar__link {
+/* ── Pills ── Inter Tight 500, 14px. Oat by default, ink when active. */
+.navbar__link,
+.navbar__cta {
   display: inline-flex;
   align-items: center;
-  min-height: 44px; /* comfortable touch target */
-  font-family: var(--font-body);
-  font-size: var(--text-lg);
+  min-height: 40px;
+  padding: 0 var(--space-5);
+  font-family: var(--font-sans);
+  font-size: var(--type-ui);
   font-weight: var(--weight-medium);
-  color: var(--nav-fg);
-  padding: var(--space-2) var(--space-4);
+  line-height: 1;
   border-radius: var(--radius-pill);
-  position: relative;
   transition:
-    color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    opacity var(--duration-fast) var(--ease-out);
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+
+.navbar__link {
+  background-color: var(--oat);
+  color: var(--ink);
 }
 
 .navbar__link:hover {
-  color: var(--nav-accent);
-  background-color: color-mix(in srgb, var(--nav-accent) 8%, transparent);
+  background-color: var(--sand);
 }
 
-/* Pressed feedback (transform/opacity only; respects reduced-motion globally) */
-.navbar__link:active {
-  transform: scale(0.96);
-  opacity: 0.85;
+.navbar__link--active,
+.navbar__link--active:hover {
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
-.navbar__link--active {
-  color: var(--nav-accent);
-  font-weight: var(--weight-semibold);
-}
-
-/* Shared-layout pill rendered behind the active link (springs between routes) */
-.navbar__pill {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-pill);
-  background-color: color-mix(in srgb, var(--nav-accent) 14%, transparent);
-}
-
-.navbar__link-label {
-  position: relative;
-  z-index: 1;
-}
-
-/* ── CTA button ── */
+/* ── Inquire pill ── */
 .navbar__actions {
   display: flex;
   align-items: center;
@@ -165,49 +142,14 @@
 }
 
 .navbar__cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: var(--space-2) var(--space-5);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: var(--weight-medium);
-  border: 2px solid var(--nav-accent);
-  border-radius: var(--radius-pill);
-  background-color: transparent;
-  color: var(--nav-accent);
-  transition:
-    background-color var(--duration-base) var(--ease-out),
-    color var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
+  background-color: var(--nav-cta-bg);
+  color: var(--nav-cta-fg);
 }
 
-.navbar__cta:hover {
-  background-color: var(--nav-accent);
-  color: var(--nav-bg);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--nav-accent) 35%, transparent);
-}
-
-/* Active: you're on /inquire. Ink fill + cream text (15.3:1) — legible on any
-   route bar, and distinct from the outline default. */
-.navbar__cta--active,
-.navbar--home .navbar__cta.navbar__cta--active {
-  background-color: var(--color-ink);
-  border-color: var(--color-ink);
-  color: var(--color-cream);
-}
-
-/* Home gets a filled orange CTA — explicit override of the outline default */
-.navbar--home .navbar__cta {
-  background-color: var(--color-orange);
-  border-color: var(--color-orange);
-  color: var(--color-cream);
-}
-
-.navbar--home .navbar__cta:hover {
-  background-color: var(--color-ink);
-  border-color: var(--color-ink);
-  color: var(--color-cream);
+.navbar__cta:hover,
+.navbar__cta--active {
+  background-color: var(--ink);
+  color: var(--paper);
 }
 
 /* ── Mobile toggle ── */
@@ -217,7 +159,8 @@
   height: 44px;
   align-items: center;
   justify-content: center;
-  color: var(--nav-accent);
+  background-color: var(--oat);
+  color: var(--ink);
   border-radius: var(--radius-pill);
 }
 
@@ -266,6 +209,10 @@
   display: inline-flex;
 }
 
+.navbar__toggle svg {
+  display: block;
+}
+
 .mobile-overlay__nav {
   /* Sit the links just below the top bar rather than filling the whole panel —
      a tidy stack near the top reads better than four items floating in space. */
@@ -280,50 +227,41 @@
   gap: var(--space-1);
 }
 
-/* Big chunky brand links (display face) instead of the plain body list. */
+/* Big display-size links in the brand face. */
 .navbar__mobile-link {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-4xl), 12vw, var(--text-6xl));
-  line-height: 1.15;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: clamp(44px, 12vw, 72px);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.05;
   color: var(--nav-fg);
-  padding: var(--space-2) 0;
-  transition:
-    color var(--duration-fast) var(--ease-out),
-    opacity var(--duration-fast) var(--ease-out);
+  padding: var(--space-1) 0;
 }
 
-/* Active route in the open menu: accent colour + a leading marker dot.
-   NavLink adds the `active` class automatically on the matched route. */
+/* Active route in the open menu: the one solid block, like a headline. */
 .navbar__mobile-link.active {
-  color: var(--nav-accent);
+  background-color: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius-hl);
+  padding-inline: 0.1em;
+  margin-inline: -0.1em;
 }
 
-.navbar__mobile-link.active::before {
-  content: '';
-  display: inline-block;
-  width: 0.32em;
-  height: 0.32em;
-  margin-right: var(--space-3);
-  border-radius: var(--radius-full);
-  background-color: var(--nav-accent);
-  flex-shrink: 0;
+.navbar--about .navbar__mobile-link.active {
+  background-color: var(--yolk);
+  color: var(--ink);
 }
 
-.navbar__mobile-link:active {
-  opacity: 0.7;
-}
-
-/* Decorative brand shape anchored to the bottom-right of the open menu. Soft
-   and low-contrast so it warms the panel without competing with the links. */
+/* Decorative brand shape anchored to the bottom-right of the open menu — one
+   flat fill at full strength, never on its own colour. */
 .mobile-overlay__motif {
   position: absolute;
   right: calc(-1 * var(--space-10));
   bottom: calc(-1 * var(--space-10));
   width: clamp(200px, 60vw, 340px);
-  color: var(--nav-accent);
-  opacity: 0.16;
+  color: var(--nav-motif);
   pointer-events: none;
   z-index: 0;
 }

@@ -29,11 +29,21 @@ function FrozenOutlet() {
   return frozen;
 }
 
+// The window's ground per route. Panels (and the footer) are inset from the
+// window, so the gaps around them must show the page's own colour.
+const GROUNDS = [
+  [/^\/projects/, 'tomato'],
+  [/^\/services/, 'yolk'],
+  [/^\/about/, 'pool'],
+];
+
 function Layout() {
   const { pathname } = useLocation();
+  const ground =
+    GROUNDS.find(([pattern]) => pattern.test(pathname))?.[1] ?? 'cream';
 
   return (
-    <div className="layout">
+    <div className={`layout layout--${ground}`}>
       <ScrollToTop />
       <Navbar />
       <main className="layout__main">

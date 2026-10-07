@@ -78,15 +78,8 @@ ol {
   isolation: isolate;
 }
 
-/* Focus visible — accessible focus rings */
-:focus-visible {
-  outline: 2px solid var(--color-orange);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
 /* Selection */
 ::selection {
-  background-color: var(--color-orange);
-  color: var(--color-cream);
+  background-color: var(--pool);
+  color: var(--paper);
 }

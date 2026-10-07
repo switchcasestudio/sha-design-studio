@@ -3,8 +3,7 @@
 
 /* ==========================================================================
    Section rhythm. Deliberately varied: the cream canvas breathes around the
-   journey, hugs the ink ticker tight, and the closing orange band goes
-   full-bleed. Never six identical boxes with identical gaps again.
+   journey and the yolk + pool panels, then closes on the sand panel.
    ========================================================================== */
 
 /* ---------- Featured work grid ---------- */
@@ -26,8 +25,7 @@
 .home-what__panel {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
-  background-color: var(--color-yellow);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-panel);
   overflow: hidden;
   min-height: 440px;
 }
@@ -36,38 +34,34 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: var(--space-12);
+  padding: var(--pad-panel);
   gap: var(--space-8);
 }
 
 .home-what__title {
-  font-size: clamp(var(--text-4xl), 5vw, var(--text-6xl));
-  color: var(--color-ink);
+  font-size: var(--type-h2);
+  color: var(--hd);
 }
 
+/* Lead */
 .home-what__text {
-  font-size: var(--text-lg);
-  color: var(--color-ink);
-  max-width: 38ch;
+  font-size: var(--type-lead);
+  font-weight: var(--weight-medium);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  max-width: 30ch;
   margin-top: auto;
 }
 
 .home-what__copy .btn {
   align-self: flex-start;
-  border-color: var(--color-ink);
-  color: var(--color-ink);
-}
-
-.home-what__copy .btn:hover {
-  background-color: var(--color-orange);
-  border-color: var(--color-orange);
-  color: var(--color-cream);
 }
 
 .home-what__media {
   position: relative;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--oat);
 }
 
 .home-what__image {
@@ -85,30 +79,28 @@
 }
 
 .home-words__card {
-  background-color: var(--color-blue);
-  color: var(--text-on-blue);
-  border-radius: var(--radius-2xl);
-  padding: clamp(var(--space-8), 4vw, var(--space-12));
-  --focus-ring: var(--color-cream);
+  color: var(--fg);
+  border-radius: var(--radius-panel);
+  padding: var(--pad-panel);
 }
 
-/* Cream display heading, inside the card now rather than above it. */
 .home-words__title {
-  font-size: clamp(var(--text-3xl), 4.2vw, var(--text-5xl));
-  color: var(--text-on-blue);
-  margin-bottom: var(--space-8);
+  font-size: var(--type-h2);
+  color: var(--hd);
+  margin-bottom: var(--gap-block);
 }
 
 .home-words__item + .home-words__item {
   margin-top: var(--space-10);
 }
 
-/* 20px+ on blue clears the large-text contrast bar (see tokens.css notes). */
+/* Quotes set as leads — paper on pool is 5.0:1. */
 .home-words__quote p {
-  font-size: clamp(var(--text-lg), 1.5vw, var(--text-xl));
-  line-height: var(--leading-relaxed);
-  font-weight: var(--weight-regular);
-  max-width: 60ch;
+  font-size: var(--type-lead);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-weight: var(--weight-medium);
+  max-width: 48ch;
 }
 
 .home-words__attribution {
@@ -132,15 +124,13 @@
 }
 
 .home-words__name {
-  font-size: var(--text-base);
-  color: var(--text-on-blue);
-  opacity: 0.85;
+  font-size: var(--type-body);
+  color: var(--fg);
 }
 
 .home-words__role {
-  font-size: var(--text-sm);
-  color: var(--text-on-blue);
-  opacity: 0.7;
+  font-size: var(--type-caption);
+  color: var(--fg);
 }
 
 /* ---------- Responsive ---------- */

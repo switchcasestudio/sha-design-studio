@@ -1,19 +1,17 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import { ArrowUpRight } from 'lucide-react';
 import CloudBadge from '@/components/ui/CloudBadge';
 import { projects } from '@/data';
+import { rise } from '@/lib/motion';
 import { inlineSvg } from '@/utils/svg';
 import daisyRaw from '@/assets/svg/daisy-yellow.svg?raw';
-import cloverRaw from '@/assets/svg/clover-blue.svg?raw';
-import flowerRaw from '@/assets/svg/flower-yellow.svg?raw';
-import starRaw from '@/assets/svg/star-blue.svg?raw';
 import woodenCover from '@/assets/images/projects/products/wooden-collection-cover.webp';
 import gardenCover from '@/assets/images/projects/products/garden-collection-cover.webp';
+import woodenCoverMobile from '@/assets/images/projects/products/wooden-collection-cover-mobile.webp';
+import gardenCoverMobile from '@/assets/images/projects/products/garden-collection-cover-mobile.webp';
 import shapeSorterCover from '@/assets/images/projects/products/shape-sorter/11-Tiny-Rockers-Shape-Sorter-15.webp';
 import './Projects.css';
-
-const spring = { type: 'spring', stiffness: 200, damping: 22 };
 
 // Tiles that span the full row in the overview grid — each carries a long
 // landscape cover photo instead of pairing up 2-up. Order is driven by each
@@ -37,17 +35,21 @@ const BADGE_LABELS = {
 // Explicit cover image for a card, overriding the default (heroImage / first
 // image). Two uses:
 //  - the wide 3:1 tiles get purpose-built covers with the whole collection
-//    lined up on one white canvas (composed from the individual packshots);
+//    lined up on one white canvas (composed from the individual packshots),
+//    plus a 4:3 two-row version for phones (`mobileSrc`), where cropping the
+//    3:1 lineup would cut products in half;
 //  - Shape Sorter's default first frame is a lifestyle "vibe" shot (baby on a
 //    rug), unlike every other card's clean packshot, so it's pinned to the
 //    white product photo to match the set.
 const COVER_OVERRIDES = {
   'wooden-toy-design': {
     src: woodenCover,
+    mobileSrc: woodenCoverMobile,
     alt: 'The wooden toy collection lined up together: stacking train, car race ramp, ride-on trike and activity walk-behind',
   },
   'garden-of-adventures-packaging': {
     src: gardenCover,
+    mobileSrc: gardenCoverMobile,
     alt: 'Garden of Adventures collection: bunny comforter with beet rattle, My First Garden gift box and carded rattle packaging',
   },
   'tiny-rockers-shape-sorter': {
@@ -56,93 +58,59 @@ const COVER_OVERRIDES = {
   },
 };
 
-// Second frame that peeks in on hover — a lifestyle shot to contrast the
-// packshot cover, matched by filename fragment with a safe fallback to any
-// other frame in the project.
-const PEEK_OVERRIDES = {
-  'here-i-grow-activity-center': '18-TPSAC19',
-  'treasure-the-ocean-gymini': '11-GYMINIOCEAN4',
-  'wooden-toy-design': 'woodenstackingtrain8',
-  'garden-of-adventures-packaging': 'giftset-6',
-  'mobile-character-design': 'Take-Along-Mobile-2',
-};
+// One paper motif in the header — paper is the only shape colour that sits
+// on a tomato ground (brand rule: never a shape on its own colour).
+const DAISY = inlineSvg(daisyRaw);
 
-function peekFrame(project, primary) {
-  if (!primary) return null;
-  const needle = PEEK_OVERRIDES[project.id];
-  const override = needle
-    ? project.images.find(
-        (image) => image.src.includes(needle) && image.src !== primary.src
-      )
-    : null;
-  return (
-    override ??
-    project.images.find((image) => image.src !== primary.src) ??
-    null
-  );
-}
+// "2-in-1" must not wrap at its hyphens — swap in U+2011 non-breaking hyphens
+const noBreakHyphens = (text) => text.replace(/-/g, '\u2011');
 
-// Brand motifs tucked behind the card corners — geometry from the shared SVG
-// set, tinted via `color` on the wrapper (see utils/svg.js).
-const MOTIFS = {
-  daisy: inlineSvg(daisyRaw),
-  clover: inlineSvg(cloverRaw),
-  flower: inlineSvg(flowerRaw),
-  star: inlineSvg(starRaw),
-};
-
-function OverviewCard({ project, idx }) {
-  // The hover frame only mounts (and therefore only loads) on first
-  // hover/focus — nobody pays for images they never peek at.
-  const [peek, setPeek] = useState(false);
+// Each card is a paper frame around the photo with the title beneath. Hover
+// is a single 220ms colour swap (paper → yolk frame); nothing lifts or zooms.
+function OverviewCard({ project, idx, reduce }) {
   const image =
     COVER_OVERRIDES[project.id] ?? project.heroImage ?? project.images[0];
-  const peekImage = peek ? peekFrame(project, image) : null;
   const isWide = WIDE_PROJECT_IDS.has(project.id);
-  const wake = () => setPeek(true);
 
   return (
     <motion.li
       className={`overview-card${isWide ? ' overview-card--wide' : ''}`}
-      initial={{ opacity: 0, y: 24 }}
+      initial={reduce ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ ...spring, delay: 0.35 + idx * 0.06 }}
+      transition={{ ...rise, delay: 0.2 + idx * 0.06 }}
     >
-      <Link
-        to={`/projects/${project.id}`}
-        className="overview-card__link"
-        onPointerEnter={wake}
-        onFocus={wake}
-      >
+      <Link to={`/projects/${project.id}`} className="overview-card__link">
         <div className="overview-card__media">
           {image && (
-            <img
-              className="overview-card__image"
-              src={image.src}
-              alt={image.alt}
-              loading={idx < 3 ? 'eager' : 'lazy'}
-            />
-          )}
-          {peekImage && (
-            <img
-              className="overview-card__image overview-card__image--peek"
-              src={peekImage.src}
-              alt=""
-              aria-hidden="true"
-            />
+            <picture>
+              {image.mobileSrc && (
+                <source media="(max-width: 560px)" srcSet={image.mobileSrc} />
+              )}
+              <img
+                className="overview-card__image"
+                src={image.src}
+                alt={image.alt}
+                loading={idx < 3 ? 'eager' : 'lazy'}
+              />
+            </picture>
           )}
           <CloudBadge className="overview-card__badge">
             {BADGE_LABELS[project.id] ?? project.category}
           </CloudBadge>
-          {/* Client kicker + title overlaid on a scrim at the bottom of the
-              image, so every card is a single fixed-ratio tile and the grid
-              rows stay evenly spaced. */}
-          <div className="overview-card__body">
+        </div>
+
+        <div className="overview-card__body">
+          <div className="overview-card__text">
             {project.client && (
               <span className="overview-card__client">{project.client}</span>
             )}
-            <h2 className="overview-card__title">{project.title}</h2>
+            <h3 className="overview-card__title">
+              {noBreakHyphens(project.title)}
+            </h3>
           </div>
+          <span className="overview-card__go" aria-hidden="true">
+            <ArrowUpRight size={20} strokeWidth={2} />
+          </span>
         </div>
       </Link>
     </motion.li>
@@ -150,62 +118,49 @@ function OverviewCard({ project, idx }) {
 }
 
 function Projects() {
+  const reduce = useReducedMotion();
+  const enter = (delay) => ({
+    initial: reduce ? false : { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { ...rise, delay },
+  });
+
   return (
-    <div className="projects-page">
+    <div className="projects-page ground-tomato">
       <section className="projects-page__hero">
         <div className="container projects-page__hero-inner">
-          <motion.h1
-            className="projects-page__title"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...spring, delay: 0.1 }}
-          >
-            Work
-          </motion.h1>
+          <div className="projects-page__title-row">
+            <motion.h1 className="projects-page__title" {...enter(0.05)}>
+              Selected <span className="hl">work</span>
+            </motion.h1>
+            <span
+              className="projects-page__motif"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: DAISY }}
+            />
+          </div>
 
-          <motion.p
-            className="projects-page__intro"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...spring, delay: 0.25 }}
-          >
-            Toys, baby gear and the boxes they arrive in &mdash; a few
-            favourites from the shelf, each designed from first sketch to
-            little hands.
+          <motion.p className="projects-page__intro" {...enter(0.12)}>
+            <span className="projects-page__intro-key">
+              Toys, baby gear and the boxes they arrive in
+            </span>{' '}
+            &mdash; a few favourites from the shelf, each designed from first
+            sketch to little hands.
           </motion.p>
+
         </div>
 
         {/* Overview grid — a clickable glimpse of every project, jumping
-            straight to each case study. Cards sit slightly tilted like
-            snapshots on a table and straighten when you reach for them. */}
+            straight to each case study. */}
         <div className="container">
           <ul className="projects-overview">
-            {/* Motifs float over the card corners like stickers. Absolutely
-                positioned li's don't take grid cells, so the 2-up flow of the
-                real cards is untouched. */}
-            <li
-              className="projects-overview__motif projects-overview__motif--daisy"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: MOTIFS.daisy }}
-            />
-            <li
-              className="projects-overview__motif projects-overview__motif--clover"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: MOTIFS.clover }}
-            />
-            <li
-              className="projects-overview__motif projects-overview__motif--flower"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: MOTIFS.flower }}
-            />
-            <li
-              className="projects-overview__motif projects-overview__motif--star"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: MOTIFS.star }}
-            />
-
             {projects.map((project, idx) => (
-              <OverviewCard key={project.id} project={project} idx={idx} />
+              <OverviewCard
+                key={project.id}
+                project={project}
+                idx={idx}
+                reduce={reduce}
+              />
             ))}
           </ul>
         </div>

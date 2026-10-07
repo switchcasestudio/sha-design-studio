@@ -6,9 +6,9 @@ import BrandShape from '@/components/ui/BrandShape';
 import { reducedReveal, slideUp } from '@/lib/motion';
 import './CtaBand.css';
 
-// The site's closing beat — a full-bleed orange band with rounded shoulders,
-// wobbling brand motifs and one big display line + button. Extracted from the
-// homepage finale so Home, Services and About all close on the same note.
+// The site's closing beat — a sand closing panel inset from the window, a few
+// still brand motifs, one big headline (with its one .hl block) and the
+// section's single capsule. Home, Services and About all close on it.
 // Copy is passed in so each page can speak for itself; the look is shared.
 function CtaBand({ title, text, buttonLabel, to = '/inquire' }) {
   const ref = useRef(null);
@@ -23,7 +23,7 @@ function CtaBand({ title, text, buttonLabel, to = '/inquire' }) {
       initial={reduce ? 'show' : 'hidden'}
       animate={inView ? 'show' : undefined}
     >
-      <div className="cta-band__panel">
+      <div className="cta-band__panel panel ground-sand">
         <BrandShape shape="daisy" className="cta-band__motif cta-band__motif--daisy" />
         <BrandShape shape="clover" className="cta-band__motif cta-band__motif--clover" />
         <BrandShape shape="flower2" className="cta-band__motif cta-band__motif--flower" />
@@ -31,7 +31,7 @@ function CtaBand({ title, text, buttonLabel, to = '/inquire' }) {
         <div className="container cta-band__inner">
           <h2 className="cta-band__title">{title}</h2>
           <p className="cta-band__text">{text}</p>
-          <Button as={Link} to={to} variant="primary" size="lg">
+          <Button as={Link} to={to} variant="capsule" size="lg">
             {buttonLabel}
           </Button>
         </div>

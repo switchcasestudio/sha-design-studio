@@ -1,17 +1,19 @@
 import { Fragment, useId } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { rise } from '@/lib/motion';
 import CtaBand from '@/components/sections/CtaBand';
 import BrandShape from '@/components/ui/BrandShape';
 import './Services.css';
 
 // Core service offering — research → design → 3D → documentation/support.
-// Each block lists the concrete deliverables it includes. `motif` is the brand
-// shape tucked into the card's top-right corner (tinted per card in the CSS).
+// Each block lists the concrete deliverables it includes. `ground` is the card's
+// panel colour (a brand .ground-* recipe); `motif` is the brand shape cropped
+// into its corner, tinted in the CSS so it is never on its own colour.
 const services = [
   {
     id: 'research-concept',
     index: '01',
-    color: 'orange',
+    ground: 'tomato',
     motif: 'daisy',
     title: 'Research & Concept Development',
     description:
@@ -31,7 +33,7 @@ const services = [
   {
     id: 'product-design',
     index: '02',
-    color: 'ink',
+    ground: 'night',
     motif: 'star',
     title: 'Product Design & Development',
     description:
@@ -50,7 +52,7 @@ const services = [
   {
     id: '3d-visualization',
     index: '03',
-    color: 'blue',
+    ground: 'pool',
     motif: 'heart',
     title: '3D Development & Product Visualization',
     description:
@@ -66,7 +68,7 @@ const services = [
   {
     id: 'documentation-support',
     index: '04',
-    color: 'cream',
+    ground: 'paper',
     motif: 'clover',
     title: 'Product Documentation & Development Support',
     description:
@@ -88,12 +90,19 @@ const expertise = [
   'Consumer Products',
 ];
 
-const spring = { type: 'spring', stiffness: 200, damping: 22 };
+// The one reveal: a 16px rise over 600ms. Reduced motion drops it entirely.
+const riseIn = (reduce, delay = 0) =>
+  reduce
+    ? { initial: false }
+    : {
+        initial: { opacity: 0, y: 16 },
+        transition: { ...rise, delay },
+      };
 
 // A short dotted play-road drawn in the gap between two service cards — the
 // same self-drawing technique as the home JourneyPath (a solid stroke animating
-// pathLength inside a mask reveals the dotted stroke tip-to-tail). Ink dots read
-// best on the yellow canvas. Turns the four numbered steps into one journey.
+// pathLength inside a mask reveals the dotted stroke tip-to-tail). It draws
+// once, then stays still. Turns the four numbered steps into one journey.
 const CONNECTOR_PATH = 'M 12 2 C 2 18, 22 34, 12 50 C 5 62, 12 66, 12 78';
 
 function ServiceConnector() {
@@ -103,7 +112,7 @@ function ServiceConnector() {
 
   // whileInView is driven from the OUTER div (which has a real layout box), not
   // the <motion.path> — a path inside <defs><mask> has no box, so its own
-  // IntersectionObserver fires unreliably and could leave the mask black (dots
+  // IntersectionObserver fires unreliably and could leave the mask empty (dots
   // fully hidden, i.e. a "missing" connector). The div propagates the `show`
   // variant down to the path.
   return (
@@ -118,17 +127,17 @@ function ServiceConnector() {
         {!reduce && (
           <defs>
             <mask id={maskId} maskUnits="userSpaceOnUse">
+              {/* Mask stroke is the light paper tone (CSS sets `color`) so the
+                  dots show at full strength where it has drawn. */}
               <motion.path
+                className="service-connector__mask"
                 d={CONNECTOR_PATH}
-                stroke="#fff"
+                stroke="currentColor"
                 strokeWidth="8"
                 strokeLinecap="round"
                 variants={{
                   hidden: { pathLength: 0 },
-                  show: {
-                    pathLength: 1,
-                    transition: { duration: 0.7, ease: 'easeOut' },
-                  },
+                  show: { pathLength: 1, transition: rise },
                 }}
               />
             </mask>
@@ -144,26 +153,17 @@ function ServiceConnector() {
   );
 }
 
-function ServiceBlock({ service, index }) {
+function ServiceBlock({ service }) {
   const reduce = useReducedMotion();
 
   return (
     <motion.article
-      className={`service-block service-block--${service.color}`}
-      initial={{ opacity: 0, y: 40 }}
+      className={`service-block service-block--${service.ground} ground-${service.ground}`}
+      {...riseIn(reduce)}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      whileHover={
-        reduce
-          ? undefined
-          : {
-              y: -4,
-              transition: { type: 'spring', stiffness: 400, damping: 17 },
-            }
-      }
-      transition={{ ...spring, delay: index * 0.08 }}
     >
-      {/* Corner sticker — decorative, tinted per card in the CSS */}
+      {/* Corner motif — decorative, one flat fill set per card in the CSS */}
       <BrandShape shape={service.motif} className="service-block__motif" />
 
       <div className="service-block__left">
@@ -176,37 +176,13 @@ function ServiceBlock({ service, index }) {
 
         <div className="service-block__includes">
           <span className="service-block__includes-label">Includes</span>
-          {/* Deliverables pop in like toys spilling out of the box */}
-          <motion.ul
-            className="service-block__chips"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-40px' }}
-            variants={{
-              show: { transition: { staggerChildren: 0.03, delayChildren: 0.12 } },
-            }}
-          >
+          <ul className="service-block__chips">
             {service.includes.map((item) => (
-              <motion.li
-                key={item}
-                className="service-block__chip"
-                variants={
-                  reduce
-                    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
-                    : {
-                        hidden: { opacity: 0, scale: 0.6 },
-                        show: {
-                          opacity: 1,
-                          scale: 1,
-                          transition: { type: 'spring', stiffness: 500, damping: 24 },
-                        },
-                      }
-                }
-              >
+              <li key={item} className="service-block__chip">
                 {item}
-              </motion.li>
+              </li>
             ))}
-          </motion.ul>
+          </ul>
         </div>
       </div>
     </motion.article>
@@ -214,24 +190,24 @@ function ServiceBlock({ service, index }) {
 }
 
 function Services() {
+  const reduce = useReducedMotion();
+
   return (
-    <div className="services-page">
+    <div className="services-page ground-yolk">
       <section className="services-page__hero">
         <div className="container services-page__hero-inner">
           <motion.h1
             className="services-page__title"
-            initial={{ opacity: 0, y: 30 }}
+            {...riseIn(reduce, 0.05)}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ ...spring, delay: 0.1 }}
           >
-            Services
+            Design <span className="hl">services</span>
           </motion.h1>
 
           <motion.p
             className="services-page__intro"
-            initial={{ opacity: 0, y: 20 }}
+            {...riseIn(reduce, 0.15)}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ ...spring, delay: 0.25 }}
           >
             I help brands, startups and entrepreneurs turn ideas into meaningful
             products — guiding each project from research and concept
@@ -244,7 +220,7 @@ function Services() {
       <div className="container services-page__list">
         {services.map((service, i) => (
           <Fragment key={service.id}>
-            <ServiceBlock service={service} index={i} />
+            <ServiceBlock service={service} />
             {/* Draw a dotted road in each gap so 01→04 reads as one journey */}
             {i < services.length - 1 && <ServiceConnector />}
           </Fragment>
@@ -255,33 +231,19 @@ function Services() {
         <div className="container">
           <motion.div
             className="services-page__expertise-inner"
-            initial={{ opacity: 0, y: 40 }}
+            {...riseIn(reduce)}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ ...spring }}
           >
             <h2 className="services-page__expertise-title">
-              Areas of Expertise
+              Areas of <span className="hl">expertise</span>
             </h2>
 
             <ul className="services-page__expertise-list">
-              {expertise.map((area, i) => (
-                <motion.li
-                  key={area}
-                  className="services-page__expertise-item"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: { ...spring, delay: 0.1 + i * 0.08 },
-                  }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                >
+              {expertise.map((area) => (
+                <li key={area} className="services-page__expertise-item">
                   {area}
-                </motion.li>
+                </li>
               ))}
             </ul>
           </motion.div>
@@ -290,9 +252,13 @@ function Services() {
 
       {/* Closing beat — don't dead-end the highest-intent page before Inquire */}
       <CtaBand
-        title="Got a product itching to exist?"
+        title={
+          <>
+            Got a product <span className="hl">itching</span> to exist?
+          </>
+        }
         text="Bring me the idea — a sketch, a spec, or just a spark — and let's shape it into something real."
-        buttonLabel="Start a Project"
+        buttonLabel="Start a project"
       />
     </div>
   );

@@ -1,6 +1,10 @@
+/* ==========================================================================
+   About — pool ground. Paper headline words + yolk block (ink letters),
+   paper running text. "My approach" is the one yolk panel on the page.
+   ========================================================================== */
+
 .about-page {
-  background-color: var(--color-blue);
-  color: var(--color-cream);
+  color: var(--fg);
   /* No bottom padding: the CTA band closes the page flush to the footer. */
   padding-bottom: 0;
 }
@@ -13,109 +17,88 @@
 .about-bio__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-12);
+  gap: var(--space-16);
   align-items: start;
 }
 
+.about-bio__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap-block);
+}
+
 .about-bio__title {
-  font-size: clamp(var(--text-5xl), 7vw, var(--text-7xl));
-  margin-bottom: var(--space-8);
+  font-size: var(--type-display);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  color: var(--hd);
 }
 
 .about-bio__text {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  font-size: var(--text-base);
-  /* Roomier leading so the inline sticker chips don't crowd the lines */
-  line-height: var(--leading-relaxed);
+  /* Roomier leading so the inline name pills don't crowd the lines */
+  line-height: 1.7;
   max-width: 50ch;
+  color: var(--fg);
 }
 
-/* The best line on the page, promoted from a bold body line to a display
-   pull-quote. Cream on blue (3.63:1) clears the 3:1 large-text bar at this
-   size; the yellow star is a decorative full stop (contrast not binding).
-   Plain inline text (not flex) so the star flows with the words and wraps
-   alongside the last one instead of dropping to its own line. */
+.about-bio__text p {
+  line-height: inherit;
+}
+
+/* The best line on the page, set as a headline: paper words, one yolk block. */
 .about-bio__signoff {
-  margin-top: var(--space-6);
-  font-family: var(--font-display);
-  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
-  line-height: 1.15;
-  color: var(--color-cream);
+  font-size: var(--type-h2);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-h2);
+  font-weight: var(--weight-medium);
+  color: var(--hd);
+  max-width: 14ch;
+  text-wrap: balance;
 }
 
-/* "wonder" + the star travel together as one unbreakable unit */
-.about-bio__signoff-last {
+/* Career milestones as name pills inline in the bio — paper pill, ink text
+   (16.9:1). Still, not clickable, so no hover. */
+.about-chip {
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 0.1em 0.7em 0.14em;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-size: var(--type-ui);
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.005em;
+  border-radius: var(--radius-pill);
+  line-height: 1.5;
   white-space: nowrap;
 }
 
-.about-bio__signoff-star {
-  display: inline-block;
-  width: clamp(24px, 3.4vw, 40px);
-  margin-left: 0.15em;
-  vertical-align: -0.15em;
-  color: var(--color-yellow);
-}
-
-.about-bio__signoff-star svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Career milestones as cream sticker chips inline in the bio — ink on cream
-   (15.3:1). Chunky pills with only a whisper of tilt; lift + straighten on
-   hover. */
-.about-chip {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 0.22em 0.8em;
-  background-color: var(--color-cream);
-  color: var(--color-ink);
-  font-weight: var(--weight-bold);
-  border-radius: var(--radius-pill);
-  line-height: 1.2;
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--duration-base) var(--ease-out),
-    box-shadow var(--duration-base) var(--ease-out);
-}
-
-.about-chip:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: var(--shadow-md);
-}
-
-.about-bio__cta {
-  margin-top: var(--space-8);
-}
-
+/* ---------- Portrait ---------- */
 .about-bio__photo {
   position: sticky;
   top: var(--space-24);
 }
 
+/* Paper frame, radius 18 — layers separate by colour alone, no shadow. */
 .about-bio__photo-frame {
   position: relative;
   max-width: 760px;
   margin-inline: auto;
+  padding: var(--gap-grid);
+  background-color: var(--paper);
+  border-radius: var(--radius-card);
 }
 
-.about-bio__photo-placeholder {
+.about-bio__photo-img {
   aspect-ratio: 4 / 5;
-  background: var(--color-cream);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-blue);
-  font-size: var(--text-sm);
-  font-style: italic;
+  border-radius: calc(var(--radius-card) - var(--gap-grid));
   overflow: hidden;
 }
 
-.about-bio__photo-placeholder img {
+.about-bio__photo-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -129,42 +112,39 @@
   top: 24px;
   left: -80px;
   width: clamp(130px, 14vw, 200px);
-  aspect-ratio: 167.9 / 146.52;
   z-index: 2;
-  /* Hoverable so it can pop like the hero motifs */
-  pointer-events: auto;
-  cursor: default;
+  color: var(--yolk);
 }
 
-.about-bio__hello-shape {
-  width: 100%;
-  height: 100%;
+.about-bio__hello-shape,
+.about-bio__hello-shape svg {
   display: block;
+  width: 100%;
+  height: auto;
 }
 
+/* Ink letters on the yolk flower (on-yolk) */
 .about-bio__hello-text {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-blue);
-  font-family: var(--font-body);
-  font-size: clamp(1.4rem, 2.5vw, 2.5rem);
-  font-weight: var(--weight-bold);
+  color: var(--on-yolk);
+  font-size: clamp(24px, 2.4vw, 36px);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-h3);
   line-height: 1;
-  transform: translateY(-2px);
 }
 
-/* ---------- Coral heart badge (companion to Hello!) ---------- */
+/* ---------- Yolk heart (companion to the hello flower) ---------- */
 .about-bio__heart {
   position: absolute;
   bottom: -18px;
   right: -14px;
   width: clamp(52px, 7vw, 84px);
-  color: var(--color-orange);
+  color: var(--yolk);
   z-index: 2;
-  cursor: default;
 }
 
 .about-bio__heart svg {
@@ -173,32 +153,36 @@
   height: auto;
 }
 
-/* ---------- What I Offer ---------- */
+/* ---------- My approach ---------- */
 .about-offer {
   padding-block: var(--space-12);
 }
 
 .about-offer__panel {
-  background-color: var(--color-yellow);
-  color: var(--color-ink);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-12);
+  color: var(--fg);
+  border-radius: var(--radius-panel);
+  padding: var(--pad-panel);
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: var(--space-12);
   align-items: start;
 }
 
+.about-offer__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
 .about-offer__title {
-  font-size: clamp(var(--text-3xl), 4vw, var(--text-4xl));
-  margin-bottom: var(--space-6);
-  letter-spacing: var(--tracking-tight);
+  font-size: var(--type-h2);
+  color: var(--hd);
 }
 
 .about-offer__text {
-  font-size: var(--text-base);
-  margin-bottom: var(--space-8);
   max-width: 38ch;
+  margin-bottom: var(--space-2);
 }
 
 .about-offer__list {
@@ -207,32 +191,36 @@
 }
 
 .about-offer__item {
-  border-top: 1px solid var(--color-ink);
+  border-top: 1px solid var(--line);
 }
 
 .about-offer__item:last-child {
-  border-bottom: 1px solid var(--color-ink);
+  border-bottom: 1px solid var(--line);
 }
 
 .about-offer__row {
   width: 100%;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-5) 0;
+  padding: var(--space-4) 0;
   background: transparent;
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: var(--weight-medium);
-  color: inherit;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--fg);
   text-align: left;
+  cursor: pointer;
 }
 
 /* Bullet + title group on the left; the +/- toggle stays flush right */
 .about-offer__row-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .about-offer__bullet {
@@ -248,25 +236,44 @@
   height: auto;
 }
 
+/* The toggle is a small pill: clear at rest, ink when hovered or open
+   (pills are ink when active). Hover is a 220ms colour swap. */
 .about-offer__toggle {
   flex: none;
+  width: 40px;
+  height: 40px;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  background-color: transparent;
+  transition:
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
 }
 
-.about-offer__row:hover {
-  opacity: 0.75;
+.about-offer__row:hover .about-offer__toggle,
+.about-offer__row[aria-expanded='true'] .about-offer__toggle {
+  background-color: var(--ink);
+  color: var(--paper);
+}
+
+.about-offer__detail-wrap {
+  overflow: hidden;
 }
 
 .about-offer__detail {
-  padding: 0 0 var(--space-5);
-  font-size: var(--text-sm);
-  opacity: 0.85;
+  padding: 0 0 var(--space-5) calc(26px + var(--space-4));
+  max-width: 52ch;
+  color: var(--fg);
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .about-bio__inner {
     grid-template-columns: 1fr;
+    gap: var(--space-12);
   }
 
   .about-bio__photo {
@@ -274,24 +281,22 @@
   }
 
   .about-bio__hello {
-    top: 24px;
-    left: -26px;
-    width: 140px;
+    top: 20px;
+    left: -10px;
+    width: 128px;
   }
 
-  .about-bio__hello-text {
-    font-size: 1.5rem;
+  .about-bio__heart {
+    right: -6px;
+    width: 52px;
   }
 
   .about-offer__panel {
     grid-template-columns: 1fr;
-    padding: var(--space-8);
+    gap: var(--space-8);
   }
 
-  /* Slimmer milestone chips on phones — the desktop chunk reads as too padded
-     inline, and the extra height made wrapped chips crowd each other. Less
-     vertical padding lets them breathe within the line. */
-  .about-chip {
-    padding: 0.1em 0.55em;
+  .about-offer__row {
+    font-size: var(--type-body);
   }
 }
