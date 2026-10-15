@@ -9,7 +9,11 @@ import { shaProjects } from '../src/data/projects.js';
    - Writes one HTML copy per route (dist/about.html, dist/projects/<id>.html…)
      whose canonical and og:url name that route. Cloudflare Pages serves
      /about from about.html, so crawlers and social scrapers see the right URL
-     without running JS. */
+     without running JS.
+   - Writes dist/404.html: noindex, no canonical, no og:url. Its presence also
+     switches Cloudflare Pages off the SPA fallback, so unknown URLs answer 404
+     (rendering the app's NotFound page) instead of a 200 copy of the home page.
+     Every real route has its own file above, so deep links still work. */
 
 // Routes that exist but aren't public pages
 const HIDDEN = new Set(['lab']);
@@ -30,6 +34,22 @@ function readRoutes(appFile) {
     }
   }
   return routes;
+}
+
+function notFoundPage(html) {
+  const out = html
+    .replace(/\s*<link rel="canonical"[^>]*>/, '')
+    .replace(/\s*<meta property="og:url"[^>]*>/, '')
+    .replace(/<title>[^<]*<\/title>/, '<title>Page not found — Sha Design Studio</title>')
+    .replace('<meta charset="UTF-8" />', '<meta charset="UTF-8" />\n    <meta name="robots" content="noindex" />');
+  if (
+    !out.includes('content="noindex"') ||
+    out.includes('rel="canonical"') ||
+    out.includes('og:url')
+  ) {
+    throw new Error('seo-pages: 404.html needs noindex and no canonical / og:url');
+  }
+  return out;
 }
 
 function withUrl(html, url) {
@@ -64,6 +84,8 @@ export default function seoPages({ site }) {
         fs.mkdirSync(path.dirname(dest), { recursive: true });
         fs.writeFileSync(dest, withUrl(index, url));
       }
+
+      fs.writeFileSync(path.join(outDir, '404.html'), notFoundPage(index));
 
       const urls = routes
         .map((r) => `  <url>\n    <loc>${site}${r}</loc>\n  </url>`)
