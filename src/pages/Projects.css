@@ -267,9 +267,11 @@ html[data-motion='vivid'] .projects-page__motif {
   display: none;
 }
 
-/* Ink on tomato read too dark at this size — paper, like the headline */
+/* Ink on tomato read too dark at this size — paper, like the headline.
+   Paper on tomato is 3.5:1, so it has to be large text (≥24px) to pass. */
 html[data-motion='vivid'] .projects-page__intro {
   color: var(--paper);
+  font-size: max(24px, var(--type-lead));
 }
 
 html[data-motion='vivid'] .projects-page__marquee {

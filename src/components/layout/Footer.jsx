@@ -74,12 +74,13 @@ function FooterMarquee() {
       to="/inquire"
       className="footer-marquee"
       data-cursor="Say hi"
-      aria-label="Let's make something thoughtful and playful — start an inquiry"
     >
       <motion.span className="footer-marquee__track" style={{ x }}>
         {row(false)}
         {row(true)}
       </motion.span>
+      {/* Accessible name = the visible words (first row) + where it goes */}
+      <span className="sr-only"> — start an inquiry</span>
     </Link>
   );
 }

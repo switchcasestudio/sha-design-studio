@@ -399,10 +399,6 @@ html[data-motion='vivid'] .service-block--paper {
     transform: scale(1.18);
   }
 
-  html[data-motion='vivid'] .service-block__index-total {
-    opacity: 0.55;
-  }
-
   html[data-motion='vivid'] .service-block--vivid .service-block__chip {
     cursor: default;
     transition:

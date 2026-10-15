@@ -256,7 +256,9 @@ html[data-motion='vivid'] .journey-vivid__strip > span {
 }
 
 html[data-motion='vivid'] .journey-vivid__total {
-  color: var(--sand);
+  /* Faded ink, not sand: still quiet, but 3.8:1 on paper (large text) */
+  color: var(--ink);
+  opacity: 0.55;
   margin-left: 0.2em;
 }
 

@@ -78,6 +78,8 @@ function VividMotif({ m, i, pointer }) {
           shape={m.shape}
           className="home-assemble__drag"
           data-cursor="Drag"
+          // Decorative toy: whileTap would make it focusable, keep it out of tab order
+          tabIndex={-1}
           drag
           dragSnapToOrigin
           dragElastic={0.9}

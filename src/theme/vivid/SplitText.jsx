@@ -21,11 +21,12 @@ function SplitText({ text, by = 'words', delay = 0, trigger = 'view', className 
   return (
     <motion.span
       className={className}
-      aria-label={text}
       style={{ display: 'inline' }}
       transition={{ staggerChildren: step, delayChildren: delay }}
       {...play}
     >
+      {/* Screen readers get the plain string; the split pieces are hidden */}
+      <span className="sr-only">{text}</span>
       {parts.map((part, i) =>
         /^\s+$/.test(part) ? (
           ' '
