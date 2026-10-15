@@ -76,6 +76,11 @@
   white-space: nowrap;
 }
 
+/* Vivid: the career names are just bold words in the running text */
+.about-name {
+  font-weight: 650;
+}
+
 /* ---------- Portrait ---------- */
 .about-bio__photo {
   position: sticky;
@@ -320,24 +325,11 @@
     }
   }
 
-  /* Career pills hop when you point at them */
-  html[data-motion='vivid'] .about-page--vivid .about-chip {
-    transition:
-      transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-      background-color 0.25s ease;
-  }
-
-  html[data-motion='vivid'] .about-page--vivid .about-chip:hover {
-    transform: translateY(-4px) rotate(-4deg) scale(1.08);
-    background-color: var(--yolk);
-  }
-
   html[data-motion='vivid'] .about-bio__photo-frame--vivid {
-    transform-style: preserve-3d;
     box-shadow: 0 30px 60px #000f4233;
   }
 
-  /* Hello flower: spins slowly on its own, grab it to fling it around */
+  /* Hello flower: still on its own, grab it to fling it around */
   html[data-motion='vivid'] .about-bio__hello--vivid {
     cursor: grab;
     touch-action: none;
@@ -345,35 +337,6 @@
 
   html[data-motion='vivid'] .about-bio__hello--vivid:active {
     cursor: grabbing;
-  }
-
-  html[data-motion='vivid'] .about-bio__hello--vivid .about-bio__hello-shape {
-    animation: v-about-spin 14s linear infinite;
-  }
-
-  html[data-motion='vivid'] .about-bio__heart--vivid svg {
-    transform-origin: center;
-    animation: v-about-beat 1.4s ease-in-out infinite;
-  }
-
-  @keyframes v-about-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes v-about-beat {
-    0%,
-    40%,
-    100% {
-      transform: scale(1);
-    }
-    15% {
-      transform: scale(1.22);
-    }
-    28% {
-      transform: scale(1.08);
-    }
   }
 
   /* Approach rows: the label slides and the shape spins on hover */

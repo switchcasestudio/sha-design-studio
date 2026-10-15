@@ -38,7 +38,8 @@ html[data-motion='vivid'] main :is(p, li) a:not([class]):hover {
     transform-origin: 0 50%;
     animation: vivid-hl-wipe linear both;
     animation-timeline: view();
-    animation-range: entry 10% cover 35%;
+    /* Done once the word is fully on screen — never left half-drawn */
+    animation-range: entry 10% entry 100%;
   }
 }
 

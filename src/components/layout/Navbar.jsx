@@ -75,6 +75,8 @@ function Navbar() {
     pathname.startsWith(path)
   );
   const theme = ROUTE_THEMES[themeKey] || { route: 'navbar--home', logo: 'cream' };
+  // The pool-on-yolk mark read faint in the vivid theme; use the ink one there
+  const logoGround = isVivid && theme.logo === 'yolk' ? 'yolkInk' : theme.logo;
   const closeMobile = () => setMobileOpen(false);
 
   // ---- Open-menu side effects: scroll lock + focus management ----
@@ -173,7 +175,7 @@ function Navbar() {
       };
 
   const isActiveHref = (href) => pathname.startsWith(href);
-  const logo = <Logo size={58} ground={theme.logo} />;
+  const logo = <Logo size={58} ground={logoGround} />;
   const cta = (
     <NavLink
       to="/inquire"
@@ -308,7 +310,7 @@ function Navbar() {
                   onClick={closeMobile}
                   aria-label="Sha Design Studio — Home"
                 >
-                  <Logo size={58} ground={theme.logo} />
+                  <Logo size={58} ground={logoGround} />
                 </Link>
 
                 <button

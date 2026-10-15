@@ -1,7 +1,7 @@
 import BrandShape from '@/components/ui/BrandShape';
 import './Marquee.css';
 
-/* Endless ticker of big words separated by spinning brand shapes. Pure CSS
+/* Endless ticker of big words separated by still brand shapes. Pure CSS
    loop; hovering slows it. Decorative — the same words are listed as real
    content elsewhere, so the whole strip is aria-hidden. */
 function Marquee({ items, shapes = ['daisy', 'star', 'heart'], className = '' }) {

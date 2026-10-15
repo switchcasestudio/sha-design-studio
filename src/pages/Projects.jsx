@@ -14,7 +14,6 @@ import shapeSorterCover from '@/assets/images/projects/products/shape-sorter/11-
 import { useTheme } from '@/theme/ThemeContext';
 import SplitText from '@/theme/vivid/SplitText';
 import { spring } from '@/theme/vivid/motion';
-import { useTilt } from '@/theme/vivid/work/useTilt';
 import ParallaxImg from '@/theme/vivid/work/ParallaxImg';
 import ScrollMarquee from '@/theme/vivid/work/ScrollMarquee';
 import './Projects.css';
@@ -86,22 +85,18 @@ const cardPop = (idx) => ({
 
 // Each card is a paper frame around the photo with the title beneath. Hover
 // is a single 220ms colour swap (paper → yolk frame); nothing lifts or zooms.
-// In the vivid theme the card tilts toward the pointer, the photo drifts
-// with scroll and zooms on hover, and a "View case study" tab slides up.
+// In the vivid theme the photo drifts with scroll; on hover a yolk ring
+// draws around the card and a "View case study" tab slides up.
 function OverviewCard({ project, idx, reduce, isVivid }) {
   const image =
     COVER_OVERRIDES[project.id] ?? project.heroImage ?? project.images[0];
   const isWide = WIDE_PROJECT_IDS.has(project.id);
-  const tilt = useTilt(isWide ? 3 : 7);
-
   const enterProps = isVivid
     ? {
         initial: 'hidden',
         whileInView: 'show',
         viewport: { once: true, amount: 0.15 },
         variants: cardPop(idx),
-        style: tilt.style,
-        ...tilt.handlers,
         'data-cursor': 'View',
       }
     : {
@@ -141,7 +136,6 @@ function OverviewCard({ project, idx, reduce, isVivid }) {
           )}
           {isVivid && (
             <>
-              <span className="overview-card__glare" aria-hidden="true" />
               <span className="overview-card__num" aria-hidden="true">
                 {String(idx + 1).padStart(2, '0')}
               </span>

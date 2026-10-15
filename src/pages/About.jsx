@@ -11,7 +11,6 @@ import { spring } from '@/theme/vivid/motion';
 import Reveal from '@/theme/vivid/Reveal';
 import SplitText from '@/theme/vivid/SplitText';
 import Magnetic from '@/theme/vivid/Magnetic';
-import Tilt from '@/theme/vivid/pages/Tilt';
 import shiranBar from '@/assets/images/Shiran-bar.png';
 import './About.css';
 
@@ -49,9 +48,9 @@ const offers = [
 ];
 
 /* ---------- Vivid theme: portrait ----------
-   The photo opens through a growing circle while it zooms back to size, the
-   frame tilts toward the pointer, the Hello flower spins and can be dragged
-   (it springs home), and the heart beats. */
+   The photo opens through a growing circle while it zooms back to size, and
+   the Hello flower pops in and can be dragged (it springs home). One shape
+   only, nothing turns, the frame stays flat. */
 function VividPortrait() {
   return (
     <motion.div
@@ -60,7 +59,7 @@ function VividPortrait() {
       animate={{ opacity: 1, y: 0, rotate: 0 }}
       transition={{ ...spring.soft, delay: 0.2 }}
     >
-      <Tilt max={5} className="about-bio__photo-frame about-bio__photo-frame--vivid">
+      <div className="about-bio__photo-frame about-bio__photo-frame--vivid">
         <motion.div
           className="about-bio__photo-img"
           initial={{ clipPath: 'circle(0% at 50% 40%)' }}
@@ -83,27 +82,25 @@ function VividPortrait() {
           dragElastic={0.7}
           dragTransition={{ bounceStiffness: 300, bounceDamping: 12 }}
           whileHover={{ scale: 1.08 }}
-          whileDrag={{ scale: 1.2, rotate: -12 }}
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
+          whileDrag={{ scale: 1.15 }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
           transition={{ ...spring.bouncy, delay: 1 }}
           title="Drag me"
         >
           <BrandShape shape="flower2" className="about-bio__hello-shape" />
           <span className="about-bio__hello-text">Hello</span>
         </motion.div>
-
-        <motion.div
-          className="about-bio__heart about-bio__heart--vivid"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ ...spring.bouncy, delay: 1.2 }}
-        >
-          <BrandShape shape="heart" />
-        </motion.div>
-      </Tilt>
+      </div>
     </motion.div>
   );
+}
+
+// Career names: paper pills in regular, plain bold words in vivid.
+function Name({ children }) {
+  const { isVivid } = useTheme();
+  if (isVivid) return <strong className="about-name">{children}</strong>;
+  return <span className="about-chip">{children}</span>;
 }
 
 // Bio paragraph: a plain <p> in regular, its own scroll-in rise in vivid.
@@ -168,9 +165,8 @@ function About() {
 
               <P>
                 I graduated from{' '}
-                <span className="about-chip">Shenkar College</span>, interned
-                at <span className="about-chip">HAPE</span> in China, and
-                worked at <span className="about-chip">Tiny Love</span>{' '}
+                <Name>Shenkar College</Name>, interned at <Name>HAPE</Name> in
+                China, and worked at <Name>Tiny Love</Name>{' '}
                 designing a wide range of baby products, from soft toys to
                 electronic developmental items.
               </P>

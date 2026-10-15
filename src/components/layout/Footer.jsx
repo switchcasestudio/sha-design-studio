@@ -61,14 +61,9 @@ function FooterMarquee() {
       {MARQUEE.map(({ text, shape, tint }) => (
         <span key={text} className="footer-marquee__item">
           <span className="footer-marquee__text">{text}</span>
-          <motion.span
-            className="footer-marquee__shape"
-            style={{ color: tint }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-          >
+          <span className="footer-marquee__shape" style={{ color: tint }}>
             <BrandShape shape={shape} />
-          </motion.span>
+          </span>
         </span>
       ))}
     </span>

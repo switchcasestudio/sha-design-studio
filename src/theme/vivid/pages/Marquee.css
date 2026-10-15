@@ -36,7 +36,6 @@
   flex: none;
   width: clamp(40px, 5vw, 76px);
   color: var(--hl-bg);
-  animation: v-marquee-spin 6s linear infinite;
 }
 
 .v-marquee__shape svg {
@@ -48,11 +47,5 @@
 @keyframes v-marquee {
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes v-marquee-spin {
-  to {
-    transform: rotate(360deg);
   }
 }

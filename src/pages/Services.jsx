@@ -198,8 +198,8 @@ function ServiceBlock({ service }) {
 
 /* ---------- Vivid theme: stacking cards ----------
    Each card sticks under the nav as you scroll and the next one slides over
-   it; the cards beneath shrink back into a deck. The motif spins with scroll,
-   the chips pop in one by one and wiggle on hover, and the card tilts toward
+   it; the cards beneath shrink back into a deck. The motif drifts with scroll
+   (no turning), the chips pop in one by one and wiggle on hover, and the card tilts toward
    the pointer. Desktop only for the stack — on phones the cards are taller
    than the screen, so they just pop in. */
 function VividServiceBlock({ service, i, total, progress, stacked }) {
@@ -208,7 +208,6 @@ function VividServiceBlock({ service, i, total, progress, stacked }) {
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const motifRotate = useTransform(scrollYProgress, [0, 1], [-60, 120]);
   const motifY = useTransform(scrollYProgress, [0, 1], ['18%', '-12%']);
   const scale = useTransform(
     progress,
@@ -230,7 +229,7 @@ function VividServiceBlock({ service, i, total, progress, stacked }) {
             >
               <motion.span
                 className="service-block__motif-wrap"
-                style={{ rotate: motifRotate, y: motifY }}
+                style={{ y: motifY }}
               >
                 <BrandShape shape={service.motif} className="service-block__motif" />
               </motion.span>

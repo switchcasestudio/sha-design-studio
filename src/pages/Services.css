@@ -329,9 +329,19 @@
 
 /* ==========================================================================
    Vivid theme — only rendered/applied with html[data-motion='vivid'].
-   Stacking deck of service cards, scroll-spun motifs, wiggly chips, a
+   Stacking deck of service cards, scroll-drifting motifs, wiggly chips, a
    marquee of expertise. Regular rules above stay untouched.
    ========================================================================== */
+/* A different motif colour on every card, so no colour repeats as the deck
+   stacks (regular keeps the yolk / yolk pair on night and pool) */
+html[data-motion='vivid'] .service-block--pool {
+  --motif: var(--tomato);
+}
+
+html[data-motion='vivid'] .service-block--paper {
+  --motif: var(--pool);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   /* The highlight block sweeps in from the left behind the words */
   html[data-motion='vivid'] .v-hl-sweep::before {

@@ -2,6 +2,7 @@ import markFull from '@/assets/logos/sha-mark.svg';
 import markOnPool from '@/assets/logos/sha-mark-on-pool.svg';
 import markOnTomato from '@/assets/logos/sha-mark-on-tomato.svg';
 import markOnYolk from '@/assets/logos/sha-mark-on-yolk.svg';
+import markOnYolkInk from '@/assets/logos/sha-mark-on-yolk-ink.svg';
 import markPaper from '@/assets/logos/sha-mark-paper.svg';
 import horizontalFull from '@/assets/logos/sha-horizontal.svg';
 import horizontalPaper from '@/assets/logos/sha-horizontal-paper.svg';
@@ -13,6 +14,7 @@ const MARKS = {
   pool: markOnPool,
   tomato: markOnTomato,
   yolk: markOnYolk,
+  yolkInk: markOnYolkInk, // vivid theme: ink body, clearer on yolk
   night: markPaper, // one colour, on night and photos
 };
 
