@@ -311,7 +311,8 @@
 }
 
 .pd-overview__entry-title {
-  font-size: var(--type-h3);
+  /* Tomato on paper only reads as large text — never under 24px (3.3:1) */
+  font-size: max(24px, var(--type-h3));
   line-height: 1.1;
   letter-spacing: var(--tracking-h3);
   color: var(--hd);

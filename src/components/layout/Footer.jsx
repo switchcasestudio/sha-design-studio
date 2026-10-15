@@ -54,7 +54,7 @@ function Footer() {
             </div>
 
             <nav className="footer__col" aria-label="Footer">
-              <h4 className="footer__eyebrow">Navigation</h4>
+              <p className="footer__eyebrow">Navigation</p>
               <ul className="footer__list">
                 {footerNavigation.menu.map((item) => (
                   <li key={item.href}>
@@ -81,7 +81,7 @@ function Footer() {
             </nav>
 
             <div className="footer__col">
-              <h4 className="footer__eyebrow">Who I am</h4>
+              <p className="footer__eyebrow">Who I am</p>
               <p className="footer__who-name">Shiran Bar Hayon</p>
               <p className="footer__who">
                 industrial and product designer.

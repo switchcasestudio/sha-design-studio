@@ -1,10 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import seoPages from './scripts/seo-pages.js';
+
+// Production origin — canonical, og:url and the sitemap all use it
+const SITE = 'https://sha-design.com';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), seoPages({ site: SITE })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

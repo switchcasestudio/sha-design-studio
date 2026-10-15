@@ -111,7 +111,7 @@ function ProjectOverview({ entries }) {
         {entries.map((entry, e) => (
           <div key={entry.id} className="pd-overview__entry">
             {multi && (
-              <h3 className="pd-overview__entry-title">{entry.title}</h3>
+              <h2 className="pd-overview__entry-title">{entry.title}</h2>
             )}
             {entry.overview.map((paragraph, i) => (
               <p

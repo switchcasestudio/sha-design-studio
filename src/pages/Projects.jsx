@@ -104,9 +104,9 @@ function OverviewCard({ project, idx, reduce }) {
             {project.client && (
               <span className="overview-card__client">{project.client}</span>
             )}
-            <h3 className="overview-card__title">
+            <h2 className="overview-card__title">
               {noBreakHyphens(project.title)}
-            </h3>
+            </h2>
           </div>
           <span className="overview-card__go" aria-hidden="true">
             <ArrowUpRight size={20} strokeWidth={2} />
