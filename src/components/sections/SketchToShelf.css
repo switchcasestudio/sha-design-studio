@@ -1,0 +1,343 @@
+/* ==========================================================================
+   SketchToShelf — the home page's tomato panel, and its biggest moment after
+   the hero. A `.panel`: inset 16px from the window like the closing panel, so
+   it runs nearly edge to edge. Copy on the colour at left, a paper stage at
+   right. Headline in paper with one pool block (the tomato recipe); the
+   switch is three pills, oat by default and ink when active, like the
+   collection switcher on a project page.
+   ========================================================================== */
+
+.sts {
+  /* Where the page's 1280px column starts, measured from the panel's edge —
+     the copy lines up with every other headline on the page. */
+  --sts-inset: max(
+    var(--pad-panel),
+    calc((100vw - var(--max-width-content)) / 2 + var(--gutter) - var(--frame))
+  );
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  overflow: hidden;
+  color: var(--fg);
+}
+
+.sts__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: var(--pad-panel) var(--space-8) var(--pad-panel) var(--sts-inset);
+  min-width: 0;
+}
+
+/* Between the H2 and display scales: the panel is big, the column is half */
+.sts__title {
+  font-size: clamp(40px, 5.6vw, 88px);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  color: var(--hd);
+}
+
+.sts__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+/* Two lines are reserved so the switch never jumps between steps. */
+.sts__line {
+  font-size: var(--type-h3);
+  font-weight: var(--weight-medium);
+  line-height: 1.25;
+  letter-spacing: var(--tracking-h3);
+  color: var(--fg);
+  max-width: 26ch;
+  min-height: 2.5em;
+}
+
+.sts__line-text {
+  display: block;
+}
+
+/* ---------- The switch: Sketch · Prototype · Shelf ---------- */
+.sts__switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-pill);
+}
+
+.sts__step {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--oat);
+  color: var(--ink);
+  font-size: var(--type-body);
+  font-weight: var(--weight-medium);
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+
+.sts__step:hover {
+  background-color: var(--sand);
+}
+
+.sts__step:focus-visible {
+  outline: var(--focus-ring-width) solid var(--ink);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-pill);
+}
+
+.sts__step[aria-pressed='true'] {
+  color: var(--paper);
+}
+
+/* The active fill is its own layer, so the vivid theme can slide it */
+.sts__step-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background-color: var(--ink);
+}
+
+/* ---------- The stage ----------
+   A paper field. The canvas inside keeps one proportion at every width, so
+   the three slots can be placed in percentages and always sit the same way.
+   It grows with the window but never past 82% of its height, so the whole
+   panel — drawings and switch — stays on one screen. */
+.sts__stage {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: clamp(var(--space-4), 3vw, var(--space-12));
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.sts__canvas {
+  position: relative;
+  width: 100%;
+  max-width: 82vh;
+  aspect-ratio: 6 / 5;
+}
+
+.sts__slot {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  width: var(--w);
+  height: var(--h);
+}
+
+.sts__slot--planet {
+  --l: 2%;
+  --t: 5%;
+  --w: 46%;
+  --h: 42%;
+}
+
+.sts__slot--starfish {
+  --l: 60%;
+  --t: 1%;
+  --w: 34%;
+  --h: 54%;
+}
+
+.sts__slot--mobile {
+  --l: 26%;
+  --t: 45%;
+  --w: 46%;
+  --h: 55%;
+  z-index: 1;
+}
+
+.sts__float,
+.sts__layer {
+  position: absolute;
+  inset: 0;
+}
+
+.sts__layer {
+  display: grid;
+  place-items: center;
+}
+
+/* Drawings are ink on paper; models are cut-outs. Both fill their slot. */
+.sts__art,
+.sts__model {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.sts__art {
+  overflow: visible;
+}
+
+.sts__art-fill {
+  fill: currentColor;
+}
+
+/* The stroked outlines only exist for the vivid drawing-in (below) */
+.sts__art-lines {
+  display: none;
+}
+
+.sts__model {
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The shipped product, on a white studio backdrop. Multiplying it onto the
+   figure's own paper fill turns that white into the stage colour, so the
+   photo has no visible edge. (The fill has to be on the figure: its transform
+   isolates it, and a blend can't reach the stage behind.) */
+.sts__shelf {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background-color: var(--paper);
+  pointer-events: none;
+}
+
+.sts__shelf img {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .sts {
+    grid-template-columns: 1fr;
+  }
+
+  .sts__copy {
+    padding: var(--space-8);
+  }
+
+  .sts__line {
+    max-width: 30ch;
+  }
+
+  /* Stacked, the stage is as wide as the panel — height no longer limits it */
+  .sts__canvas {
+    max-width: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .sts__copy {
+    padding: var(--space-6);
+  }
+
+  .sts__step {
+    min-height: 48px;
+    padding: 0 var(--space-4);
+    font-size: var(--type-ui);
+  }
+}
+
+/* ==========================================================================
+   Vivid theme — the drawings draw themselves. Each outline is stroked from
+   nothing (pathLength is normalised to 1 in the markup), big shapes first,
+   then the traced shape fills and the construction strokes fade away.
+   `data-draw` flips out → in whenever a drawing (re)appears, which restarts
+   the animation. Skipped entirely for reduced motion.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion='vivid'] .sts__art-lines {
+    display: inline;
+  }
+
+  html[data-motion='vivid'] .sts__art-lines path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 5;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  html[data-motion='vivid'] .sts__art {
+    --draw: 1.5s;
+    --step: 22ms;
+  }
+
+  html[data-motion='vivid'] .sts__art[data-pace='quick'] {
+    --draw: 0.8s;
+    --step: 9ms;
+  }
+
+  html[data-motion='vivid'] .sts__art[data-draw='out'] .sts__art-fill {
+    opacity: 0;
+  }
+
+  html[data-motion='vivid'] .sts__art[data-draw='in'] .sts__art-lines path {
+    animation:
+      sts-draw var(--draw) cubic-bezier(0.65, 0, 0.35, 1) both,
+      sts-lines-out 0.5s ease both;
+    animation-delay:
+      calc(var(--i) * var(--step)),
+      calc(var(--draw) + 36 * var(--step) + 0.1s);
+  }
+
+  html[data-motion='vivid'] .sts__art[data-draw='in'] .sts__art-fill {
+    animation: sts-fill 0.6s ease both;
+    animation-delay: calc(var(--draw) * 0.8 + 18 * var(--step));
+  }
+
+  /* The switch's ink pill is slid by Motion; let the label follow at once */
+  html[data-motion='vivid'] .sts__step {
+    transition:
+      background-color 0.3s var(--ease-out),
+      color 0.2s var(--ease-out),
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html[data-motion='vivid'] .sts__step:active {
+    transform: scale(0.94);
+  }
+}
+
+@keyframes sts-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sts-fill {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sts-lines-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

@@ -3,12 +3,22 @@
 
 /* ==========================================================================
    Section rhythm. Deliberately varied: the cream canvas breathes around the
-   journey and the yolk + pool panels, then closes on the sand panel.
+   tomato panel, the journey and the yolk + pool panels, then closes on the
+   sand panel.
    ========================================================================== */
 
 /* ---------- Featured work grid ---------- */
 .home-work {
   padding-block: var(--space-16) var(--space-10);
+}
+
+/* ---------- From sketch to shelf (spacing only; visuals live in
+   SketchToShelf.css) ---------- */
+/* The top clearance is deliberate: in the vivid theme the work collage's right
+   column drifts up to 120px below its section as it scrolls out, and the
+   panel must never sit under it. */
+.home-sketch {
+  padding-block: clamp(var(--space-20), 10vw, 7.5rem) var(--space-6);
 }
 
 /* ---------- Journey (cream canvas — spacing only; visuals live in

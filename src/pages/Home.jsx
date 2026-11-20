@@ -11,6 +11,7 @@ import Button from '@/components/ui/Button';
 import HomeAssemble from '@/components/sections/HomeAssemble';
 import HomeWorkGrid from '@/components/sections/HomeWorkGrid';
 import JourneyPath from '@/components/sections/JourneyPath';
+import SketchToShelf from '@/components/sections/SketchToShelf';
 import SocialProof from '@/components/sections/SocialProof';
 import CtaBand from '@/components/sections/CtaBand';
 import { reducedReveal, rise, slideUp } from '@/lib/motion';
@@ -140,6 +141,13 @@ function Home() {
       {/* ---------- Featured work: the homepage finally shows the work ---------- */}
       <ColorWorld className="home-work">
         <HomeWorkGrid />
+      </ColorWorld>
+
+      {/* ---------- From sketch to shelf — the tomato panel, nearly edge to
+          edge. One shipped project, walked from its first drawings to the
+          product. ---------- */}
+      <ColorWorld className="home-sketch">
+        <SketchToShelf />
       </ColorWorld>
 
       {/* ---------- The designer's journey — a dotted play-path drawn straight
