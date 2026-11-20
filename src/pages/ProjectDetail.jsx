@@ -248,11 +248,11 @@ function ProjectTimeline({ steps }) {
 }
 
 // ---------- Sketches: full-width image(s), click to open in the lightbox ----------
+// Every sketch here has a real file (getCaseStudy drops the rest), so its
+// position in the list is its position in the lightbox set.
 function ProjectSketches({ sketches, onOpen }) {
   const reveal = useReveal();
   const { isVivid } = useTheme();
-  // Track each real image's position in the (placeholder-free) lightbox set.
-  let lightboxIndex = -1;
 
   return (
     <motion.section
@@ -274,11 +274,7 @@ function ProjectSketches({ sketches, onOpen }) {
           : {})}
       >
         {sketches.map((sketch, i) => {
-          const interactive = Boolean(sketch.src && onOpen);
-          if (sketch.src) lightboxIndex += 1;
-          const at = lightboxIndex;
-
-          const media = sketch.src ? (
+          const media = (
             <img
               className="pd-sketches__image"
               src={sketch.src}
@@ -286,10 +282,6 @@ function ProjectSketches({ sketches, onOpen }) {
               loading="lazy"
               decoding="async"
             />
-          ) : (
-            <div className="pd-sketches__placeholder" aria-hidden="true">
-              <span>Sketch</span>
-            </div>
           );
 
           return (
@@ -309,11 +301,11 @@ function ProjectSketches({ sketches, onOpen }) {
                   }
                 : {})}
             >
-              {interactive ? (
+              {onOpen ? (
                 <button
                   type="button"
                   className="pd-sketches__frame pd-sketches__frame--button"
-                  onClick={() => onOpen(at)}
+                  onClick={() => onOpen(i)}
                   aria-label={`Open sketch: ${sketch.alt}`}
                 >
                   <span className="pd-sketches__media">
@@ -542,11 +534,11 @@ function ProjectDetail() {
   const fanImages = activeImages.slice(0, FAN_COUNT);
 
   // Sketch lightbox set: a project's stage images when it has stages,
-  // otherwise its real (non-placeholder) sketches
+  // otherwise its sketches (both hold only images whose files exist)
   const stages = caseStudy?.stages ?? [];
   const sketchImages = stages.length
     ? stageLightboxImages(stages)
-    : (caseStudy?.sketches ?? []).filter((s) => s.src);
+    : (caseStudy?.sketches ?? []);
 
   const [titleBefore, titleHl, titleAfter] = splitTitle(
     project.id,
@@ -761,7 +753,9 @@ function ProjectDetail() {
           onNavigate={setLightboxIndex}
         />
 
-        {/* ---------- Case study: process · sketches (or stages) ---------- */}
+        {/* ---------- Case study: process · sketches (or stages) ----------
+            Each part shows only when the project has that material. A project
+            with none goes straight from its photos to the footer nav. */}
         {caseStudy?.hasOwnProcess && (
           <ProjectTimeline steps={caseStudy.process} />
         )}
@@ -775,7 +769,7 @@ function ProjectDetail() {
           caseStudy?.sketches?.length > 0 && (
             <ProjectSketches
               sketches={caseStudy.sketches}
-              onOpen={sketchImages.length > 0 ? setSketchIndex : undefined}
+              onOpen={setSketchIndex}
             />
           )
         )}

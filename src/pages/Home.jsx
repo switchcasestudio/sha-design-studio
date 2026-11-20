@@ -185,7 +185,9 @@ function Home() {
         </div>
       </ColorWorld>
 
-      {/* ---------- Kind words — one pool panel holding every quote ---------- */}
+      {/* ---------- Kind words — one pool panel holding every quote. With no
+          quotes in the data the whole panel is left out. ---------- */}
+      {testimonials.length > 0 && (
       <ColorWorld className="home-words">
         <div className="container">
           <WordsCard>
@@ -258,6 +260,7 @@ function Home() {
           </WordsCard>
         </div>
       </ColorWorld>
+      )}
 
       {/* ---------- Closing panel: the page's last word before the footer ---------- */}
       <CtaBand

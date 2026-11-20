@@ -21,16 +21,9 @@ export const testimonials = [
       'Channing made an extra effort to add elements that were personal to us. She made sure our space reflected us as individuals and as a family.',
     image: null,
   },
-  // Placeholder #2 (client-requested) — fills the mirrored bubble until a
-  // real second quote arrives. Replace name + comment before launch.
-  {
-    id: 'placeholder-second',
-    name: 'Your name here',
-    title: null,
-    comment:
-      'A second kind word goes here: a few lines from a brand or studio that shipped a product with Shiran.',
-    image: null,
-  },
+  // Add further quotes here as they arrive. Only real quotes belong in this
+  // list: a slot with nothing to say is left out rather than filled with
+  // stand-in text, and the home page hides the whole section when it is empty.
 ];
 
 export default testimonials;

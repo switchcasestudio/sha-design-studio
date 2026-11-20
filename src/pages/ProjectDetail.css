@@ -469,23 +469,6 @@
   color: var(--paper);
 }
 
-/* Placeholder for missing imagery: a flat oat fill with a small label */
-.pd-sketches__placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background-color: var(--oat);
-}
-
-.pd-sketches__placeholder span {
-  font-size: var(--type-label);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--slate);
-}
-
 .pd-sketches__caption {
   margin-top: var(--space-3);
   font-size: var(--type-caption);

@@ -5,8 +5,9 @@
  * `projects.js` is the generated source of truth and must not be hand-edited,
  * so this richer editorial content lives app-side and is keyed by project id —
  * the same pattern as COLLECTION_KIND in ProjectDetail.jsx. Pages read it via
- * `getCaseStudy(id)`, which resolves each sketch's `assetPath` to a bundled URL
- * (null when the file hasn't been dropped in yet → the UI shows a placeholder).
+ * `getCaseStudy(id)`, which resolves each sketch's `assetPath` to a bundled URL.
+ * A sketch whose file hasn't been dropped in yet is left out, and a project
+ * with no sketches shows no sketch section at all — nothing empty is rendered.
  *
  * To add sketches for a project, drop the files under
  *   src/assets/images/case-studies/<project-id>/
@@ -172,9 +173,9 @@ const caseStudies = {
 
   // ---------------------------------------------------------------------------
   // Scaffolds for the other on-site projects. Keyed by their SITE project id.
-  // Every project renders the full layout: any slot left empty/null falls back
-  // to the shared DEFAULT_* content below. Fill a slot to override it with that
-  // project's real specifics. Shapes:
+  // A slot left empty/null is not shown on the page (the brief is the one
+  // exception: it falls back to DEFAULT_BRIEF below). Fill a slot with that
+  // project's real specifics and its section appears. Shapes:
   //
   //   brief: {
   //     goals:       ['…', '…'],
@@ -226,11 +227,11 @@ const caseStudies = {
   },
 };
 
-// Shared fallback content so EVERY project shows the full case-study layout
-// (Brief · Process · Sketches), even before it's been customized. A project's
-// own values in `caseStudies` always win; anything it leaves empty falls back
-// to these. Kept deliberately generic + true to Shiran's process so it reads
-// honestly as a placeholder — replace per project with the real specifics.
+// Shared fallback content. A project's own values in `caseStudies` always win.
+// Only DEFAULT_BRIEF is ever shown (its goals fill the reference card);
+// DEFAULT_PROCESS is kept as a starting point for writing a project's own
+// steps and never reaches the page (see `hasOwnProcess`). Kept deliberately
+// generic + true to Shiran's process — replace per project with the specifics.
 const DEFAULT_BRIEF = {
   goals: [
     'Support developmental play',
@@ -281,7 +282,8 @@ const DEFAULT_PROCESS = [
 ];
 
 // Each project gets its own sketch slot/path so a real file can be dropped in
-// per project (until then it renders the striped placeholder).
+// per project with no code change. Until the file exists the slot resolves to
+// nothing and the page shows no sketch section.
 function defaultSketches(id) {
   return [
     {
@@ -331,10 +333,11 @@ export function getCaseStudy(id) {
     // The shared DEFAULT_PROCESS is a fallback, not this project's story — the
     // page only shows a process section when a project has its own steps.
     hasOwnProcess: Boolean(study.process?.length),
-    sketches: sketches.map((sketch) => ({
-      ...sketch,
-      src: resolveSketch(sketch.assetPath),
-    })),
+    // Only sketches whose file exists. No file, no frame: the page never shows
+    // an empty slot.
+    sketches: sketches
+      .map((sketch) => ({ ...sketch, src: resolveSketch(sketch.assetPath) }))
+      .filter((sketch) => sketch.src),
     stages,
     stagesCaption: stages.length ? (study.stagesCaption ?? null) : null,
   };
