@@ -4,6 +4,8 @@ Portfolio website for **Shiran Bar**, an industrial designer specializing in toy
 
 > **Tagline:** Designing Playful Thoughtful Products
 
+> Current state and open items: [`STATUS.md`](./STATUS.md). History: [`WORKLOG.md`](./WORKLOG.md) (newest first). The routes table below predates `/inquire` and `/projects/:id`.
+
 ---
 
 ## Tech Stack

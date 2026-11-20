@@ -1,6 +1,124 @@
 # Work Log — Sha Design Studio
 
-A running record of notable work and follow-ups. Newest entries on top.
+A running record of notable work and follow-ups. **Newest entries on top.**
+Current state, open items and do-not-revert rules: `STATUS.md`. Note: no
+entries exist for the 2026-10-06..14 commits (brand kit v3, animated theme,
+SEO) — see `git log` and STATUS.md until they are backfilled.
+
+---
+
+## 2026-11-20 — Home: "From sketch to shelf" interactive panel
+
+A new tomato panel on the homepage, between "Fresh from the studio" and "How I
+got here", that walks the Ocean Gymini from drawing to shipped product and
+links to its case study. Same day: made bigger at Moses's request, and the
+theme switcher retired (below). Shipped to `main` with the 2026-11-19 work.
+
+- **What it does** (`src/components/sections/SketchToShelf.{jsx,css}`): copy on
+  tomato at left, a paper stage at right. A three-pill switch — Sketch · Prototype · Shelf — changes the stage:
+  three ink drawings → the three models built from them → the shipped gym.
+  One line of copy changes with the step (`aria-live`); a dark pill links to
+  `/projects/treasure-the-ocean-gymini`.
+- **Vivid theme**: when the stage is half on screen the drawings draw
+  themselves (each traced outline is stroked in, big shapes first, then the
+  shape fills), and the panel plays Sketch → Prototype → Shelf once (3.4s,
+  6.2s) and stops; using the switch cancels the autoplay. Pointing at a
+  drawing peeks at its model, and at a model shows its drawing (cursor label
+  "Peek"). The stage drifts a few px against the pointer. Models pop in on
+  `spring.bouncy`; on Shelf the three gather and the product springs in. No
+  rotation. The switch's ink pill slides between options.
+- **Reduced motion**: no autoplay, no drawing-in, no drift — the switch and
+  the peek cross-fade in 220ms.
+- **Size (second pass)**: first built inside the 1280px column like "What I
+  do"; Moses asked for bigger. It is now a `.panel` — inset 16px from the
+  window like the closing panel, so nearly edge to edge (1526×696 in a 1558px
+  window, was 1200×534). Headline `clamp(40px, 5.6vw, 88px)`, step line at the
+  H3 scale, 52px switch pills, the link is a large pill. On wide screens the
+  copy's left edge is computed to line up with the page's 1280px column
+  (`--sts-inset`). The stage canvas is capped at 82vh wide so the whole panel
+  fits on one screen.
+- **Content, one source**: the models come from the case study's `stages`
+  (ringed planet, dotted starfish, final starfish) and the product photo is the
+  project's `heroImage`, so home and case study can't drift apart. The photo's
+  white studio backdrop is multiplied onto paper so it has no visible edge.
+- **Drawings** (`src/data/sketchMotifs.js`, generated): three single motifs
+  lifted from Shiran's sketch sheet — ringed planet, starfish with a face, star
+  mobile with fish — traced with potrace at 3×, neighbours dropped by position,
+  compacted with svgo. 260 outlines, 27 KB / 12 KB gzip, loaded on demand as
+  its own chunk (`import()`), so the main bundle only grew by the component.
+- **Spacing**: `.home-sketch` has 80–120px of top padding on purpose — in vivid
+  the work collage's right column drifts up to 120px below its section; with
+  less, its last caption slid over the panel (measured clearance now ≥ 40px).
+- **Copy is a first draft, not Shiran's**: the headline "From sketch to shelf",
+  the three step lines and "See how it took shape" need her sign-off.
+- **Theme switcher retired** (Moses: "we are only doing the animated
+  version"): deleted `src/theme/ThemeSwitcher.{jsx,css}` and the `?themes` /
+  `?theme=` / localStorage logic in `ThemeContext.jsx`. The context is now just
+  `{ isVivid: !reduced, reduced }`, so a browser that had "Regular" saved can no
+  longer get stuck on it. The calm ("regular") code paths stay — they are the
+  reduced-motion fallback. `Layout.jsx` keys page transitions on the path only.
+- **Checked**: `npm run build` passes. Chrome at 1558 / 1280 / 1024 / 901 /
+  390px: autoplay, redraw, peek, switch by click and keyboard, focus ring, no
+  console errors; every route loads with no switcher. Not run: Lighthouse, a
+  real phone, Safari/Firefox (the drawing-in relies on `pathLength` + dash
+  offset).
+- **Seen, not touched**: at 901px wide the page scrolls sideways (document
+  996px). The elements past the edge are the journey's vivid path
+  (`.journey__path--vivid`), not the new panel (its right edge is 885px).
+
+---
+
+## 2026-11-19 — Ocean Gymini: real sketches + models in "From the sketchbook"
+
+Shiran shared her Figma file (key `aLlKDlo6fPgu4U2k79QMfY`, pages `Page 1`,
+`OCEAN`, `SAC`). The Ocean Gymini case study now shows her process material in
+place of the empty sketch frame. Shipped to `main` on 2026-11-20.
+
+- **What the page shows** (`/projects/treasure-the-ocean-gymini`): three paper
+  cards under the existing "From the sketchbook" heading, one per stage —
+  01 Initial form studies, 02 Character & material, 03 Starfish direction.
+  Each card = stage number/title/line in a left rail (same type stack as a
+  process card), one ink drawing across the top, three model cut-outs beneath.
+  All 12 images open in the existing lightbox, in reading order.
+- **Where the content came from**: stage titles and lines are Shiran's, from
+  her "Concept Exploration" layouts (V1–V5 on the `OCEAN` page). Her layouts
+  used 8 images; this uses those plus 4 more from her own collage frames (the
+  ringed-planet and dotted-disc models, the dome character on a green star) and
+  rows 2 and 3 of the same sketch sheet, so every stage reads drawing → models.
+  Her single "kawaii dome" sketch from the layouts is not used.
+- **Data** (`src/data/caseStudies.js`): new optional `stages[]` per project
+  (`n`, `title`, `text`, `sketch`, `models[]`) + `stagesCaption`. When a project
+  has stages they replace the sketch frame; `getCaseStudy` resolves the asset
+  URLs and drops any image whose file is missing. Other projects still show the
+  intentional sketch placeholder.
+- **UI** (`ProjectDetail.jsx` `ProjectStages`, `ProjectDetail.css` `.pd-stage*`):
+  no new tokens. Hover is the paper → yolk swap used by the sketch frame and
+  photo fan. Vivid: the card wipes up (same clip reveal as the sketch frame),
+  the drawing wipes in from the left, the models pop in on `spring.bouncy`; no
+  rotation. Regular/reduced motion: the section's single rise only. ≤900px the
+  rail stacks above the work; ≤640px the 3:1 drawing keeps a 168px height and
+  pans sideways (it would be ~100px tall otherwise), model tiles go square.
+- **Assets** (`src/assets/images/case-studies/treasure-the-ocean-gymini/`,
+  12 files, ~820 KB, all lazy-loaded):
+  - `sketch-0{1,2,3}-*.svg` — the three rows of Shiran's 1236×1272 sketch sheet,
+    traced to vector (potrace at 4× upscale, two tone layers: lines at
+    threshold 120, hatching at 205 / 32% opacity) and filled brand ink
+    `#001959`. The source was low-res raster; vector keeps it sharp at any size.
+  - `model-0x-*.webp` — Shiran's Figma only held 577px remove.bg previews. Each
+    cut-out is rebuilt at up to 1100px by upscaling the preview's alpha mask
+    onto the full-size original photo from the same file (the final starfish
+    has no original in the file, so it is the 2× preview). A hand and stray
+    objects were masked out of two photos.
+  - Built with throwaway node scripts (sharp, potrace, svgo) outside the repo;
+    no dependency was added.
+- **Checked**: `npm run build` passes. Viewed in Chrome at 1440, 860 and 390px,
+  both themes, hover, lightbox open/next/close; no horizontal page overflow; no
+  new console messages. Not run: Lighthouse, a real phone.
+- **Open — Shiran to confirm**: (1) whether the sketch sheets are her own
+  drawings — several boards in the file are exactly 1536×1024 with prompt-like
+  names, which is how AI image tools export; the section says "From the
+  sketchbook". (2) The 4 added models and the two added sketch rows. (3) Which
+  of her five layout versions she prefers, if she wants this closer to one.
 
 ---
 
@@ -121,8 +239,8 @@ First dedicated mobile pass across the app. All scoped to `@media (max-width:
   clipped past one screen), and tamed the giant morphing wordmark (~24vw → 15vw)
   so it reads as the hero instead of a chaotic wall.
 
-Still to confirm with Shiran (pre-existing, unrelated to this pass): the
-placeholder testimonial content (Kind Words) and the Inquire copy placeholders.
+Still to confirm with Shiran: placeholder Kind Words + Inquire copy (listed in
+full under 2026-08-18).
 
 ---
 
@@ -487,9 +605,8 @@ Process now before Sketches, header meta rebalanced, footer active-link dot remo
   content fills any project that hasn't been customized, so the layout applies
   app-wide. Treasure the Ocean Gymini has real, specific content.
 
-**Update:** the standalone "Brief" panel was later removed. **Goals** now live in
-the header aside (under Client / Role); Constraints / Users are no longer shown.
-Section order below the gallery is now **Process → Sketches**.
+**Update:** see the same-day "layout polish" entry above (Brief panel removed,
+Goals in the aside, Process → Sketches).
 
 ### ⚠️ Follow-up — replace placeholder case-study content (per project)
 
