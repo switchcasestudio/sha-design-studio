@@ -7,6 +7,35 @@ SEO) — see `git log` and STATUS.md until they are backfilled.
 
 ---
 
+## 2026-11-20 — Empty slots are hidden, not shown as placeholders
+
+Moses's rule from today: where there is no content, show nothing. This
+reverses the 06-30 decision that empty sketch slots are intentional
+placeholders. Shipped to `main` the same day.
+
+- **Project pages** (`src/data/caseStudies.js`, `src/pages/ProjectDetail.{jsx,css}`):
+  `getCaseStudy` now returns only sketches whose file exists, so a project with
+  no sketch file has no "From the sketchbook" section. The oat "SKETCH" frame
+  and its styles are gone. Affects here-i-grow-activity-center,
+  wooden-toy-design, garden-of-adventures-packaging, tiny-rockers-shape-sorter
+  and mobile-character-design: those pages now go from the photos straight to
+  the footer nav (80px gap, measured). The Ocean Gymini keeps its three stage
+  cards.
+- **Still drop-in**: each project keeps its slot path. Put a file at
+  `src/assets/images/case-studies/<project-id>/sketch-1.webp` and the section
+  appears with no code change.
+- **Home, Kind words** (`src/data/testimonials.js`, `src/pages/Home.jsx`): the
+  "Your name here" stand-in quote is removed. The panel now renders only when
+  the list has at least one quote.
+- **Checks**: `npm run build` passes. All 13 routes scanned in Chrome at 1440px
+  for placeholder classes, stand-in text, images without a source, empty text
+  elements and empty or zero-size sections: none found. No console errors.
+- **Left alone, flagged to Moses**: (1) the one remaining Kind words quote is
+  template text (it calls the designer "Channing" and talks about a "space");
+  (2) the footer's Instagram and LinkedIn icons link to the sites' home pages,
+  not to a profile; (3) the Goals row on the five projects above is the shared
+  `DEFAULT_BRIEF`, not project-specific.
+
 ## 2026-11-20 — Home: "From sketch to shelf" interactive panel
 
 A new tomato panel on the homepage, between "Fresh from the studio" and "How I
