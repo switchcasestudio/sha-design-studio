@@ -3,7 +3,6 @@ import { useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import ThemeSwitcher from '@/theme/ThemeSwitcher';
 import { useTheme } from '@/theme/ThemeContext';
 import Cursor from '@/theme/vivid/Cursor';
 import SmoothScroll, { getLenis } from '@/theme/vivid/SmoothScroll';
@@ -128,7 +127,7 @@ function ScrollProgress() {
 
 function Layout() {
   const { pathname } = useLocation();
-  const { theme, isVivid } = useTheme();
+  const { isVivid } = useTheme();
   const ground =
     GROUNDS.find(([pattern]) => pattern.test(pathname))?.[1] ?? 'cream';
 
@@ -140,8 +139,7 @@ function Layout() {
         {isVivid ? (
           <AnimatePresence mode="wait" onExitComplete={scrollTopNow}>
             <motion.div
-              /* Keyed on theme too, so switching replays the page's entrance */
-              key={`${pathname}:${theme}`}
+              key={pathname}
               variants={pageVariants}
               initial="initial"
               animate="enter"
@@ -154,8 +152,7 @@ function Layout() {
         ) : (
           <AnimatePresence mode="wait">
             <motion.div
-              /* Keyed on theme too, so switching replays the page's entrance */
-              key={`${pathname}:${theme}`}
+              key={pathname}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               /* Quick tweens, not springs: with mode="wait" the main area
@@ -179,7 +176,6 @@ function Layout() {
           <Cursor />
         </>
       )}
-      <ThemeSwitcher />
     </div>
   );
 }

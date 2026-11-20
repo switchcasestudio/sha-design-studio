@@ -1,100 +1,24 @@
 /* ==========================================================================
-   Site theme — "regular" (the brand-kit site as shipped) or "vivid" (the
-   animated exploration). Vivid is a layer on top of regular: every vivid
-   effect is gated on `useTheme().isVivid` in JS, or on
-   `html[data-motion='vivid']` in CSS, so regular renders exactly as before.
+   Site motion. The site ships one look: the animated ("vivid") one, Shiran's
+   pick. It honours the visitor's reduced-motion setting by falling back to
+   the calm paths — every vivid effect is gated on `useTheme().isVivid` in JS,
+   or on `html[data-motion='vivid']` in CSS (index.html sets that attribute;
+   CSS that moves things adds its own reduced-motion query).
 
-   Vivid is the live site (Shiran's pick, 2026-10-14). The switcher stays as a
-   way to compare: it appears only after visiting any page with `?themes` in
-   the URL (remembered per browser); `?themes=off` hides it again and drops
-   back to vivid. With the switcher on, `?theme=vivid` or `?theme=regular`
-   picks a theme from the link.
+   There used to be a second, switchable "regular" theme with a floating
+   switcher (`?themes`). Both were retired on 2026-11-20. The calm code paths
+   stay: they are what reduced-motion visitors get.
    ========================================================================== */
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useContext } from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
-const THEME_KEY = 'sha-theme';
-const SWITCHER_KEY = 'sha-theme-switcher';
-const THEMES = ['regular', 'vivid'];
-
-const DEFAULT_THEME = 'vivid';
-
-const ThemeContext = createContext({
-  theme: DEFAULT_THEME,
-  isVivid: true,
-  reduced: false,
-  switcherEnabled: false,
-  setTheme: () => {},
-});
-
-function read(key) {
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function write(key, value) {
-  try {
-    if (value == null) window.localStorage.removeItem(key);
-    else window.localStorage.setItem(key, value);
-  } catch {
-    /* storage blocked — the choice just won't persist */
-  }
-}
-
-function initialSwitcher() {
-  if (typeof window === 'undefined') return false;
-  const param = new URLSearchParams(window.location.search).get('themes');
-  if (param === 'off') {
-    write(SWITCHER_KEY, null);
-    write(THEME_KEY, null);
-    return false;
-  }
-  if (param !== null) {
-    write(SWITCHER_KEY, '1');
-    return true;
-  }
-  return read(SWITCHER_KEY) === '1';
-}
+const ThemeContext = createContext({ isVivid: true, reduced: false });
 
 export function ThemeProvider({ children }) {
-  const [switcherEnabled] = useState(initialSwitcher);
-  const [theme, setThemeState] = useState(() => {
-    if (!switcherEnabled) return DEFAULT_THEME;
-    // `?theme=vivid` opens straight into a theme (handy for sharing links)
-    const fromUrl = new URLSearchParams(window.location.search).get('theme');
-    if (THEMES.includes(fromUrl)) {
-      write(THEME_KEY, fromUrl);
-      return fromUrl;
-    }
-    const saved = read(THEME_KEY);
-    return THEMES.includes(saved) ? saved : DEFAULT_THEME;
-  });
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
 
-  const setTheme = useCallback((next) => {
-    if (!THEMES.includes(next)) return;
-    setThemeState(next);
-    write(THEME_KEY, next);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.dataset.motion = theme;
-  }, [theme]);
-
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        // Vivid honours reduced motion by falling back to the regular site.
-        isVivid: theme === 'vivid' && !reduced,
-        reduced,
-        switcherEnabled,
-        setTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ isVivid: !reduced, reduced }}>
       {children}
     </ThemeContext.Provider>
   );

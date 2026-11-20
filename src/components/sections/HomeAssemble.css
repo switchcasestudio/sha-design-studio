@@ -137,7 +137,7 @@ html[data-motion='vivid'] .home-assemble--vivid .home-assemble__headline {
 html[data-motion='vivid'] .home-assemble__hint {
   position: absolute;
   left: 50%;
-  bottom: max(104px, 11vh); /* clears the floating theme switcher */
+  bottom: max(104px, 11vh); /* sits well clear of the fold (once cleared the retired theme switcher) */
   translate: -50% 0;
   z-index: 2;
   padding: var(--space-2) var(--space-4);
