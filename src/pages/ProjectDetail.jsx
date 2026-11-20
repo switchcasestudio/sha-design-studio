@@ -76,6 +76,32 @@ const vividMetaRow = {
   hidden: { opacity: 0, x: 60 },
   show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: vEase.expoOut } },
 };
+// Vivid theme: a sketchbook page wipes up into view, its drawing is "drawn"
+// across from the left, then the models built from it land one by one.
+const vividStagePage = {
+  hidden: { clipPath: 'inset(0% 0% 100% 0%)', y: 60 },
+  show: {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    y: 0,
+    transition: { duration: 1.1, ease: vEase.expoOut },
+  },
+};
+const vividStageSketch = {
+  hidden: { clipPath: 'inset(0% 100% 0% 0%)' },
+  show: {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    transition: { duration: 1.4, ease: vEase.expoOut, delay: 0.35 },
+  },
+};
+const vividStageModel = {
+  hidden: { opacity: 0, y: 28, scale: 0.85 },
+  show: (i) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { ...spring.bouncy, delay: 0.8 + i * 0.1 },
+  }),
+};
 const vividInView = (list) => ({
   variants: list,
   initial: 'hidden',
@@ -316,6 +342,131 @@ function ProjectSketches({ sketches, onOpen }) {
   );
 }
 
+// ---------- Stages: three pages from the sketchbook ----------
+// Each page pairs one drawing with the models built from it. Every image opens
+// in the lightbox; `onOpen` takes its position in the flat stage image set
+// (see stageLightboxImages).
+function ProjectStages({ stages, caption, onOpen }) {
+  const reveal = useReveal();
+  const { isVivid } = useTheme();
+  let lightboxIndex = -1;
+  const zoom = isVivid ? { 'data-cursor': 'Zoom' } : {};
+
+  return (
+    <motion.section
+      className="pd-sketches"
+      aria-labelledby="pd-sketches-title"
+      {...reveal}
+    >
+      <h2 id="pd-sketches-title" className="pd-heading">
+        {split('From the', 0, 'words', 'view')}{' '}
+        <span className="hl">{split('sketchbook', 0.15, 'words', 'view')}</span>
+      </h2>
+
+      <ol className="pd-stages">
+        {stages.map((stage) => {
+          const sketchAt = stage.sketch ? (lightboxIndex += 1) : null;
+          return (
+            // Vivid: the list item (never clipped) watches the viewport and
+            // hands the state down — a fully clipped page can't trigger itself.
+            <motion.li
+              key={stage.n}
+              className="pd-stage"
+              {...(isVivid
+                ? {
+                    initial: 'hidden',
+                    whileInView: 'show',
+                    viewport: { once: true, amount: 0.25 },
+                  }
+                : {})}
+            >
+              <motion.article
+                className="pd-stage__page"
+                {...(isVivid ? { variants: vividStagePage } : {})}
+              >
+                <header className="pd-stage__copy">
+                  <span className="pd-stage__num">{stage.n}</span>
+                  <h3 className="pd-stage__title">{stage.title}</h3>
+                  <p className="pd-stage__text">{stage.text}</p>
+                </header>
+
+                <div className="pd-stage__work">
+                  {stage.sketch && (
+                    <div className="pd-stage__sketch-scroll">
+                      <motion.button
+                        type="button"
+                        className="pd-stage__tile pd-stage__tile--sketch"
+                        onClick={() => onOpen(sketchAt)}
+                        aria-label={`Open sketch: ${stage.sketch.alt}`}
+                        {...zoom}
+                        {...(isVivid ? { variants: vividStageSketch } : {})}
+                      >
+                        <img
+                          src={stage.sketch.src}
+                          alt={stage.sketch.alt}
+                          width={stage.sketch.width}
+                          height={stage.sketch.height}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </motion.button>
+                    </div>
+                  )}
+
+                  {stage.models.length > 0 && (
+                    <ul className="pd-stage__models">
+                      {stage.models.map((model, i) => {
+                        const at = (lightboxIndex += 1);
+                        return (
+                          <motion.li
+                            key={model.assetPath}
+                            {...(isVivid
+                              ? { variants: vividStageModel, custom: i }
+                              : {})}
+                          >
+                            <button
+                              type="button"
+                              className="pd-stage__tile pd-stage__tile--model"
+                              onClick={() => onOpen(at)}
+                              aria-label={`Open photo: ${model.alt}`}
+                              {...zoom}
+                            >
+                              <img
+                                src={model.src}
+                                alt={model.alt}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            </button>
+                          </motion.li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+              </motion.article>
+            </motion.li>
+          );
+        })}
+      </ol>
+
+      {caption && <p className="pd-sketches__caption">{caption}</p>}
+    </motion.section>
+  );
+}
+
+// The stage images as one flat lightbox set, in reading order: each page's
+// drawing, then its models. Captions carry the stage they belong to.
+function stageLightboxImages(stages) {
+  return stages.flatMap((stage) =>
+    [stage.sketch, ...stage.models].filter(Boolean).map((image) => ({
+      src: image.src,
+      alt: image.alt,
+      caption: `${stage.n} — ${stage.title}`,
+    }))
+  );
+}
+
 function ProjectDetail() {
   const { projectId } = useParams();
   const reduceMotion = useReducedMotion();
@@ -390,8 +541,12 @@ function ProjectDetail() {
   const FAN_COUNT = 5;
   const fanImages = activeImages.slice(0, FAN_COUNT);
 
-  // Real (non-placeholder) sketches, for the sketch lightbox
-  const sketchImages = (caseStudy?.sketches ?? []).filter((s) => s.src);
+  // Sketch lightbox set: a project's stage images when it has stages,
+  // otherwise its real (non-placeholder) sketches
+  const stages = caseStudy?.stages ?? [];
+  const sketchImages = stages.length
+    ? stageLightboxImages(stages)
+    : (caseStudy?.sketches ?? []).filter((s) => s.src);
 
   const [titleBefore, titleHl, titleAfter] = splitTitle(
     project.id,
@@ -606,15 +761,23 @@ function ProjectDetail() {
           onNavigate={setLightboxIndex}
         />
 
-        {/* ---------- Case study: process · sketches ---------- */}
+        {/* ---------- Case study: process · sketches (or stages) ---------- */}
         {caseStudy?.hasOwnProcess && (
           <ProjectTimeline steps={caseStudy.process} />
         )}
-        {caseStudy?.sketches?.length > 0 && (
-          <ProjectSketches
-            sketches={caseStudy.sketches}
-            onOpen={sketchImages.length > 0 ? setSketchIndex : undefined}
+        {stages.length > 0 ? (
+          <ProjectStages
+            stages={stages}
+            caption={caseStudy.stagesCaption}
+            onOpen={setSketchIndex}
           />
+        ) : (
+          caseStudy?.sketches?.length > 0 && (
+            <ProjectSketches
+              sketches={caseStudy.sketches}
+              onOpen={sketchImages.length > 0 ? setSketchIndex : undefined}
+            />
+          )
         )}
 
         <Lightbox

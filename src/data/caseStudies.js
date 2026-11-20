@@ -1,5 +1,6 @@
 /**
- * Case-study content (brief / process / sketches) for the project detail page.
+ * Case-study content (brief / process / sketches / stages) for the project
+ * detail page.
  *
  * `projects.js` is the generated source of truth and must not be hand-edited,
  * so this richer editorial content lives app-side and is keyed by project id —
@@ -10,6 +11,11 @@
  * To add sketches for a project, drop the files under
  *   src/assets/images/case-studies/<project-id>/
  * and reference them from that project's `sketches[].assetPath` below.
+ *
+ * A project with real process material uses `stages` instead of the single
+ * sketch slot: each stage is one "page from the sketchbook" — a drawing, then
+ * the physical models that came out of it (see the Ocean Gymini below). When a
+ * project has stages, the page shows them in place of the sketch frame.
  */
 
 // Resolve every case-study image to its bundled URL, preferring the .webp
@@ -25,6 +31,8 @@ function resolveSketch(assetPath) {
   const webpKey = key.replace(/\.(jpe?g|png)$/i, '.webp');
   return sketchUrls[webpKey] ?? sketchUrls[key] ?? null;
 }
+
+const OCEAN = 'src/assets/images/case-studies/treasure-the-ocean-gymini';
 
 const caseStudies = {
   'treasure-the-ocean-gymini': {
@@ -77,16 +85,89 @@ const caseStudies = {
       },
     ],
 
-    // Single full-width sketch. Drop the real file at the assetPath below to
-    // replace the placeholder.
-    sketches: [
+    // Form exploration, told as three pages from the sketchbook. Each page is
+    // one row of Shiran's concept sheet (traced to ink vector from her Figma
+    // file, so it stays sharp at any size) followed by the models built from
+    // it. Stage titles and lines are hers, from the same file.
+    stages: [
       {
-        assetPath:
-          'src/assets/images/case-studies/treasure-the-ocean-gymini/sketch-1.webp',
-        alt: 'Concept sketches of the 2-in-1 gym — lay & play and tummy-time modes, with arch and mobile explorations',
-        caption: 'Concept exploration — two play modes and form studies',
+        n: '01',
+        title: 'Initial form studies',
+        text: 'Early studies explored simple geometric forms and a suspended mobile structure.',
+        sketch: {
+          assetPath: `${OCEAN}/sketch-01-form-studies.svg`,
+          width: 1236,
+          height: 388,
+          alt: 'Sketches of ringed planets, a dotted saucer and cone-shaped hanging mobiles',
+        },
+        models: [
+          {
+            assetPath: `${OCEAN}/model-01-ringed-planet.webp`,
+            alt: 'Model of a ringed planet: stacked rings on a sphere, sitting on a flat disc',
+          },
+          {
+            assetPath: `${OCEAN}/model-01-dotted-disc.webp`,
+            alt: 'Model of a white dome set in a patterned fabric disc',
+          },
+          {
+            assetPath: `${OCEAN}/model-01-canopy-mobile.webp`,
+            alt: 'Fabric canopy mobile prototype with a jellyfish, a fish and a shell hanging from it',
+          },
+        ],
+      },
+      {
+        n: '02',
+        title: 'Character & material',
+        text: 'Combining a molded plastic head with soft fabric elements.',
+        sketch: {
+          assetPath: `${OCEAN}/sketch-02-characters.svg`,
+          width: 1236,
+          height: 430,
+          alt: 'Character sketches: jellyfish, a starfish with a face, and a dome-headed star hanging from the gym arch',
+        },
+        models: [
+          {
+            assetPath: `${OCEAN}/model-02-star-white-dome.webp`,
+            alt: 'Prototype of a white dome with eyes set in a teal fabric star, with a ring, a rattle and a striped star attached',
+          },
+          {
+            assetPath: `${OCEAN}/model-02-dome-character.webp`,
+            alt: 'Prototype of a dome character with a face, resting on a green fabric star',
+          },
+          {
+            assetPath: `${OCEAN}/model-02-on-the-arch.webp`,
+            alt: 'The dome character prototype hanging from the gym arch',
+          },
+        ],
+      },
+      {
+        n: '03',
+        title: 'Starfish direction',
+        text: 'Form, character and interaction evolve together.',
+        sketch: {
+          assetPath: `${OCEAN}/sketch-03-starfish.svg`,
+          width: 1236,
+          height: 416,
+          alt: 'Sketches of padded stars and a star-shaped mobile with hanging fish',
+        },
+        models: [
+          {
+            assetPath: `${OCEAN}/model-03-starfish-first-form.webp`,
+            alt: 'First starfish form in cream fabric with a round centre',
+          },
+          {
+            assetPath: `${OCEAN}/model-03-starfish-dotted.webp`,
+            alt: 'Starfish prototype in dotted fabric with eyes and fish charms',
+          },
+          {
+            assetPath: `${OCEAN}/model-03-starfish-final.webp`,
+            alt: 'Starfish mobile prototype: a molded star on navy fabric with fish hanging beneath',
+          },
+        ],
       },
     ],
+    stagesCaption:
+      'Concept exploration — from functional models to a playful ocean character',
   },
 
   // ---------------------------------------------------------------------------
@@ -105,6 +186,12 @@ const caseStudies = {
   //     assetPath: 'src/assets/images/case-studies/<project-id>/sketch-1.webp',
   //     alt: '…',
   //     caption: '…',
+  //   } ]
+  //   stages: [ {                                           // replaces `sketches`
+  //     n: '01', title: '…', text: '…',
+  //     sketch: { assetPath: '…/sketch-01.svg', width: 1236, height: 388, alt: '…' },
+  //       (width/height = the file's own size, so the page holds its space while it loads)
+  //     models: [ { assetPath: '…/model-01.webp', alt: '…' }, … ],
   //   } ]
   // ---------------------------------------------------------------------------
 
@@ -205,6 +292,23 @@ function defaultSketches(id) {
   ];
 }
 
+// Resolve a project's stages to bundled URLs. An image whose file is missing is
+// dropped (never a broken frame), and a stage left with nothing to show is
+// dropped with it.
+function resolveStages(stages = []) {
+  const withSrc = (image) => {
+    const src = resolveSketch(image?.assetPath);
+    return src ? { ...image, src } : null;
+  };
+  return stages
+    .map((stage) => ({
+      ...stage,
+      sketch: withSrc(stage.sketch),
+      models: (stage.models ?? []).map(withSrc).filter(Boolean),
+    }))
+    .filter((stage) => stage.sketch || stage.models.length > 0);
+}
+
 /**
  * Case-study content for a project id, with sketch URLs resolved and shared
  * defaults filled in. Returns content for every project so the full layout is
@@ -214,7 +318,13 @@ export function getCaseStudy(id) {
   const study = caseStudies[id] ?? {};
   const brief = study.brief ?? DEFAULT_BRIEF;
   const process = study.process?.length ? study.process : DEFAULT_PROCESS;
-  const sketches = study.sketches?.length ? study.sketches : defaultSketches(id);
+  const stages = resolveStages(study.stages);
+  // Stages are the real material, so they take the sketch frame's place.
+  const sketches = stages.length
+    ? []
+    : study.sketches?.length
+      ? study.sketches
+      : defaultSketches(id);
   return {
     brief,
     process,
@@ -225,6 +335,8 @@ export function getCaseStudy(id) {
       ...sketch,
       src: resolveSketch(sketch.assetPath),
     })),
+    stages,
+    stagesCaption: stages.length ? (study.stagesCaption ?? null) : null,
   };
 }
 
