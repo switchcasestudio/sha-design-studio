@@ -27,7 +27,9 @@ Updated 2026-11-20 (the three 2026-11-19/20 bullets below were verified in the b
 - Shiran: the `#02` Services card is a big ink card; her 07-02 feedback called big black moments off-brand — swap candidates `--color-orange-deep` / deep yellow (WORKLOG 07-03 S7). Open (unverified).
 - Shiran: real testimonials and the Inquire copy (above).
 - Shiran: sign off the homepage "From sketch to shelf" copy (headline, three step lines, button label are drafts) (WORKLOG 2026-11-20).
-- Shiran: confirm the Ocean Gymini sketchbook section — are the sketch sheets her own drawings (some boards look AI-generated), and are the 4 added models + 2 added sketch rows OK (WORKLOG 2026-11-19).
+- Shiran: confirm the Ocean Gymini sketchbook section — are the sketch sheets her own drawings, and are the 4 added models + 2 added sketch rows OK (WORKLOG 2026-11-19).
+- Shiran: an email listing all of the asks above, plus sketches for the five projects without them and her Instagram / LinkedIn links, was drafted for Moses to send on 2026-11-20.
+- Moses: hide the template Kind words quote? hide the footer Instagram / LinkedIn icons until real links arrive? keep the generic Goals row on five projects? (asked 2026-11-20, no answer yet)
 - Accepted trade-off: equal footer columns force a 2x2 nav below ~1204px (08-18).
 
 ## Constraints (do-not-revert)
@@ -38,5 +40,5 @@ Updated 2026-11-20 (the three 2026-11-19/20 bullets below were verified in the b
 
 ## Where history lives
 
-- `WORKLOG.md` — canonical log, **newest first**, `## <date> — <title>` per pass; `grep -n "^## 2026-" WORKLOG.md`. Covers 2026-06-30 → 2026-08-18; `git log --date=short --format='%h %ad %s'` for 2026-10.
+- `WORKLOG.md` — **internal, local only** (gitignored and untracked since 2026-11-20; never commit it). Canonical log, **newest first**, `## <date> — <title>` per pass; `grep -n "^## 2026-" WORKLOG.md`. Covers 2026-06-30 → 2026-08-18; `git log --date=short --format='%h %ad %s'` for 2026-10.
 - `docs/2026-07-03-subpage-whimsy-audit.md` (the plan the 07-03 passes executed); `README.md` (setup/structure; its routes table predates `/inquire`); `BRAND_GUIDELINES.md`; `PRODUCT.md`.

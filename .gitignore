@@ -55,3 +55,6 @@ Sha-Brand-Kit/
 
 # Saved design critiques (impeccable skill output, local only)
 .impeccable/
+
+# Internal work log (kept local, not in git)
+WORKLOG.md

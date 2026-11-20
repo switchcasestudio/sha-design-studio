@@ -4,7 +4,7 @@ Portfolio website for **Shiran Bar**, an industrial designer specializing in toy
 
 > **Tagline:** Designing Playful Thoughtful Products
 
-> Current state and open items: [`STATUS.md`](./STATUS.md). History: [`WORKLOG.md`](./WORKLOG.md) (newest first). The routes table below predates `/inquire` and `/projects/:id`.
+> Current state and open items: [`STATUS.md`](./STATUS.md). History: `WORKLOG.md` (newest first), an internal log kept on the working machine and not in git. The routes table below predates `/inquire` and `/projects/:id`.
 
 ---
 
