@@ -1,0 +1,13 @@
+{
+  "name": "sha-brand-book",
+  "private": true,
+  "type": "module",
+  "description": "Sha Design Studio brand guideline books (Full + Essentials). Build: node brand-book/build.mjs",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "pdf-lib": "^1.17.1",
+    "playwright": "^1.56.0"
+  }
+}
