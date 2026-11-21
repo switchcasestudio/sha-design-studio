@@ -158,7 +158,7 @@ export const type = () =>
         <p class="caption">${C.typeface.rules.map(([a, b]) => `<span class="strong">${esc(a)}</span> ${esc(b)}`).join(' ')}</p>
       </div>
       <div class="card e-type__table">
-        ${C.scale.styles.map(([cls, name, spec, , use]) => `<div class="e-type__row"><span class="ui strong">${esc(name)}</span><span class="caption">${esc(spec)}</span><span class="caption soft">${esc(use)}</span></div>`).join('')}
+        ${C.scale.styles.map(([, name, spec, , use]) => `<div class="e-type__row"><span class="ui strong">${esc(name)}</span><span class="caption">${esc(spec)}</span><span class="caption soft">${esc(use)}</span></div>`).join('')}
       </div>
       <div class="e-type__right">
         <div class="set__ex g-cream"><p class="set__type">${hl(C.setting.ex1)}</p></div>

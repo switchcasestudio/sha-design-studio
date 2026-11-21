@@ -1,6 +1,6 @@
 # Sha Design Studio
 
-Portfolio website for **Shiran Bar**, an industrial designer specializing in toys and baby products. Built with React + Vite + vanilla CSS, with optional [React Bits Pro](https://reactbits.dev) components for premium animated sections.
+Portfolio website for **Shiran Bar**, an industrial designer specializing in toys and baby products. Built with React + Vite + vanilla CSS.
 
 > **Tagline:** Designing Playful Thoughtful Products
 
@@ -13,7 +13,6 @@ Portfolio website for **Shiran Bar**, an industrial designer specializing in toy
 - **React 18** with **Vite** for blazing-fast dev/build
 - **React Router 6** for client-side routing
 - **Vanilla CSS** with CSS custom properties (no Tailwind, no CSS-in-JS)
-- **React Bits Pro** for animated UI components (optional, license-gated)
 - **Lucide React** for icons
 - **Motion** (Framer Motion) for animations
 
@@ -32,7 +31,7 @@ npm install
 
 ### 3. Set up environment variables
 
-Copy `.env.example` to `.env.local` and add your React Bits Pro license key:
+Copy `.env.example` to `.env.local` and add the Web3Forms key (the contact form sends through it):
 
 ```bash
 cp .env.example .env.local
@@ -41,10 +40,10 @@ cp .env.example .env.local
 Edit `.env.local`:
 
 ```
-REACTBITS_LICENSE_KEY=your_key_here
+VITE_WEB3FORMS_ACCESS_KEY=your_key_here
 ```
 
-> The site runs without a license key — you just won't be able to install React Bits Pro components.
+> The site runs without the key; only contact form submissions need it.
 
 ### 4. Add fonts
 
@@ -113,12 +112,10 @@ sha-design-studio/
 ├── .env.example                  # Template for env vars
 ├── .env.local                    # Local secrets (gitignored)
 ├── .gitignore
-├── components.json               # shadcn/React Bits registry config
 ├── index.html
 ├── jsconfig.json                 # Path alias intellisense
 ├── package.json
 ├── README.md                     # ← you are here
-├── BRAND_GUIDELINES.md           # Brand reference for the project
 └── vite.config.js
 ```
 
@@ -145,22 +142,6 @@ Imports use these aliases (configured in `vite.config.js` + `jsconfig.json`):
 | `/services` | Services |
 | `/about` | About |
 | `*` | 404 |
-
-## Adding React Bits Components
-
-With your license key set in `.env.local`, install components/blocks via the shadcn CLI:
-
-```bash
-# A single animated component (use the -css variant since this project doesn't use Tailwind)
-npx shadcn@latest add @reactbits-starter/silk-waves-css
-
-# A full page block (Pro license required)
-npx shadcn@latest add @reactbits-pro/hero-1
-```
-
-Components install to `src/components/react-bits/` and blocks to `src/components/blocks/`.
-
-> **Note:** Some React Bits blocks ship with Tailwind classes. Since this project uses vanilla CSS, you may need to translate or strip those classes after installing. The `cn()` helper in `src/utils/cn.js` handles both cases.
 
 ## Content & Data
 
@@ -207,7 +188,7 @@ render cleanly without them. Multiple entries stack automatically.
 
 ## Design System
 
-See [`BRAND_GUIDELINES.md`](./BRAND_GUIDELINES.md) for the full brand specification — colors, typography, voice, and visual language.
+The brand source of truth is the local (gitignored) `Sha-Brand-Kit/` (v3); the brand books build from `brand-book/`.
 
 All design tokens live in `src/styles/tokens.css` as CSS custom properties. To re-theme, edit those variables.
 

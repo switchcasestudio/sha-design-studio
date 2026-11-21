@@ -1,6 +1,6 @@
 // Full edition, pages 14 to 26: color, type, motifs, icons, photography.
 import * as C from './content.js';
-import { esc, hl, head, logo, motif, icon, favicon, img, page, tokens, rgbOf, cmykOf, contrast } from './lib.js';
+import { esc, hl, head, motif, icon, favicon, img, page, tokens, rgbOf, cmykOf, contrast } from './lib.js';
 
 const T = () => tokens();
 const hexOf = (name) => T()[name].toUpperCase();
@@ -53,7 +53,7 @@ export const shareBar = (aligned = true) => `
       ${C.pairing.share.map(([name, , pct]) => `<span class="bg-${name}" style="flex:${pct}"></span>`).join('')}
     </div>
     <div class="share__labels caption${aligned ? '' : ' share__labels--spread'}">
-      ${C.pairing.share.map(([name, label, pct]) => `<span${aligned ? ` style="flex:${pct}"` : ''}><span class="strong">${esc(label)}</span> ${pct}%</span>`).join('')}
+      ${C.pairing.share.map(([, label, pct]) => `<span${aligned ? ` style="flex:${pct}"` : ''}><span class="strong">${esc(label)}</span> ${pct}%</span>`).join('')}
     </div>
   </div>`;
 

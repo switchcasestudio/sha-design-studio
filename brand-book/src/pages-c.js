@@ -1,6 +1,6 @@
 // Full edition, pages 27 to 35: layout, components, motion, in use, clients, reference.
 import * as C from './content.js';
-import { esc, hl, head, logo, motif, icon, img, page } from './lib.js';
+import { esc, hl, head, logo, motif, img, page } from './lib.js';
 
 /* 27 --------------------------------------------------------------------- */
 export const spacingBars = () => `
